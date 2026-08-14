@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useTransition } from "react";
-import { Calendar, CheckCircle2, ChevronRight, Loader2, IndianRupee, X, ExternalLink, Building2, Landmark, HeartHandshake } from "lucide-react";
+import { Calendar, CheckCircle2, ChevronRight, Loader2, IndianRupee, X, ExternalLink, Building2, Landmark, HeartHandshake, Mail } from "lucide-react";
 import { Scheme, User } from "@/lib/db";
 import { applyToScheme } from "@/app/actions";
 import { Badge } from "@/components/ui/badge";
@@ -14,9 +14,49 @@ interface SchemeCardProps {
   user?: User;
 }
 
+const DEMO_SCHEME_ID = "db859c25-f712-4022-9214-e25f6e80b2a6";
+
 export function SchemeCard({ scheme, hasApplied, user }: SchemeCardProps) {
   const [isPending, startTransition] = useTransition();
   const [showModal, setShowModal] = useState(false);
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
+  const [emailResult, setEmailResult] = useState<{ success: boolean; message: string } | null>(null);
+
+  const isEmailDemo = scheme.id === DEMO_SCHEME_ID;
+
+  const handleSendReminder = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!user?.email) {
+      alert("No email found for the logged-in user.");
+      return;
+    }
+    setIsSendingEmail(true);
+    setEmailResult(null);
+    try {
+      const res = await fetch("/api/send-reminder", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          schemeId: scheme.id,
+          userEmail: user.email,
+          userName: user.full_name || "User",
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setEmailResult({ success: true, message: `Email sent to ${user.email}` });
+        alert(`Success: Email sent successfully to ${user.email}!`);
+      } else {
+        setEmailResult({ success: false, message: data.error || "Failed to send email" });
+        alert(`Error: Failed to send email - ${data.error || "Unknown error"}`);
+      }
+    } catch (err: any) {
+      setEmailResult({ success: false, message: err.message });
+      alert(`Error: Network issue occurred while sending email - ${err.message}`);
+    } finally {
+      setIsSendingEmail(false);
+    }
+  };
 
   const handleDownloadICS = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent opening modal
@@ -158,44 +198,72 @@ export function SchemeCard({ scheme, hasApplied, user }: SchemeCardProps) {
         </CardContent>
         
         <CardFooter className="p-4 pt-0 border-t border-slate-100 flex flex-wrap gap-2 mt-auto">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleDownloadICS}
-            disabled={!scheme.deadline}
-            className="flex-1 border-slate-200 text-slate-600 hover:bg-slate-50 cursor-pointer text-[13px] tap-target"
-          >
-            <Calendar className="h-4 w-4 mr-1.5" /> Save Reminder
-          </Button>
-          
-          {hasApplied ? (
-            <Button
-              disabled
-              variant="secondary"
-              aria-label={`Already applied to ${scheme.title}`}
-              className="flex-1 bg-emerald-50 text-emerald-600 font-medium border border-emerald-100 text-sm"
-            >
-              <CheckCircle2 className="h-4 w-4 mr-1.5" /> Applied
-            </Button>
-          ) : (
+          {isEmailDemo ? (
+            /* Demo scheme: single Send Reminder button */
             <Button
               size="sm"
-              onClick={handleApply}
-              disabled={isPending}
-              className="flex-1 bg-[#0F172A] hover:bg-[#1e293b] text-white font-semibold cursor-pointer text-sm btn-primary tap-target"
+              onClick={handleSendReminder}
+              disabled={isSendingEmail || emailResult?.success}
+              className={`flex-1 font-semibold cursor-pointer text-sm tap-target ${
+                emailResult?.success
+                  ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
+                  : "bg-[#0F172A] hover:bg-[#1e293b] text-white btn-primary"
+              }`}
             >
-              {isPending ? (
+              {isSendingEmail ? (
                 <span role="status" className="flex items-center gap-1.5">
                   <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-                  <span className="sr-only">Submitting application…</span>
-                  <span aria-hidden="true">Applying…</span>
+                  Sending…
                 </span>
+              ) : emailResult?.success ? (
+                <><CheckCircle2 className="h-4 w-4 mr-1.5" /> Sent!</>
               ) : (
-                <>
-                  {!scheme.provider_type || scheme.provider_type === "Government" ? "Apply to portal" : "Apply now"} <ChevronRight className="h-4 w-4 ml-1" aria-hidden="true" />
-                </>
+                <><Mail className="h-4 w-4 mr-1.5" /> Send Reminder</>
               )}
             </Button>
+          ) : (
+            /* Normal scheme: Save Reminder + Apply buttons */
+            <>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleDownloadICS}
+                disabled={!scheme.deadline}
+                className="flex-1 border-slate-200 text-slate-600 hover:bg-slate-50 cursor-pointer text-[13px] tap-target"
+              >
+                <Calendar className="h-4 w-4 mr-1.5" /> Save Reminder
+              </Button>
+              
+              {hasApplied ? (
+                <Button
+                  disabled
+                  variant="secondary"
+                  aria-label={`Already applied to ${scheme.title}`}
+                  className="flex-1 bg-emerald-50 text-emerald-600 font-medium border border-emerald-100 text-sm"
+                >
+                  <CheckCircle2 className="h-4 w-4 mr-1.5" /> Applied
+                </Button>
+              ) : (
+                <Button
+                  size="sm"
+                  onClick={handleApply}
+                  disabled={isPending}
+                  className="flex-1 bg-[#0F172A] hover:bg-[#1e293b] text-white font-semibold cursor-pointer text-sm btn-primary tap-target"
+                >
+                  {isPending ? (
+                    <span role="status" className="flex items-center gap-1.5">
+                      <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+                      <span className="sr-only">Submitting application…</span>
+                      <span aria-hidden="true">Applying…</span>
+                    </span>
+                  ) : (
+                    <>
+                      {!scheme.provider_type || scheme.provider_type === "Government" ? "Apply to portal" : "Apply now"} <ChevronRight className="h-4 w-4 ml-1" aria-hidden="true" />
+                    </>
+                  )}
+                </Button>
+              )}
+            </>
           )}
         </CardFooter>
       </Card>
@@ -377,7 +445,25 @@ export function SchemeCard({ scheme, hasApplied, user }: SchemeCardProps) {
                     For more information click here <ExternalLink className="h-3.5 w-3.5" />
                   </a>
                 )}
-                {hasApplied ? (
+                {isEmailDemo ? (
+                  <button
+                    onClick={handleSendReminder}
+                    disabled={isSendingEmail || emailResult?.success}
+                    className={`font-semibold px-6 py-2.5 rounded-lg text-[13px] flex items-center gap-1.5 cursor-pointer tap-target focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 ${
+                      emailResult?.success
+                        ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
+                        : "bg-[#0F172A] hover:bg-[#1e293b] text-white btn-primary"
+                    }`}
+                  >
+                    {isSendingEmail ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : emailResult?.success ? (
+                      <><CheckCircle2 className="h-4 w-4" /> Sent!</>
+                    ) : (
+                      <><Mail className="h-4 w-4" /> Send Reminder</>
+                    )}
+                  </button>
+                ) : hasApplied ? (
                   <button
                     disabled
                     className="bg-emerald-50 text-emerald-600 font-bold border border-emerald-100 px-6 py-2.5 rounded-lg text-xs flex items-center gap-1.5"

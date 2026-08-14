@@ -507,12 +507,46 @@ export const mockSchemes = [
     ministry: "K.C. Mahindra Education Trust",
     provider_type: "NGO",
     provider_name: "K.C. Mahindra Education Trust"
+  },
+  {
+    id: "db859c25-f712-4022-9214-e25f6e80b2a6",
+    title: "U-GO Scholarship Program 2026-27",
+    description: "An initiative designed to provide financial assistance to talented young women pursuing professional undergraduate courses such as teaching, nursing, pharmacy, medicine, engineering, architecture, and law.",
+    min_benefit_amount: 40000,
+    max_benefit_amount: 60000,
+    eligibility_json: {
+      max_income: 500000,
+      category: ["All"],
+      states: ["All"],
+      education: ["Undergraduate"],
+      gender: ["Female"]
+    },
+    required_documents: [
+      "Recent photograph",
+      "Mark sheets and passing certificates of class 10 and 12",
+      "Government-issued identity proof (Voter ID, Driving Licence, PAN card, etc.)",
+      "Current year admission proof (fee receipt, admission letter, ID card, or bonafide certificate)",
+      "Family income proof (ITR, Form 16, income certificate, or salary slips)",
+      "Payment receipts for funds spent on academic purposes",
+      "Bank account details"
+    ],
+    prerequisites: [
+      "Must be a young woman enrolled in any year (except final year) of a professional graduation course",
+      "Must have secured at least 70% marks in both Class 10 and Class 12 examinations"
+    ],
+    application_url: "https://www.buddy4study.com/page/ugo-scholarship-program",
+    deadline: "2026-08-20T23:59:59.000Z",
+    category: "Education",
+    state: "All",
+    ministry: "None",
+    provider_type: "NGO",
+    provider_name: "U-GO"
   }
 ];
 
 export async function seedDatabase() {
   console.log("Seeding Database...");
-  
+
   let schemeError = null;
   try {
     // Clean old schemes and insert fresh ones
@@ -533,7 +567,7 @@ export async function seedDatabase() {
     .upsert({ ...demoUser, id: demoUser.id }, { onConflict: "id" })
     .select()
     .single();
-    
+
   if (userError) console.error("Error seeding demo user:", userError);
   else console.log("Demo user seeded successfully");
 
@@ -549,7 +583,7 @@ export async function seedDatabase() {
     const { error: familyError } = await supabase
       .from("family_members")
       .upsert(supabaseFamily, { onConflict: "id" });
-      
+
     if (familyError) console.error("Error seeding family:", familyError);
     else console.log("Family seeded successfully");
   }

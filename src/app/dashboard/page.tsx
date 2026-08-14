@@ -12,17 +12,23 @@ export const revalidate = 0; // Force dynamic rendering
 
 export default async function DashboardPage() {
   const user = await getUser();
-  
+
   // If user has no profile yet, show a gentle banner instead of redirecting
   const isProfileIncomplete = !user || !user.annual_income || !user.caste_category;
 
   const allSchemes = await getSchemes();
   const userApps = await getApplications(user?.id);
   const familyMembers = await getFamilyMembers(user?.id);
-  
+
   // Run the matching algorithm
   const eligibleSchemes = isProfileIncomplete ? [] : getEligibleSchemes(user!, allSchemes);
-  
+
+  // Always append U-GO demo scheme at the end (for email automation demo)
+  const ugoScheme = allSchemes.find(s => s.id === "db859c25-f712-4022-9214-e25f6e80b2a6");
+  if (ugoScheme && !eligibleSchemes.find(s => s.id === ugoScheme.id)) {
+    eligibleSchemes.push(ugoScheme);
+  }
+
   // Sum up total benefits
   const totalBenefits = eligibleSchemes.reduce((sum, scheme) => {
     return sum + (scheme.max_benefit_amount || 0);
@@ -39,7 +45,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="max-w-5xl mx-auto p-6 md:p-8 space-y-8">
-      
+
       {/* Profile Incomplete Banner */}
       {isProfileIncomplete && (
         <div className="flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-xl p-4">
@@ -59,40 +65,40 @@ export default async function DashboardPage() {
 
       {/* Upper Status Bar */}
       {!isProfileIncomplete && (
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white border border-slate-200 rounded-xl p-5">
-        <div className="space-y-0.5 flex-1">
-          <div className="flex items-center gap-2 flex-wrap">
-            <Badge variant="secondary" className="bg-blue-50 text-blue-700 font-semibold text-[10px] uppercase border-blue-100">
-              {user!.caste_category}
-            </Badge>
-            <Badge variant="secondary" className="bg-slate-100 text-slate-600 font-semibold text-[10px] border-slate-200">
-              ₹{user!.annual_income!.toLocaleString("en-IN")} / yr
-            </Badge>
-            {isDemo && (
-              <Badge className="bg-purple-100 text-purple-700 border-0 font-semibold text-[10px]">
-                Demo
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white border border-slate-200 rounded-xl p-5">
+          <div className="space-y-0.5 flex-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <Badge variant="secondary" className="bg-blue-50 text-blue-700 font-semibold text-[10px] uppercase border-blue-100">
+                {user!.caste_category}
               </Badge>
-            )}
+              <Badge variant="secondary" className="bg-slate-100 text-slate-600 font-semibold text-[10px] border-slate-200">
+                ₹{user!.annual_income!.toLocaleString("en-IN")} / yr
+              </Badge>
+              {isDemo && (
+                <Badge className="bg-purple-100 text-purple-700 border-0 font-semibold text-[10px]">
+                  Demo
+                </Badge>
+              )}
+            </div>
+            <h1 className="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">
+              Welcome back, {user!.full_name}
+            </h1>
           </div>
-          <h1 className="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">
-            Welcome back, {user!.full_name}
-          </h1>
+
+          <Link
+            href="/"
+            className="flex items-center gap-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 px-4 py-2.5 rounded-lg transition-colors cursor-pointer tap-target"
+          >
+            <RefreshCw className="h-3.5 w-3.5" /> Update Profile
+          </Link>
         </div>
-        
-        <Link
-          href="/"
-          className="flex items-center gap-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 px-4 py-2.5 rounded-lg transition-colors cursor-pointer tap-target"
-        >
-          <RefreshCw className="h-3.5 w-3.5" /> Update Profile
-        </Link>
-      </div>
       )}
 
       {/* Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {/* Card 1: Total matched — dark accent card */}
         <div className="bg-[#0F172A] text-white rounded-xl p-6 border border-[#1e293b] space-y-3 relative overflow-hidden">
-          <div className="absolute inset-0 opacity-10" style={{background: 'radial-gradient(circle at 80% 20%, #0369A1 0%, transparent 60%)'}} />
+          <div className="absolute inset-0 opacity-10" style={{ background: 'radial-gradient(circle at 80% 20%, #0369A1 0%, transparent 60%)' }} />
           <div className="flex items-center justify-between relative">
             <span className="text-xs font-medium text-slate-400">Total matched value</span>
             <TrendingUp className="h-4 w-4 text-emerald-400" />
@@ -138,9 +144,9 @@ export default async function DashboardPage() {
 
       {/* Hidden element for Chrome Extension Sync */}
       {user && (
-        <div 
-          id="schemefit-extension-sync-data" 
-          data-profile={JSON.stringify(user)} 
+        <div
+          id="schemefit-extension-sync-data"
+          data-profile={JSON.stringify(user)}
           style={{ display: 'none' }}
         />
       )}
