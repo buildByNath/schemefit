@@ -331,7 +331,7 @@ export function VoiceOnboarding() {
             <button
               onClick={handleSave}
               disabled={isSaving || isParsing}
-              className="flex items-center gap-2 bg-indigo-650 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-sm transition-all disabled:opacity-50 cursor-pointer text-xs"
+              className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-sm transition-all disabled:opacity-50 cursor-pointer text-xs"
               style={{ minHeight: "44px" }}
             >
               {isSaving ? (

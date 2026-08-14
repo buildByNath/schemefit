@@ -271,7 +271,7 @@ export function DocumentVault({ initialDocuments }: DocumentVaultProps) {
                     className="p-4 flex items-center justify-between gap-4 hover:bg-slate-50/50 transition-colors"
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="h-10 w-10 bg-indigo-50 border border-indigo-100 rounded-lg flex items-center justify-center shrink-0 text-indigo-650">
+                      <div className="h-10 w-10 bg-indigo-50 border border-indigo-100 rounded-lg flex items-center justify-center shrink-0 text-indigo-600">
                         <FileText className="h-5 w-5" />
                       </div>
                       <div className="min-w-0">
@@ -281,7 +281,7 @@ export function DocumentVault({ initialDocuments }: DocumentVaultProps) {
                         <div className="flex items-center gap-2 text-[10px] text-slate-400 font-semibold mt-1">
                           <span>{(doc.file_size / 1024).toFixed(1)} KB</span>
                           <span>•</span>
-                          <span className="text-indigo-650 flex items-center gap-0.5">
+                          <span className="text-indigo-600 flex items-center gap-0.5">
                             🔒 AES-256
                           </span>
                           <span>•</span>

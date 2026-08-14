@@ -120,7 +120,7 @@ export function FamilySection({ initialMembers, isDemoMode }: FamilySectionProps
               onClick={() => setShowAddForm(true)}
               variant="outline"
               size="sm"
-              className="text-indigo-650 hover:text-indigo-700 border-indigo-200 hover:bg-indigo-50/50 cursor-pointer font-semibold"
+              className="text-indigo-600 hover:text-indigo-700 border-indigo-200 hover:bg-indigo-50/50 cursor-pointer font-semibold"
             >
               Add Household Dependent
             </Button>
@@ -285,7 +285,7 @@ export function FamilySection({ initialMembers, isDemoMode }: FamilySectionProps
                 type="submit"
                 disabled={isPending}
                 size="sm"
-                className="h-9 bg-indigo-650 hover:bg-indigo-700 text-white font-semibold flex items-center gap-1 cursor-pointer rounded-lg shadow-sm"
+                className="h-9 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold flex items-center gap-1 cursor-pointer rounded-lg shadow-sm"
               >
                 {isPending ? "Saving..." : "Add Member"}
               </Button>
