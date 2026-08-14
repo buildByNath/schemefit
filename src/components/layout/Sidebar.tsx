@@ -16,13 +16,11 @@ import { cn } from "@/lib/utils";
 
 const items = [
   { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { title: "My Benefits", href: "/benefits", icon: Gift },
-  { title: "Family", href: "/family", icon: Users },
-  { title: "Documents", href: "/documents", icon: Files },
-  { title: "Applications", href: "/applications", icon: FileCheck },
-  { title: "Calendar", href: "/calendar", icon: Calendar },
-  { title: "Assistant", href: "/assistant", icon: MessageSquare },
-  { title: "Settings", href: "/settings", icon: Settings },
+  { title: "My Benefits", href: "/dashboard/benefits", icon: Gift },
+  { title: "My Family", href: "/dashboard/family", icon: Users },
+  { title: "My Documents", href: "/dashboard/documents", icon: Files },
+  { title: "SmartDoc Studio", href: "/dashboard/smartdoc", icon: Settings },
+  { title: "My Applications", href: "/dashboard/applications", icon: FileCheck },
 ];
 
 export function Sidebar() {
