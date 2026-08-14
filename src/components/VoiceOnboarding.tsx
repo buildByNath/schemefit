@@ -259,8 +259,8 @@ export function VoiceOnboarding() {
               </label>
               <input
                 type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
                 placeholder="As per Aadhaar/Bank"
                 className="w-full px-3 py-2 text-slate-800 border border-slate-200 rounded-lg text-sm bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
                 required
