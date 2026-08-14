@@ -1,4 +1,5 @@
 export interface ParsedProfile {
+  full_name?: string | null;
   annual_income: number;
   caste_category: string;
   education: string;
@@ -15,26 +16,35 @@ export interface ParsedProfile {
 export function parseSpeechText(text: string): ParsedProfile {
   const lowercaseText = text.toLowerCase();
   
+  // 0. Parse Name
+  let full_name: string | null = null;
+  const nameMatch = text.match(/(?:i am|my name is|myself|name is)\s+([a-zA-Z]+(?:\s+[a-zA-Z]+)?)/i);
+  if (nameMatch) {
+    const candidate = nameMatch[1].trim();
+    const firstWord = candidate.split(" ")[0].toLowerCase();
+    if (!["an", "a", "the", "currently", "studying", "working"].includes(firstWord)) {
+      full_name = candidate
+        .split(" ")
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+        .join(" ");
+    }
+  }
+
   // 1. Parse Income
   let income = 250000; // default fallback
-  
-  // Match "X.Y lakh" or "X lakh"
-  const lakhMatch = lowercaseText.match(/(\d+(?:\.\d+)?)\s*(?:lakh|lakhs|lcs|lac|lacs)/);
+  const lakhMatch = lowercaseText.match(/(\d+(?:\.\d+)?)\s*(?:lakh|lakhs|lcs|lac|lacs|l)/);
   if (lakhMatch) {
     const value = parseFloat(lakhMatch[1]);
     income = Math.round(value * 100000);
   } else {
-    // Match "X k" or "X thousand"
     const thousandMatch = lowercaseText.match(/(\d+(?:\.\d+)?)\s*(?:k|thousand|thousands)/);
     if (thousandMatch) {
       const value = parseFloat(thousandMatch[1]);
       income = Math.round(value * 1000);
     } else {
-      // Match raw numbers that look like income (e.g. 50000, 200000)
       const rawNumbers = lowercaseText.match(/\b\d{4,8}\b/g);
       if (rawNumbers && rawNumbers.length > 0) {
-        // take the largest number found
-        const numbers = rawNumbers.map(n => parseInt(n, 10));
+        const numbers = rawNumbers.map((n) => parseInt(n, 10));
         income = Math.max(...numbers);
       }
     }
@@ -46,37 +56,84 @@ export function parseSpeechText(text: string): ParsedProfile {
     category = "OBC";
   } else if (lowercaseText.includes("sc") && !lowercaseText.includes("school")) {
     category = "SC";
-  } else if (lowercaseText.includes("st") && !lowercaseText.includes("student")) {
-    // Be careful with "st" in other words, check for boundaries if possible
-    // Use regex to find "st" as a word or near user categories
-    const stMatch = /\b(st)\b/.test(lowercaseText);
-    if (stMatch) {
-      category = "ST";
-    }
+  } else if (/\b(st)\b/.test(lowercaseText)) {
+    category = "ST";
   }
 
   // 3. Parse Education
-  let education = "Undergraduate"; // default
-  if (lowercaseText.includes("postgraduate") || lowercaseText.includes("post-graduate") || lowercaseText.includes("pg") || lowercaseText.includes("master")) {
+  let education = "Undergraduate";
+  if (
+    lowercaseText.includes("postgraduate") ||
+    lowercaseText.includes("post-graduate") ||
+    lowercaseText.includes("pg") ||
+    lowercaseText.includes("master")
+  ) {
     education = "Postgraduate";
-  } else if (lowercaseText.includes("school") || lowercaseText.includes("matric") || lowercaseText.includes("12th") || lowercaseText.includes("10th")) {
+  } else if (
+    lowercaseText.includes("school") ||
+    lowercaseText.includes("matric") ||
+    lowercaseText.includes("12th") ||
+    lowercaseText.includes("10th")
+  ) {
     education = "School";
-  } else if (lowercaseText.includes("undergraduate") || lowercaseText.includes("ug") || lowercaseText.includes("degree") || lowercaseText.includes("college") || lowercaseText.includes("student")) {
+  } else if (
+    lowercaseText.includes("undergraduate") ||
+    lowercaseText.includes("ug") ||
+    lowercaseText.includes("degree") ||
+    lowercaseText.includes("college") ||
+    lowercaseText.includes("student")
+  ) {
     education = "Undergraduate";
   }
 
   // 4. Parse Occupation
   let occupation = "Student";
-  if (lowercaseText.includes("farmer") || lowercaseText.includes("agriculture") || lowercaseText.includes("farming")) {
+  if (
+    lowercaseText.includes("farmer") ||
+    lowercaseText.includes("agriculture") ||
+    lowercaseText.includes("farming")
+  ) {
     occupation = "Farmer";
-  } else if (lowercaseText.includes("worker") || lowercaseText.includes("labor") || lowercaseText.includes("labour")) {
+  } else if (
+    lowercaseText.includes("worker") ||
+    lowercaseText.includes("labor") ||
+    lowercaseText.includes("labour")
+  ) {
     occupation = "Worker";
+  } else if (
+    lowercaseText.includes("ngo") ||
+    lowercaseText.includes("private sector") ||
+    lowercaseText.includes("company")
+  ) {
+    occupation = "NGO/Private sector";
+  } else if (lowercaseText.includes("student")) {
+    occupation = "Student";
+  }
+
+  // 5. Additional Flags & Metadata
+  const bpl_status =
+    lowercaseText.includes("bpl") || lowercaseText.includes("below poverty line");
+  const is_differently_abled =
+    lowercaseText.includes("differently abled") ||
+    lowercaseText.includes("handicapped") ||
+    lowercaseText.includes("disabled");
+
+  let gender: string | null = null;
+  if (/\b(female|woman|girl)\b/.test(lowercaseText)) {
+    gender = "Female";
+  } else if (/\b(male|man|boy)\b/.test(lowercaseText)) {
+    gender = "Male";
   }
 
   return {
+    full_name,
     annual_income: income,
     caste_category: category,
     education,
-    occupation
+    occupation,
+    bpl_status,
+    is_differently_abled,
+    gender,
   };
 }
+

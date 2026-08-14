@@ -103,12 +103,23 @@ export function VoiceOnboarding() {
       });
       if (res.ok) {
         const data = await res.json();
-        setProfile({
-          annual_income: data.annual_income ?? 250000,
-          caste_category: data.caste_category ?? "General",
-          education: data.education ?? "Undergraduate",
-          occupation: data.occupation ?? "Student",
-        });
+        if (data.full_name) {
+          setFullName(data.full_name);
+        }
+        setProfile((prev) => ({
+          ...prev,
+          annual_income: data.annual_income ?? prev.annual_income,
+          caste_category: data.caste_category ?? prev.caste_category,
+          education: data.education ?? prev.education,
+          occupation: data.occupation ?? prev.occupation,
+          date_of_birth: data.date_of_birth ?? prev.date_of_birth,
+          gender: data.gender ?? prev.gender,
+          marital_status: data.marital_status ?? prev.marital_status,
+          religion: data.religion ?? prev.religion,
+          is_differently_abled: data.is_differently_abled ?? prev.is_differently_abled,
+          bpl_status: data.bpl_status ?? prev.bpl_status,
+          home_state: data.home_state ?? prev.home_state,
+        }));
         setApiSource(data.source || "local");
       }
     } catch (e) {
@@ -116,6 +127,11 @@ export function VoiceOnboarding() {
     } finally {
       setIsParsing(false);
     }
+  };
+
+  const handleSampleClick = (sampleText: string) => {
+    setTranscript(sampleText);
+    parseProfileText(sampleText);
   };
 
   const handleManualTextSubmit = async (e: React.FormEvent) => {
@@ -177,9 +193,16 @@ export function VoiceOnboarding() {
               <Mic className="h-4 w-4 text-blue-600" />
               Voice Assistant
             </h3>
-            <p className="text-slate-400 text-xs">
-              Say: &ldquo;I am Rahul, an OBC student with 2.5 lakh income&rdquo;
-            </p>
+            <div className="flex flex-col items-center gap-1">
+              <span className="text-slate-400 text-xs font-medium">Try clicking or saying:</span>
+              <button
+                type="button"
+                onClick={() => handleSampleClick("I am Rahul, an OBC student with 2.5 lakh income")}
+                className="text-blue-600 hover:text-blue-700 bg-blue-50/80 hover:bg-blue-100/80 border border-blue-200 rounded-md px-2.5 py-1 text-xs font-medium transition-all cursor-pointer shadow-xs active:scale-95"
+              >
+                &ldquo;I am Rahul, an OBC student with 2.5 lakh income&rdquo;
+              </button>
+            </div>
           </div>
 
           {/* Pulsing Mic Button */}

@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     if (apiKey) {
       try {
         const response = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -22,22 +22,24 @@ export async function POST(request: Request) {
                   text: `You are an AI profile extractor. Extract demographic parameters from the user's spoken transcription: "${text}".
 Return ONLY a raw JSON object with these keys (no markdown formatting, no comments):
 {
+  "full_name": string (extract full name if mentioned e.g. "Rahul", "Rahul Menon", else null),
   "annual_income": number (annual household income in rupees. Extract lakhs e.g. "2.5 lakh" -> 250000. Default: 250000),
   "caste_category": string (must be exactly "General", "OBC", "SC", or "ST". Default: "General"),
   "education": string (must be exactly "School", "Undergraduate", or "Postgraduate". Default: "Undergraduate"),
-  "occupation": string (must be exactly "Student", "Farmer", "Worker", or "None". Default: "Student"),
+  "occupation": string (must be exactly "Student", "Farmer", "Worker", "NGO/Private sector", or "None". Default: "Student"),
   "date_of_birth": string (YYYY-MM-DD format if mentioned, else null),
   "gender": string ("Male", "Female", "Other", or null if not mentioned),
   "marital_status": string ("Single", "Married", "Divorced", "Widowed", or null),
   "religion": string (extract religion e.g. "Hindu", "Muslim", "Christian", "Sikh", etc., or null),
   "is_differently_abled": boolean (true if they mention disability, handicap, or being differently abled. Default: false),
-  "bpl_status": boolean (true if they mention BPL, below poverty line, or BPL card. Default: false)
+  "bpl_status": boolean (true if they mention BPL, below poverty line, or BPL card. Default: false),
+  "home_state": string (state name if mentioned e.g. "Kerala", "Maharashtra", else null)
 }`
                 }]
               }],
               generationConfig: { responseMimeType: "application/json" }
             }),
-            signal: AbortSignal.timeout(2000)
+            signal: AbortSignal.timeout(8000)
           }
         );
 

@@ -20,6 +20,13 @@ export async function saveUserProfile(data: {
   caste_category: string;
   education: string;
   occupation: string;
+  date_of_birth?: string | null;
+  gender?: string | null;
+  marital_status?: string | null;
+  religion?: string | null;
+  is_differently_abled?: boolean | null;
+  bpl_status?: boolean | null;
+  state?: string | null;
 }) {
   try {
     const userId = await getActiveUserId();
@@ -30,7 +37,13 @@ export async function saveUserProfile(data: {
       caste_category: data.caste_category,
       education: data.education,
       occupation: data.occupation,
-      state: "Kerala" // Set default state for demo matches
+      date_of_birth: data.date_of_birth,
+      gender: data.gender,
+      marital_status: data.marital_status,
+      religion: data.religion,
+      is_differently_abled: data.is_differently_abled,
+      bpl_status: data.bpl_status,
+      state: data.state || "Kerala"
     });
     
     revalidatePath("/dashboard");
