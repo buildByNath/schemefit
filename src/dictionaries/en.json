@@ -1,0 +1,67 @@
+{
+  "dashboard": {
+    "welcome_back": "Welcome back",
+    "update_profile": "Update Profile",
+    "total_matched_value": "Total matched value",
+    "across_schemes": "Across {count} schemes you qualify for",
+    "benefits_received": "Benefits received",
+    "from_approved": "From approved applications",
+    "applications_filed": "Applications filed",
+    "submitted_to_portals": "Submitted to government portals",
+    "schemes_you_qualify_for": "Schemes you qualify for",
+    "available": "available",
+    "all_caught_up": "All caught up!",
+    "no_unclaimed_schemes": "No unclaimed schemes found."
+  },
+  "scheme_card": {
+    "financial_benefit": "Financial Benefit",
+    "direct_funding": "Direct funding if you are approved — no repayment required.",
+    "ai_eligibility_check": "AI Eligibility Check",
+    "save_reminder": "Save Reminder",
+    "applied": "Applied",
+    "applying": "Applying…",
+    "submitting_application": "Submitting application…",
+    "apply_to_portal": "Apply to portal",
+    "apply_now": "Apply now"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "my_benefits": "My Benefits",
+    "my_family": "My Family",
+    "my_documents": "My Documents",
+    "smartdoc_studio": "SmartDoc Studio",
+    "my_applications": "My Applications",
+    "ai_chatbot": "AI Chatbot",
+    "provider_portal": "Provider Portal",
+    "role_view": "Role View",
+    "ngo_sponsor": "NGO / Sponsor",
+    "beneficiary": "Beneficiary",
+    "switch": "switch"
+  },
+  "applications": {
+    "vault": "Applications Vault",
+    "title": "My Applications",
+    "desc": "Track active welfare benefits status, review disapproved filings, and instantly compile statutory grievance complaints or RTI delay requests.",
+    "profile_incomplete": "Complete your profile first",
+    "setup_profile": "Setup Profile →",
+    "profile_desc": "You need a profile to start applying for welfare schemes."
+  },
+  "documents": {
+    "secure_repo": "Secure Document Repository",
+    "title": "My Encrypted Vault",
+    "desc": "Securely manage your personal identification documents and income certificates. Files are automatically encrypted client-side using bank-grade AES-256 keys.",
+    "profile_desc": "Set up your profile before uploading documents."
+  },
+  "benefits": {
+    "tag": "Document Matching Directory",
+    "title": "My Welfare Benefits",
+    "desc": "Review the list of matching programs, toggle documents in your vault, and monitor your exact completion status before submitting applications to government departments.",
+    "profile_desc": "We need your income and caste category to match you with eligible welfare schemes."
+  },
+  "family": {
+    "tag": "Household Savings & Wealth",
+    "title": "My Family Benefits Ledger",
+    "desc": "Track the direct welfare distributions received by individual family members and view potential unclaimed benefits with clear cash payouts.",
+    "profile_desc": "We need your household details to calculate family benefits."
+  }
+}

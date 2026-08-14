@@ -1,6 +1,7 @@
 import { LogoutButton } from "./LogoutButton";
 import { MobileNav } from "./MobileNav";
 import { ProfileDropdown } from "./ProfileDropdown";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 import { getUser } from "@/lib/db";
 
 export async function Header() {
@@ -28,6 +29,7 @@ export async function Header() {
 
         {/* Right side nav */}
         <div className="hidden md:flex items-center gap-3">
+          <LanguageSwitcher />
           <span className="text-sm text-slate-500">
             {activeUser?.full_name || "Guest"}
           </span>

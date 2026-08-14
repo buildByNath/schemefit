@@ -28,7 +28,21 @@ const baseItems = [
   { title: "AI Chatbot", href: "/dashboard/chatbot", icon: MessageSquare },
 ];
 
-export function Sidebar() {
+export function Sidebar({ dict }: { dict?: any }) {
+  const t = dict || {
+    dashboard: "Dashboard",
+    my_benefits: "My Benefits",
+    my_family: "My Family",
+    my_documents: "My Documents",
+    smartdoc_studio: "SmartDoc Studio",
+    my_applications: "My Applications",
+    ai_chatbot: "AI Chatbot",
+    provider_portal: "Provider Portal",
+    role_view: "Role View",
+    ngo_sponsor: "NGO / Sponsor",
+    beneficiary: "Beneficiary",
+    switch: "switch"
+  };
   const pathname = usePathname();
   const [isProviderRole, setIsProviderRole] = useState(false);
 
@@ -52,8 +66,14 @@ export function Sidebar() {
   }, [pathname]);
 
   const navigationItems = [
-    ...baseItems,
-    ...(isProviderRole ? [{ title: "Provider Portal", href: "/dashboard/provider", icon: Building2, isProviderOnly: true }] : [])
+    { title: t.dashboard, href: "/dashboard", icon: LayoutDashboard },
+    { title: t.my_benefits, href: "/dashboard/benefits", icon: Gift },
+    { title: t.my_family, href: "/dashboard/family", icon: Users },
+    { title: t.my_documents, href: "/dashboard/documents", icon: Files },
+    { title: t.smartdoc_studio, href: "/dashboard/smartdoc", icon: Settings },
+    { title: t.my_applications, href: "/dashboard/applications", icon: FileCheck },
+    { title: t.ai_chatbot, href: "/dashboard/chatbot", icon: MessageSquare },
+    ...(isProviderRole ? [{ title: t.provider_portal, href: "/dashboard/provider", icon: Building2, isProviderOnly: true }] : [])
   ];
 
   return (
@@ -63,7 +83,7 @@ export function Sidebar() {
           const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
           return (
             <Link
-              key={item.title}
+              key={item.href}
               href={item.href}
               aria-current={isActive ? 'page' : undefined}
               className={cn(
@@ -87,7 +107,7 @@ export function Sidebar() {
 
       {/* Role View Demo Switcher */}
       <div className="pt-4 border-t border-slate-100 space-y-2">
-        <p className="px-1 text-[10px] font-semibold text-slate-400">Role View</p>
+        <p className="px-1 text-[10px] font-semibold text-slate-400">{t.role_view}</p>
         <button
           onClick={() => setIsProviderRole(!isProviderRole)}
           className={`w-full p-2.5 rounded-lg border text-[11px] font-semibold flex items-center justify-between gap-2 transition-all cursor-pointer ${
@@ -101,16 +121,16 @@ export function Sidebar() {
             {isProviderRole ? (
               <>
                 <Building2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
-                <span className="truncate">NGO / Sponsor</span>
+                <span className="truncate">{t.ngo_sponsor}</span>
               </>
             ) : (
               <>
                 <UserCheck className="h-3.5 w-3.5 text-slate-500 shrink-0" />
-                <span className="truncate">Beneficiary</span>
+                <span className="truncate">{t.beneficiary}</span>
               </>
             )}
           </div>
-          <span className="text-[9px] font-semibold text-slate-400 shrink-0">switch</span>
+          <span className="text-[9px] font-semibold text-slate-400 shrink-0">{t.switch}</span>
         </button>
       </div>
     </nav>

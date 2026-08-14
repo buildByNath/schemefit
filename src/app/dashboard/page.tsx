@@ -1,6 +1,7 @@
 import React from "react";
 import { getUser, getSchemes, getApplications, getFamilyMembers } from "@/lib/db";
 import { getEligibleSchemes } from "@/lib/matching";
+import { getDictionary } from "@/lib/i18n";
 import { SchemeCard } from "@/components/SchemeCard";
 import { FamilySection } from "@/components/FamilySection";
 import { RefreshCw, AlertCircle, TrendingUp, CheckCircle, FileText, Info } from "lucide-react";
@@ -12,6 +13,7 @@ export const revalidate = 0; // Force dynamic rendering
 
 export default async function DashboardPage() {
   const user = await getUser();
+  const dict = await getDictionary();
 
   // If user has no profile yet, show a gentle banner instead of redirecting
   const isProfileIncomplete = !user || !user.annual_income || !user.caste_category;
@@ -81,7 +83,7 @@ export default async function DashboardPage() {
               )}
             </div>
             <h1 className="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">
-              Welcome back, {user!.full_name}
+              {dict.dashboard.welcome_back}, {user!.full_name}
             </h1>
           </div>
 
@@ -89,7 +91,7 @@ export default async function DashboardPage() {
             href="/"
             className="flex items-center gap-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 px-4 py-2.5 rounded-lg transition-colors cursor-pointer tap-target"
           >
-            <RefreshCw className="h-3.5 w-3.5" /> Update Profile
+            <RefreshCw className="h-3.5 w-3.5" /> {dict.dashboard.update_profile}
           </Link>
         </div>
       )}
@@ -100,7 +102,7 @@ export default async function DashboardPage() {
         <div className="bg-[#0F172A] text-white rounded-xl p-6 border border-[#1e293b] space-y-3 relative overflow-hidden">
           <div className="absolute inset-0 opacity-10" style={{ background: 'radial-gradient(circle at 80% 20%, #0369A1 0%, transparent 60%)' }} />
           <div className="flex items-center justify-between relative">
-            <span className="text-xs font-medium text-slate-400">Total matched value</span>
+            <span className="text-xs font-medium text-slate-400">{dict.dashboard.total_matched_value}</span>
             <TrendingUp className="h-4 w-4 text-emerald-400" />
           </div>
           <div className="relative">
@@ -108,7 +110,7 @@ export default async function DashboardPage() {
               ₹{totalBenefits.toLocaleString("en-IN")}
             </h3>
             <p className="text-xs text-slate-400 mt-1">
-              Across {eligibleSchemes.length} schemes you qualify for
+              {dict.dashboard.across_schemes.replace("{count}", eligibleSchemes.length.toString())}
             </p>
           </div>
         </div>
@@ -116,28 +118,28 @@ export default async function DashboardPage() {
         {/* Card 2: Benefits received */}
         <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-3 card-hover">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-500">Benefits received</span>
+            <span className="text-xs font-medium text-slate-500">{dict.dashboard.benefits_received}</span>
             <CheckCircle className="h-4 w-4 text-blue-500" />
           </div>
           <div>
             <h3 className="text-3xl font-black tracking-tight tabular-nums text-slate-900">
               ₹{claimedBenefits.toLocaleString("en-IN")}
             </h3>
-            <p className="text-xs text-slate-400 mt-1">From approved applications</p>
+            <p className="text-xs text-slate-400 mt-1">{dict.dashboard.from_approved}</p>
           </div>
         </div>
 
         {/* Card 3: Applications filed */}
         <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-3 card-hover">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-500">Applications filed</span>
+            <span className="text-xs font-medium text-slate-500">{dict.dashboard.applications_filed}</span>
             <FileText className="h-4 w-4 text-blue-500" />
           </div>
           <div>
             <h3 className="text-3xl font-black tracking-tight tabular-nums text-slate-900">
               {userApps.length}
             </h3>
-            <p className="text-xs text-slate-400 mt-1">Submitted to government portals</p>
+            <p className="text-xs text-slate-400 mt-1">{dict.dashboard.submitted_to_portals}</p>
           </div>
         </div>
       </div>
@@ -158,19 +160,19 @@ export default async function DashboardPage() {
       <div className="space-y-4 pt-2">
         <div className="flex items-center justify-between">
           <h3 className="font-bold text-lg text-slate-900">
-            Schemes you qualify for
+            {dict.dashboard.schemes_you_qualify_for}
           </h3>
           <span aria-live="polite" aria-atomic="true" className="text-xs text-slate-500 font-medium tabular-nums">
-            {isDemo ? 0 : eligibleSchemes.length} available
+            {isDemo ? 0 : eligibleSchemes.length} {dict.dashboard.available}
           </span>
         </div>
 
         {isDemo || eligibleSchemes.length === 0 ? (
           <div className="bg-white border border-slate-200 rounded-xl p-10 text-center">
             <Info className="h-8 w-8 text-slate-300 mx-auto mb-3" />
-            <h4 className="font-semibold text-slate-700 mb-1">All caught up</h4>
+            <h4 className="font-semibold text-slate-700 mb-1">{dict.dashboard.all_caught_up}</h4>
             <p className="text-slate-400 text-sm max-w-sm mx-auto">
-              You&apos;ve applied to all matching schemes, or no programs match your profile yet.
+              {dict.dashboard.no_unclaimed_schemes}
             </p>
           </div>
         ) : (
@@ -181,6 +183,7 @@ export default async function DashboardPage() {
                   scheme={scheme}
                   hasApplied={appliedSchemeIdsSet.has(scheme.id)}
                   user={user || undefined}
+                  dict={dict.scheme_card}
                 />
               </div>
             ))}

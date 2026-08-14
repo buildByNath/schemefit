@@ -3,6 +3,7 @@ import { Atkinson_Hyperlegible } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Sidebar } from "@/components/layout/Sidebar";
+import { getDictionary } from "@/lib/i18n";
 
 const atkinson = Atkinson_Hyperlegible({ subsets: ["latin"], weight: ["400", "700"] });
 
@@ -11,11 +12,12 @@ export const metadata: Metadata = {
   description: "Discover and prepare for government benefits you may be eligible for.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const dict = await getDictionary();
   return (
     <html lang="en">
       <body className={atkinson.className}>
@@ -28,7 +30,7 @@ export default function RootLayout({
         </a>
         <Header />
         <div className="flex h-[calc(100vh-3.5rem)] overflow-hidden">
-          <Sidebar />
+          <Sidebar dict={dict.sidebar} />
           <main id="main-content" className="flex-1 overflow-y-auto bg-[#F8FAFC]" tabIndex={-1}>
             {children}
           </main>

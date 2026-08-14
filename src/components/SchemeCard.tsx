@@ -12,15 +12,28 @@ interface SchemeCardProps {
   scheme: Scheme;
   hasApplied: boolean;
   user?: User;
+  dict?: any;
 }
 
 const DEMO_SCHEME_ID = "db859c25-f712-4022-9214-e25f6e80b2a6";
 
-export function SchemeCard({ scheme, hasApplied, user }: SchemeCardProps) {
+export function SchemeCard({ scheme, hasApplied, user, dict }: SchemeCardProps) {
   const [isPending, startTransition] = useTransition();
   const [showModal, setShowModal] = useState(false);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
   const [emailResult, setEmailResult] = useState<{ success: boolean; message: string } | null>(null);
+
+  const t = dict || {
+    financial_benefit: "Financial Benefit",
+    direct_funding: "Direct funding if you are approved — no repayment required.",
+    ai_eligibility_check: "AI Eligibility Check",
+    save_reminder: "Save Reminder",
+    applied: "Applied",
+    applying: "Applying…",
+    submitting_application: "Submitting application…",
+    apply_to_portal: "Apply to portal",
+    apply_now: "Apply now"
+  };
 
   const isEmailDemo = scheme.id === DEMO_SCHEME_ID;
 
@@ -231,7 +244,7 @@ export function SchemeCard({ scheme, hasApplied, user }: SchemeCardProps) {
                 disabled={!scheme.deadline}
                 className="flex-1 border-slate-200 text-slate-600 hover:bg-slate-50 cursor-pointer text-[13px] tap-target"
               >
-                <Calendar className="h-4 w-4 mr-1.5" /> Save Reminder
+                <Calendar className="h-4 w-4 mr-1.5" /> {t.save_reminder}
               </Button>
               
               {hasApplied ? (
@@ -241,7 +254,7 @@ export function SchemeCard({ scheme, hasApplied, user }: SchemeCardProps) {
                   aria-label={`Already applied to ${scheme.title}`}
                   className="flex-1 bg-emerald-50 text-emerald-600 font-medium border border-emerald-100 text-sm"
                 >
-                  <CheckCircle2 className="h-4 w-4 mr-1.5" /> Applied
+                  <CheckCircle2 className="h-4 w-4 mr-1.5" /> {t.applied}
                 </Button>
               ) : (
                 <Button
@@ -253,12 +266,12 @@ export function SchemeCard({ scheme, hasApplied, user }: SchemeCardProps) {
                   {isPending ? (
                     <span role="status" className="flex items-center gap-1.5">
                       <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-                      <span className="sr-only">Submitting application…</span>
-                      <span aria-hidden="true">Applying…</span>
+                      <span className="sr-only">{t.submitting_application}</span>
+                      <span aria-hidden="true">{t.applying}</span>
                     </span>
                   ) : (
                     <>
-                      {!scheme.provider_type || scheme.provider_type === "Government" ? "Apply to portal" : "Apply now"} <ChevronRight className="h-4 w-4 ml-1" aria-hidden="true" />
+                      {!scheme.provider_type || scheme.provider_type === "Government" ? t.apply_to_portal : t.apply_now} <ChevronRight className="h-4 w-4 ml-1" aria-hidden="true" />
                     </>
                   )}
                 </Button>
