@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useTransition } from "react";
-import { Calendar, CheckCircle2, ChevronRight, Loader2, IndianRupee, X, ExternalLink, FileText, Check, AlertTriangle, Sparkles } from "lucide-react";
+import { Calendar, CheckCircle2, ChevronRight, Loader2, IndianRupee, X, ExternalLink, Building2, Landmark, HeartHandshake } from "lucide-react";
 import { Scheme, User } from "@/lib/db";
 import { applyToScheme } from "@/app/actions";
 import { Badge } from "@/components/ui/badge";
@@ -105,7 +105,7 @@ export function SchemeCard({ scheme, hasApplied, user }: SchemeCardProps) {
       {/* Interactive Card */}
       <Card 
         onClick={() => setShowModal(true)}
-        className="flex flex-col h-full bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all cursor-pointer group"
+        className="flex flex-col h-full bg-white border border-slate-200 rounded-xl card-hover cursor-pointer group"
       >
         <CardHeader className="p-5 pb-3">
           <div className="flex justify-between items-start gap-2 mb-2 flex-wrap">
@@ -114,18 +114,18 @@ export function SchemeCard({ scheme, hasApplied, user }: SchemeCardProps) {
                 {scheme.category || "General"}
               </Badge>
               {scheme.provider_type === "NGO" && (
-                <Badge className="bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-[10px]">
-                  💚 NGO
+                <Badge className="bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold text-[10px] gap-1">
+                  <HeartHandshake className="h-3 w-3" aria-hidden="true" /> NGO
                 </Badge>
               )}
               {scheme.provider_type === "Private Sector" && (
-                <Badge className="bg-purple-50 text-purple-700 border border-purple-200 font-bold text-[10px]">
-                  💜 Private Sector
+                <Badge className="bg-violet-50 text-violet-700 border border-violet-200 font-semibold text-[10px] gap-1">
+                  <Building2 className="h-3 w-3" aria-hidden="true" /> Private
                 </Badge>
               )}
               {(!scheme.provider_type || scheme.provider_type === "Government") && (
-                <Badge className="bg-blue-50 text-blue-700 border border-blue-200 font-bold text-[10px]">
-                  🏛️ Government
+                <Badge className="bg-blue-50 text-blue-700 border border-blue-200 font-semibold text-[10px] gap-1">
+                  <Landmark className="h-3 w-3" aria-hidden="true" /> Government
                 </Badge>
               )}
             </div>
@@ -136,7 +136,7 @@ export function SchemeCard({ scheme, hasApplied, user }: SchemeCardProps) {
               </div>
             )}
           </div>
-          <CardTitle className="text-base font-bold text-slate-900 leading-tight group-hover:text-blue-600 transition-colors">
+          <CardTitle className="text-[15px] font-bold text-slate-900 leading-tight group-hover:text-[#0369A1] transition-colors">
             {scheme.title}
           </CardTitle>
           <CardDescription className="text-slate-400 text-[11px] mt-1">
@@ -145,7 +145,7 @@ export function SchemeCard({ scheme, hasApplied, user }: SchemeCardProps) {
         </CardHeader>
         
         <CardContent className="p-5 pt-0 pb-4 flex-1">
-          <p className="text-slate-600 text-xs leading-relaxed line-clamp-3">
+          <p className="text-slate-600 text-sm leading-relaxed line-clamp-3">
             {scheme.description}
           </p>
           
@@ -157,14 +157,13 @@ export function SchemeCard({ scheme, hasApplied, user }: SchemeCardProps) {
           )}
         </CardContent>
         
-        <CardFooter className="p-5 pt-0 border-t border-slate-100 flex gap-3 mt-auto">
+        <CardFooter className="p-4 pt-0 border-t border-slate-100 flex flex-wrap gap-2 mt-auto">
           <Button
             variant="outline"
             size="sm"
             onClick={handleDownloadICS}
             disabled={!scheme.deadline}
-            className="flex-1 border-slate-200 text-slate-600 hover:bg-slate-50 cursor-pointer text-xs"
-            style={{ minHeight: "44px" }}
+            className="flex-1 border-slate-200 text-slate-600 hover:bg-slate-50 cursor-pointer text-[13px] tap-target"
           >
             <Calendar className="h-4 w-4 mr-1.5" /> Save Reminder
           </Button>
@@ -173,8 +172,8 @@ export function SchemeCard({ scheme, hasApplied, user }: SchemeCardProps) {
             <Button
               disabled
               variant="secondary"
-              className="flex-1 bg-emerald-50 text-emerald-600 font-medium border border-emerald-100 text-xs"
-              style={{ minHeight: "44px" }}
+              aria-label={`Already applied to ${scheme.title}`}
+              className="flex-1 bg-emerald-50 text-emerald-600 font-medium border border-emerald-100 text-sm"
             >
               <CheckCircle2 className="h-4 w-4 mr-1.5" /> Applied
             </Button>
@@ -183,14 +182,17 @@ export function SchemeCard({ scheme, hasApplied, user }: SchemeCardProps) {
               size="sm"
               onClick={handleApply}
               disabled={isPending}
-              className="flex-1 bg-slate-900 hover:bg-slate-800 text-white font-medium cursor-pointer text-xs"
-              style={{ minHeight: "44px" }}
+              className="flex-1 bg-[#0F172A] hover:bg-[#1e293b] text-white font-semibold cursor-pointer text-sm btn-primary tap-target"
             >
               {isPending ? (
-                <Loader2 className="h-4 w-4 animate-spin mr-1.5" />
+                <span role="status" className="flex items-center gap-1.5">
+                  <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+                  <span className="sr-only">Submitting application…</span>
+                  <span aria-hidden="true">Applying…</span>
+                </span>
               ) : (
                 <>
-                  {!scheme.provider_type || scheme.provider_type === "Government" ? "Go to Portal (Autofill)" : "One-Click Apply"} <ChevronRight className="h-4 w-4 ml-1" />
+                  {!scheme.provider_type || scheme.provider_type === "Government" ? "Apply to portal" : "Apply now"} <ChevronRight className="h-4 w-4 ml-1" aria-hidden="true" />
                 </>
               )}
             </Button>
@@ -210,10 +212,10 @@ export function SchemeCard({ scheme, hasApplied, user }: SchemeCardProps) {
                     {scheme.category || "General"}
                   </Badge>
                   {scheme.provider_type && (
-                    <Badge className={`border font-extrabold text-[10px] ${
+                    <Badge className={`border font-semibold text-[10px] ${
                       scheme.provider_type === "Government" ? "bg-blue-50 text-blue-700 border-blue-200" :
                       scheme.provider_type === "NGO" ? "bg-emerald-50 text-emerald-700 border-emerald-200" :
-                      "bg-purple-50 text-purple-700 border-purple-200"
+                      "bg-violet-50 text-violet-700 border-violet-200"
                     }`}>
                       {scheme.provider_type}
                     </Badge>
@@ -228,7 +230,8 @@ export function SchemeCard({ scheme, hasApplied, user }: SchemeCardProps) {
               </div>
               <button 
                 onClick={() => setShowModal(false)}
-                className="text-slate-400 hover:text-slate-600 p-1.5 hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
+                className="text-slate-400 hover:text-slate-600 p-1.5 hover:bg-slate-100 rounded-full transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-600"
+                aria-label="Close modal"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -239,11 +242,11 @@ export function SchemeCard({ scheme, hasApplied, user }: SchemeCardProps) {
               {/* Highlighted Benefit Box */}
               <div className="p-5 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50/60 border border-emerald-100 flex items-center justify-between">
                 <div className="space-y-1">
-                  <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-wide flex items-center gap-1">
-                    <Sparkles className="h-3 w-3 text-emerald-600 animate-pulse" /> Financial Benefit
+                  <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-wide">
+                    Financial Benefit
                   </span>
-                  <p className="text-xs text-emerald-700 font-semibold max-w-md leading-normal">
-                    This program grants direct funding for higher education tuition fee coverage and study allowances.
+                  <p className="text-xs text-emerald-700 font-medium max-w-md leading-normal">
+                    Direct funding if you are approved — no repayment required.
                   </p>
                 </div>
                 {scheme.max_benefit_amount && (
@@ -268,9 +271,8 @@ export function SchemeCard({ scheme, hasApplied, user }: SchemeCardProps) {
               {/* AI Audit Checklist Section */}
               <div className="space-y-4">
                 <div className="flex items-center gap-2 border-b border-slate-100 pb-2">
-                  <h3 className="text-sm font-bold text-slate-800 flex items-center gap-1.5">
-                    <Sparkles className="h-4 w-4 text-indigo-500 animate-pulse" />
-                    AI Instant Welfare Match Check
+                  <h3 className="text-sm font-bold text-slate-800">
+                    AI Eligibility Check
                   </h3>
                 </div>
 
@@ -370,7 +372,7 @@ export function SchemeCard({ scheme, hasApplied, user }: SchemeCardProps) {
                     href={scheme.application_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-slate-900 border border-slate-250 bg-white hover:bg-slate-50 px-4 py-2.5 rounded-lg transition-colors"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-slate-900 border border-slate-250 bg-white hover:bg-slate-50 px-4 py-2.5 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600"
                   >
                     For more information click here <ExternalLink className="h-3.5 w-3.5" />
                   </a>
@@ -387,14 +389,14 @@ export function SchemeCard({ scheme, hasApplied, user }: SchemeCardProps) {
                   <button
                     onClick={handleApply}
                     disabled={isPending}
-                    className="bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-2.5 rounded-lg text-xs flex items-center gap-1.5 cursor-pointer"
-                    style={{ minHeight: "44px" }}
+                    aria-label={`Apply to ${scheme.title}`}
+                    className="bg-[#0F172A] hover:bg-[#1e293b] text-white font-semibold px-6 py-2.5 rounded-lg text-[13px] flex items-center gap-1.5 cursor-pointer btn-primary tap-target focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600"
                   >
                     {isPending ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
                       <>
-                        {!scheme.provider_type || scheme.provider_type === "Government" ? "Apply & Autofill" : "One-Click Apply (Internal)"} <ChevronRight className="h-4 w-4" />
+                        {!scheme.provider_type || scheme.provider_type === "Government" ? "Apply to portal" : "Apply now"} <ChevronRight className="h-4 w-4" />
                       </>
                     )}
                   </button>

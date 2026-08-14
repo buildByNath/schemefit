@@ -49,38 +49,38 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --background: #F8FAFC;
+  --foreground: #020617;
+  --card: #FFFFFF;
+  --card-foreground: #020617;
+  --popover: #FFFFFF;
+  --popover-foreground: #020617;
+  --primary: #0F172A;
+  --primary-foreground: #FFFFFF;
+  --secondary: #334155;
+  --secondary-foreground: #FFFFFF;
+  --muted: #E8ECF1;
+  --muted-foreground: #475569;
+  --accent: #0369A1;
+  --accent-foreground: #FFFFFF;
+  --destructive: #DC2626;
+  --border: #E2E8F0;
+  --input: #E2E8F0;
+  --ring: #0F172A;
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #020617;
+  --sidebar-primary: #0F172A;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #E8ECF1;
+  --sidebar-accent-foreground: #475569;
+  --sidebar-border: #E2E8F0;
+  --sidebar-ring: #0F172A;
 }
 
 .dark {
@@ -123,8 +123,75 @@
   }
   body {
     @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   html {
     @apply font-sans;
+    font-size: 16px;
+  }
+
+  /* Typeset — enforce readable body measure and consistent role scale */
+  h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  p, li {
+    line-height: 1.6;
+  }
+
+  /* Semantic focus ring — 3-4px per accessible-and-ethical spec */
+  :focus-visible {
+    outline: 3px solid #0369A1;
+    outline-offset: 3px;
+    border-radius: 4px;
   }
 }
+
+/* ── Layout — spacing rhythm ── */
+@layer utilities {
+  .section-gap { @apply space-y-8; }
+  .card-gap    { @apply gap-5; }
+
+  /* Animate — purposeful CSS transitions */
+  .card-hover {
+    transition: box-shadow 200ms cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+                transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .card-hover:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(3, 105, 161, 0.1), 0 1px 4px rgba(0,0,0,0.06);
+    border-color: #CBD5E1;
+  }
+
+  /* Button hover feedback — confident arrival */
+  .btn-primary {
+    transition: background-color 150ms ease, transform 100ms ease, box-shadow 150ms ease;
+  }
+  .btn-primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(15,23,42,0.25);
+  }
+  .btn-primary:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  /* Delight — fade-in entrance for cards (respects reduced motion) */
+  @media (prefers-reduced-motion: no-preference) {
+    .fade-up {
+      animation: fadeUp 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  }
+
+  /* Adapt — consistent mobile tap target floor */
+  .tap-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}

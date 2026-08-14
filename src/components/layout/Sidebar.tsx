@@ -57,7 +57,7 @@ export function Sidebar() {
   ];
 
   return (
-    <nav className="hidden md:flex w-[200px] flex-col justify-between gap-2 p-4 h-[calc(100vh-3.5rem)] border-r bg-white">
+    <nav aria-label="Main navigation" className="hidden md:flex w-[200px] flex-col justify-between gap-2 p-4 h-[calc(100vh-3.5rem)] border-r bg-white">
       <div className="space-y-1">
         {navigationItems.map((item: any) => {
           const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
@@ -65,16 +65,17 @@ export function Sidebar() {
             <Link
               key={item.title}
               href={item.href}
+              aria-current={isActive ? 'page' : undefined}
               className={cn(
-                "flex items-center gap-3 rounded-xl px-3 py-2 text-xs font-semibold transition-all cursor-pointer",
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-xs font-medium transition-all cursor-pointer",
                 isActive 
-                  ? "bg-indigo-50 text-indigo-700 font-bold border border-indigo-100" 
+                  ? "bg-[#0369A1]/8 text-[#0369A1] font-semibold" 
                   : item.isProviderOnly
-                  ? "text-emerald-700 bg-emerald-50/50 hover:bg-emerald-50 font-bold border border-emerald-200/60"
+                  ? "text-emerald-700 bg-emerald-50/50 hover:bg-emerald-50 font-semibold border border-emerald-200/60"
                   : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
               )}
             >
-              <item.icon className={cn("h-4 w-4", isActive ? "text-indigo-600" : item.isProviderOnly ? "text-emerald-600" : "text-slate-400")} />
+              <item.icon className={cn("h-4 w-4", isActive ? "text-[#0369A1]" : item.isProviderOnly ? "text-emerald-600" : "text-slate-400")} />
               <span>{item.title}</span>
               {item.isProviderOnly && (
                 <span className="ml-auto flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -86,12 +87,10 @@ export function Sidebar() {
 
       {/* Role View Demo Switcher */}
       <div className="pt-4 border-t border-slate-100 space-y-2">
-        <div className="flex items-center justify-between px-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-          <span>Active Role View</span>
-        </div>
+        <p className="px-1 text-[10px] font-semibold text-slate-400">Role View</p>
         <button
           onClick={() => setIsProviderRole(!isProviderRole)}
-          className={`w-full p-2.5 rounded-xl border text-[11px] font-bold flex items-center justify-between gap-2 transition-all cursor-pointer ${
+          className={`w-full p-2.5 rounded-lg border text-[11px] font-semibold flex items-center justify-between gap-2 transition-all cursor-pointer ${
             isProviderRole
               ? "bg-emerald-50 border-emerald-200 text-emerald-800"
               : "bg-slate-50 border-slate-200 text-slate-700"
@@ -106,12 +105,12 @@ export function Sidebar() {
               </>
             ) : (
               <>
-                <UserCheck className="h-3.5 w-3.5 text-indigo-600 shrink-0" />
-                <span className="truncate">Student View</span>
+                <UserCheck className="h-3.5 w-3.5 text-slate-500 shrink-0" />
+                <span className="truncate">Beneficiary</span>
               </>
             )}
           </div>
-          <span className="text-[9px] font-extrabold underline shrink-0">Switch</span>
+          <span className="text-[9px] font-semibold text-slate-400 shrink-0">switch</span>
         </button>
       </div>
     </nav>

@@ -3,7 +3,7 @@ import { getUser, getSchemes, getApplications, getFamilyMembers } from "@/lib/db
 import { getEligibleSchemes } from "@/lib/matching";
 import { SchemeCard } from "@/components/SchemeCard";
 import { FamilySection } from "@/components/FamilySection";
-import { Sparkles, RefreshCw, AlertCircle, TrendingUp, CheckCircle, FileText, Info } from "lucide-react";
+import { RefreshCw, AlertCircle, TrendingUp, CheckCircle, FileText, Info } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { demoUser } from "@/lib/seed";
@@ -38,121 +38,100 @@ export default async function DashboardPage() {
   const isDemo = user?.id === demoUser.id;
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto p-6 md:p-8 bg-slate-50 min-h-screen">
+    <div className="max-w-5xl mx-auto p-6 md:p-8 space-y-8">
       
       {/* Profile Incomplete Banner */}
       {isProfileIncomplete && (
         <div className="flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-xl p-4">
           <AlertCircle className="h-5 w-5 text-amber-600 flex-shrink-0" />
           <div className="flex-1">
-            <p className="text-sm font-semibold text-amber-800">Your profile is incomplete</p>
-            <p className="text-xs text-amber-600">Fill in your details to start matching with welfare schemes.</p>
+            <p className="text-sm font-semibold text-amber-800">Complete your profile to see matched schemes</p>
+            <p className="text-xs text-amber-600">We need a few details to find schemes you actually qualify for.</p>
           </div>
           <Link
             href="/"
             className="text-xs font-bold text-amber-700 bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded-lg transition-colors"
           >
-            Complete Profile →
+            Get Started →
           </Link>
         </div>
       )}
 
       {/* Upper Status Bar */}
       {!isProfileIncomplete && (
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
-        <div className="space-y-1 flex-1">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white border border-slate-200 rounded-xl p-5">
+        <div className="space-y-0.5 flex-1">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Active Profile</span>
-            <Badge variant="secondary" className="bg-blue-50 text-blue-600 font-bold text-[10px] uppercase border-blue-100">
-              {user!.caste_category} Category
+            <Badge variant="secondary" className="bg-blue-50 text-blue-700 font-semibold text-[10px] uppercase border-blue-100">
+              {user!.caste_category}
             </Badge>
-            <Badge variant="secondary" className="bg-indigo-50 text-indigo-600 font-bold text-[10px] uppercase border-indigo-100">
-              Income: ₹{user!.annual_income!.toLocaleString("en-IN")}
+            <Badge variant="secondary" className="bg-slate-100 text-slate-600 font-semibold text-[10px] border-slate-200">
+              ₹{user!.annual_income!.toLocaleString("en-IN")} / yr
             </Badge>
-            {isDemo ? (
-              <Badge className="bg-purple-100 text-purple-700 hover:bg-purple-200 border-0 font-bold text-[10px] uppercase">
-                Demo Mode
-              </Badge>
-            ) : (
-              <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 border-0 font-bold text-[10px] uppercase">
-                Custom User Mode
+            {isDemo && (
+              <Badge className="bg-purple-100 text-purple-700 border-0 font-semibold text-[10px]">
+                Demo
               </Badge>
             )}
           </div>
-          <h2 className="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">
             Welcome back, {user!.full_name}
-          </h2>
-          <p className="text-slate-500 text-xs max-w-xl truncate">
-            Parsed Intake: &ldquo;{user!.voice_raw_text || "Manual profile inputs"}&rdquo;
-          </p>
+          </h1>
         </div>
         
         <Link
           href="/"
-          className="flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-250 px-4 py-2.5 rounded-lg transition-colors cursor-pointer"
-          style={{ minHeight: "44px" }}
+          className="flex items-center gap-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 px-4 py-2.5 rounded-lg transition-colors cursor-pointer tap-target"
         >
-          <RefreshCw className="h-3.5 w-3.5" /> Retake Voice Onboarding
+          <RefreshCw className="h-3.5 w-3.5" /> Update Profile
         </Link>
       </div>
       )}
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Card 1: Eligibility Score */}
-        <div className="bg-slate-900 text-white rounded-xl p-6 shadow-sm border border-slate-800 space-y-4 relative overflow-hidden group">
-          <div className="absolute right-0 bottom-0 translate-x-4 translate-y-4 opacity-5 group-hover:scale-110 transition-transform">
-            <TrendingUp className="h-32 w-32" />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        {/* Card 1: Total matched — dark accent card */}
+        <div className="bg-[#0F172A] text-white rounded-xl p-6 border border-[#1e293b] space-y-3 relative overflow-hidden">
+          <div className="absolute inset-0 opacity-10" style={{background: 'radial-gradient(circle at 80% 20%, #0369A1 0%, transparent 60%)'}} />
+          <div className="flex items-center justify-between relative">
+            <span className="text-xs font-medium text-slate-400">Total matched value</span>
+            <TrendingUp className="h-4 w-4 text-emerald-400" />
           </div>
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Welfare Eligibility Score</span>
-            <TrendingUp className="h-5 w-5 text-emerald-400" />
-          </div>
-          <div className="space-y-1">
-            <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight">
+          <div className="relative">
+            <h3 className="text-3xl font-black tracking-tight tabular-nums">
               ₹{totalBenefits.toLocaleString("en-IN")}
             </h3>
-            <p className="text-xs text-slate-400 leading-normal">
-              Based on {eligibleSchemes.length} matching welfare programs discovery.
+            <p className="text-xs text-slate-400 mt-1">
+              Across {eligibleSchemes.length} schemes you qualify for
             </p>
           </div>
         </div>
 
-        {/* Card 2: Claims Made */}
-        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-4 relative overflow-hidden group">
-          <div className="absolute right-0 bottom-0 translate-x-4 translate-y-4 opacity-5 group-hover:scale-110 transition-transform text-indigo-500">
-            <CheckCircle className="h-32 w-32" />
-          </div>
+        {/* Card 2: Benefits received */}
+        <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-3 card-hover">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Benefits Claimed</span>
-            <CheckCircle className="h-5 w-5 text-indigo-500" />
+            <span className="text-xs font-medium text-slate-500">Benefits received</span>
+            <CheckCircle className="h-4 w-4 text-blue-500" />
           </div>
-          <div className="space-y-1">
-            <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">
+          <div>
+            <h3 className="text-3xl font-black tracking-tight tabular-nums text-slate-900">
               ₹{claimedBenefits.toLocaleString("en-IN")}
             </h3>
-            <p className="text-xs text-slate-500 leading-normal">
-              Accumulated benefits successfully approved.
-            </p>
+            <p className="text-xs text-slate-400 mt-1">From approved applications</p>
           </div>
         </div>
 
-        {/* Card 3: Active Filings */}
-        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-4 relative overflow-hidden group">
-          <div className="absolute right-0 bottom-0 translate-x-4 translate-y-4 opacity-5 group-hover:scale-110 transition-transform text-blue-500">
-            <FileText className="h-32 w-32" />
-          </div>
+        {/* Card 3: Applications filed */}
+        <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-3 card-hover">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Applications Filed</span>
-            <FileText className="h-5 w-5 text-blue-500" />
+            <span className="text-xs font-medium text-slate-500">Applications filed</span>
+            <FileText className="h-4 w-4 text-blue-500" />
           </div>
-          <div className="space-y-1">
-            <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">
-              {userApps.length} <span className="text-xs text-slate-400 font-semibold">filings</span>
+          <div>
+            <h3 className="text-3xl font-black tracking-tight tabular-nums text-slate-900">
+              {userApps.length}
             </h3>
-            <p className="text-xs text-slate-500 leading-normal">
-              Active tracks on departmental queues.
-            </p>
+            <p className="text-xs text-slate-400 mt-1">Submitted to government portals</p>
           </div>
         </div>
       </div>
@@ -172,32 +151,32 @@ export default async function DashboardPage() {
       {/* Eligible Schemes Section */}
       <div className="space-y-4 pt-2">
         <div className="flex items-center justify-between">
-          <h3 className="font-bold text-lg text-slate-850 flex items-center gap-2">
-            <Sparkles className="h-4.5 w-4.5 text-blue-600 animate-pulse" />
-            Unclaimed Welfare Cash Values Waiting For You
+          <h3 className="font-bold text-lg text-slate-900">
+            Schemes you qualify for
           </h3>
-          <span className="text-xs text-slate-500 font-medium">
-            {isDemo ? 0 : eligibleSchemes.length} programs available
+          <span aria-live="polite" aria-atomic="true" className="text-xs text-slate-500 font-medium tabular-nums">
+            {isDemo ? 0 : eligibleSchemes.length} available
           </span>
         </div>
 
         {isDemo || eligibleSchemes.length === 0 ? (
-          <div className="bg-white border border-slate-200 rounded-xl p-10 shadow-sm text-center">
-            <Info className="h-10 w-10 text-slate-400 mx-auto mb-3" />
-            <h4 className="font-bold text-slate-800 text-lg mb-1">No Unclaimed Welfare Available</h4>
-            <p className="text-slate-500 text-sm max-w-sm mx-auto">
-              Your household has already applied for or claimed all eligible matching schemes!
+          <div className="bg-white border border-slate-200 rounded-xl p-10 text-center">
+            <Info className="h-8 w-8 text-slate-300 mx-auto mb-3" />
+            <h4 className="font-semibold text-slate-700 mb-1">All caught up</h4>
+            <p className="text-slate-400 text-sm max-w-sm mx-auto">
+              You&apos;ve applied to all matching schemes, or no programs match your profile yet.
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {eligibleSchemes.map((scheme) => (
-              <SchemeCard
-                key={scheme.id}
-                scheme={scheme}
-                hasApplied={appliedSchemeIdsSet.has(scheme.id)}
-                user={user || undefined}
-              />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {eligibleSchemes.map((scheme, i) => (
+              <div key={scheme.id} className="fade-up" style={{ animationDelay: `${i * 40}ms` }}>
+                <SchemeCard
+                  scheme={scheme}
+                  hasApplied={appliedSchemeIdsSet.has(scheme.id)}
+                  user={user || undefined}
+                />
+              </div>
             ))}
           </div>
         )}
