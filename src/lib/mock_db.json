@@ -11,62 +11,133 @@
       "occupation": "Student",
       "education": "Undergraduate",
       "uploaded_documents": [
-        "Aadhaar",
+        "Aadhaar Card",
         "Bank Passbook",
-        "Institution ID",
-        "Mark Sheet",
-        "Passport Photo",
-        "Income Certificate",
-        "Caste Certificate"
+        "Marksheet",
+        "College ID Card"
       ],
       "voice_raw_text": "I am an OBC student with 2.5 lakh income, studying undergraduate course in Kerala."
     },
     {
       "id": "00000000-0000-0000-0000-000000000002",
-      "full_name": "Rahul Menon",
+      "full_name": "Guest User",
       "email": "guest@schemefit.in",
-      "annual_income": 150000,
-      "caste_category": "SC",
-      "state": "Kerala",
+      "annual_income": null,
+      "caste_category": null,
+      "state": null,
       "district": null,
-      "occupation": "Student",
-      "education": "Undergraduate",
-      "voice_raw_text": "My name is John Doe, I am SC student with annual income of 150000 who is in undergraduate degree and is currently a student.",
-      "uploaded_documents": [
-        "Aadhaar",
-        "Bank Passbook",
-        "Income Certificate"
-      ],
-      "updated_at": "2026-08-14T09:50:27.296Z"
-    },
-    {
-      "id": "6dbcfe1f-936a-44d5-b66a-c7987b1a55fb",
-      "full_name": "Rahul Menon",
-      "email": "new@user.com",
-      "created_at": "2026-08-14T13:44:55.630Z",
-      "updated_at": "2026-08-14T13:45:12.771Z",
-      "voice_raw_text": "Manually typed",
-      "annual_income": 250000,
-      "caste_category": "OBC",
-      "education": "School",
-      "occupation": "Student",
-      "state": "Kerala"
-    },
-    {
-      "id": "f1bb42c8-7656-4bbe-9880-873caab172fe",
-      "full_name": "Rahul",
-      "email": "new@user.com",
-      "created_at": "2026-08-14T14:18:30.811Z",
-      "updated_at": "2026-08-14T16:22:57.791Z",
-      "voice_raw_text": "Manually typed",
-      "annual_income": 250000,
-      "caste_category": "OBC",
-      "education": "Postgraduate",
-      "occupation": "Farmer",
-      "state": "Kerala"
+      "occupation": null,
+      "education": null,
+      "voice_raw_text": null,
+      "uploaded_documents": []
     }
   ],
   "schemes": [
+    {
+      "title": "Tata Trusts Higher Education Scholarship",
+      "description": "Merit-cum-means scholarship funded by Tata Trusts for undergraduate students in Science, Engineering, and Healthcare.",
+      "min_benefit_amount": 25000,
+      "max_benefit_amount": 60000,
+      "eligibility_json": {
+        "max_income": 400000,
+        "category": [
+          "OBC",
+          "General",
+          "SC",
+          "ST"
+        ],
+        "states": [
+          "All"
+        ],
+        "education": [
+          "Undergraduate"
+        ]
+      },
+      "required_documents": [
+        "Income Certificate",
+        "Marksheet",
+        "Aadhaar Card",
+        "College ID Card"
+      ],
+      "prerequisites": [
+        "Income Certificate",
+        "Marksheet"
+      ],
+      "application_url": "https://www.tatatrusts.org/scholarships",
+      "deadline": "2026-09-23T18:10:22.596Z",
+      "category": "Education",
+      "state": "All",
+      "ministry": "Tata Group CSR Division",
+      "provider_type": "Private Sector",
+      "provider_name": "Tata Trusts",
+      "id": "scheme-0000-0000-0000-000000000001"
+    },
+    {
+      "title": "Smile Foundation STEM Girl Excellence Grant",
+      "description": "NGO grant supporting female undergraduate students pursuing STEM and technology degrees across India.",
+      "min_benefit_amount": 15000,
+      "max_benefit_amount": 35000,
+      "eligibility_json": {
+        "gender": [
+          "Female"
+        ],
+        "max_income": 300000,
+        "states": [
+          "All"
+        ],
+        "education": [
+          "Undergraduate"
+        ]
+      },
+      "required_documents": [
+        "Aadhaar Card",
+        "Marksheet",
+        "College ID Card",
+        "Income Certificate"
+      ],
+      "prerequisites": [
+        "College ID Card"
+      ],
+      "application_url": "https://www.smilefoundationindia.org/scholarships",
+      "deadline": "2026-09-08T18:10:22.596Z",
+      "category": "Education",
+      "state": "All",
+      "ministry": "Smile Foundation NGO Network",
+      "provider_type": "NGO",
+      "provider_name": "Smile Foundation NGO",
+      "id": "scheme-0000-0000-0000-000000000002"
+    },
+    {
+      "title": "Reliance Foundation Undergraduate Merit Scholarship",
+      "description": "Private sector scholarship providing financial aid and leadership development for outstanding Indian undergraduate students.",
+      "min_benefit_amount": 50000,
+      "max_benefit_amount": 200000,
+      "eligibility_json": {
+        "max_income": 600000,
+        "states": [
+          "All"
+        ],
+        "education": [
+          "Undergraduate"
+        ]
+      },
+      "required_documents": [
+        "Aadhaar Card",
+        "Marksheet",
+        "Income Certificate"
+      ],
+      "prerequisites": [
+        "Income Certificate"
+      ],
+      "application_url": "https://www.scholarships.reliancefoundation.org",
+      "deadline": "2026-10-03T18:10:22.596Z",
+      "category": "Education",
+      "state": "All",
+      "ministry": "Reliance Foundation CSR",
+      "provider_type": "Private Sector",
+      "provider_name": "Reliance Foundation",
+      "id": "scheme-0000-0000-0000-000000000003"
+    },
     {
       "title": "Kerala Higher Education Support Grant",
       "description": "Financial assistance for undergraduate students from middle-income families.",
@@ -87,20 +158,22 @@
       },
       "required_documents": [
         "Income Certificate",
-        "Bonafide Certificate",
-        "Aadhaar",
+        "College ID Card",
+        "Aadhaar Card",
         "Bank Passbook"
       ],
       "prerequisites": [
         "Income Certificate",
-        "Bonafide Certificate"
+        "College ID Card"
       ],
       "application_url": "https://egrantz.kerala.gov.in",
-      "deadline": "2026-09-13T07:33:14.329Z",
+      "deadline": "2026-09-13T18:10:22.596Z",
       "category": "Education",
       "state": "Kerala",
       "ministry": "Higher Education Department",
-      "id": "scheme-0000-0000-0000-000000000001"
+      "provider_type": "Government",
+      "provider_name": "Government of Kerala",
+      "id": "scheme-0000-0000-0000-000000000004"
     },
     {
       "title": "National Merit Scholarship",
@@ -118,8 +191,8 @@
         ]
       },
       "required_documents": [
-        "Aadhaar",
-        "Mark Sheet",
+        "Aadhaar Card",
+        "Marksheet",
         "Income Certificate",
         "Passport Photo"
       ],
@@ -127,11 +200,13 @@
         "Income Certificate"
       ],
       "application_url": "https://scholarships.gov.in",
-      "deadline": "2026-08-29T07:33:14.329Z",
+      "deadline": "2026-08-29T18:10:22.596Z",
       "category": "Education",
       "state": "All",
       "ministry": "Ministry of Education",
-      "id": "scheme-0000-0000-0000-000000000002"
+      "provider_type": "Government",
+      "provider_name": "Government of India",
+      "id": "scheme-0000-0000-0000-000000000005"
     },
     {
       "title": "Student Digital Access Assistance",
@@ -152,278 +227,49 @@
         ]
       },
       "required_documents": [
-        "Institution ID",
-        "Quotation",
+        "College ID Card",
+        "Quotation Document",
         "Bank Passbook"
       ],
       "prerequisites": [
-        "Institution ID"
+        "College ID Card"
       ],
       "application_url": "https://digitalindia.gov.in/students",
-      "deadline": "2026-09-28T07:33:14.329Z",
+      "deadline": "2026-09-28T18:10:22.596Z",
       "category": "Technology",
       "state": "Multiple",
       "ministry": "MeitY",
-      "id": "scheme-0000-0000-0000-000000000003"
-    },
-    {
-      "title": "Farmer Family Education Support",
-      "description": "Support for children of agricultural workers and farmers.",
-      "min_benefit_amount": 8000,
-      "max_benefit_amount": 15000,
-      "eligibility_json": {
-        "occupation": [
-          "Farmer",
-          "Agricultural Worker"
-        ],
-        "states": [
-          "All"
-        ]
-      },
-      "required_documents": [
-        "Farmer ID/Kisan Card",
-        "Aadhaar",
-        "Bonafide Certificate"
-      ],
-      "prerequisites": [
-        "Farmer ID/Kisan Card"
-      ],
-      "application_url": "https://pmkisan.gov.in/education",
-      "deadline": "2026-10-13T07:33:14.329Z",
-      "category": "Agriculture",
-      "state": "All",
-      "ministry": "Ministry of Agriculture",
-      "id": "scheme-0000-0000-0000-000000000004"
-    },
-    {
-      "title": "Women Entrepreneurship Assistance",
-      "description": "Financial support and training for women starting new ventures.",
-      "min_benefit_amount": 50000,
-      "max_benefit_amount": 200000,
-      "eligibility_json": {
-        "gender": [
-          "Female"
-        ],
-        "max_income": 500000
-      },
-      "required_documents": [
-        "Project Report",
-        "Aadhaar",
-        "Bank Details"
-      ],
-      "prerequisites": [
-        "Project Report"
-      ],
-      "application_url": "https://msme.gov.in/women-entrepreneurs",
-      "deadline": "2026-11-12T07:33:14.329Z",
-      "category": "Business",
-      "state": "All",
-      "ministry": "Ministry of MSME",
-      "id": "scheme-0000-0000-0000-000000000005"
-    },
-    {
-      "title": "PM Kisan Samman Nidhi (PM-KISAN)",
-      "description": "Central sector scheme providing income support of ₹6,000 per year in three equal installments to all landholding farmer families.",
-      "min_benefit_amount": 6000,
-      "max_benefit_amount": 6000,
-      "eligibility_json": {
-        "occupation": [
-          "Farmer",
-          "Agricultural Worker"
-        ],
-        "states": [
-          "All"
-        ]
-      },
-      "required_documents": [
-        "Land Possession Certificate",
-        "Aadhaar",
-        "Bank Passbook",
-        "Citizen ID"
-      ],
-      "prerequisites": [
-        "Land Possession Certificate"
-      ],
-      "application_url": "https://pmkisan.gov.in",
-      "deadline": "2026-10-28T07:33:14.329Z",
-      "category": "Agriculture",
-      "state": "All",
-      "ministry": "Ministry of Agriculture & Farmers Welfare",
+      "provider_type": "Government",
+      "provider_name": "MeitY",
       "id": "scheme-0000-0000-0000-000000000006"
     },
     {
-      "title": "PM Garib Kalyan Anna Yojana (PMGKAY)",
-      "description": "A food security welfare scheme providing free food grains to eligible families under Priority Households (PHH) and Antyodaya Anna Yojana (AAY).",
-      "min_benefit_amount": 1000,
-      "max_benefit_amount": 5000,
+      "title": "GiveIndia Rural Student Bright Future Grant",
+      "description": "Non-profit crowdfunding and corporate-partnered scholarship for low-income rural students.",
+      "min_benefit_amount": 12000,
+      "max_benefit_amount": 30000,
       "eligibility_json": {
-        "max_income": 100000,
-        "states": [
-          "All"
-        ]
-      },
-      "required_documents": [
-        "Ration Card",
-        "Aadhaar",
-        "Income Certificate"
-      ],
-      "prerequisites": [
-        "Ration Card"
-      ],
-      "application_url": "https://dfpd.gov.in",
-      "deadline": "2026-12-12T07:33:14.329Z",
-      "category": "Social Welfare",
-      "state": "All",
-      "ministry": "Ministry of Consumer Affairs, Food and Public Distribution",
-      "id": "scheme-0000-0000-0000-000000000007"
-    },
-    {
-      "title": "Pradhan Mantri Awas Yojana - Urban (PMAY-U)",
-      "description": "Interest subsidy on home loans for purchase, construction, or enhancement of houses under Credit Linked Subsidy Scheme (CLSS) for EWS/LIG.",
-      "min_benefit_amount": 150000,
-      "max_benefit_amount": 267000,
-      "eligibility_json": {
-        "max_income": 600000,
+        "max_income": 200000,
         "states": [
           "All"
         ]
       },
       "required_documents": [
         "Income Certificate",
-        "Aadhaar",
-        "Affidavit of landless household",
-        "Bank Account Details"
+        "Aadhaar Card",
+        "Marksheet"
       ],
       "prerequisites": [
         "Income Certificate"
       ],
-      "application_url": "https://pmay-urban.gov.in",
-      "deadline": "2027-02-10T07:33:14.329Z",
-      "category": "Housing",
-      "state": "All",
-      "ministry": "Ministry of Housing and Urban Affairs",
-      "id": "scheme-0000-0000-0000-000000000008"
-    },
-    {
-      "title": "Ayushman Bharat Pradhan Mantri Jan Arogya Yojana (PM-JAY)",
-      "description": "Cashless health cover up to ₹5 lakh per family per year for secondary and tertiary care hospitalization in empaneled public and private hospitals.",
-      "min_benefit_amount": 100000,
-      "max_benefit_amount": 500000,
-      "eligibility_json": {
-        "max_income": 250000,
-        "category": [
-          "SC",
-          "ST",
-          "OBC"
-        ],
-        "states": [
-          "All"
-        ]
-      },
-      "required_documents": [
-        "PM-JAY Card/Ration Card",
-        "Aadhaar",
-        "Income Certificate"
-      ],
-      "prerequisites": [
-        "Income Certificate"
-      ],
-      "application_url": "https://pmjay.gov.in",
-      "deadline": "2027-08-14T07:33:14.329Z",
-      "category": "Healthcare",
-      "state": "All",
-      "ministry": "Ministry of Health and Family Welfare",
-      "id": "scheme-0000-0000-0000-000000000009"
-    },
-    {
-      "title": "Atal Pension Yojana (APY)",
-      "description": "Guaranteed minimum pension of ₹1,000 to ₹5,000 per month for workers in the unorganized sectors after attaining the age of 60.",
-      "min_benefit_amount": 12000,
-      "max_benefit_amount": 60000,
-      "eligibility_json": {
-        "occupation": [
-          "Unorganized Sector",
-          "Worker",
-          "Farmer",
-          "Artisan"
-        ],
-        "states": [
-          "All"
-        ]
-      },
-      "required_documents": [
-        "Savings Bank Account",
-        "Aadhaar",
-        "Mobile Number"
-      ],
-      "prerequisites": [
-        "Savings Bank Account"
-      ],
-      "application_url": "https://www.npscra.nsdl.co.in",
-      "deadline": "2026-11-22T07:33:14.329Z",
-      "category": "Social Security",
-      "state": "All",
-      "ministry": "Ministry of Finance",
-      "id": "scheme-0000-0000-0000-0000000000010"
-    },
-    {
-      "title": "Sukanya Samriddhi Yojana (SSY)",
-      "description": "A small deposit savings scheme targeted at parents of girl children, offering high interest rate and tax exemption for education/marriage.",
-      "min_benefit_amount": 250,
-      "max_benefit_amount": 150000,
-      "eligibility_json": {
-        "gender": [
-          "Female"
-        ],
-        "states": [
-          "All"
-        ]
-      },
-      "required_documents": [
-        "Birth Certificate of Girl Child",
-        "Identity Proof of Parent",
-        "Address Proof"
-      ],
-      "prerequisites": [
-        "Birth Certificate of Girl Child"
-      ],
-      "application_url": "https://www.nsiindia.gov.in",
-      "deadline": "2027-01-11T07:33:14.329Z",
+      "application_url": "https://giveindia.org/scholarships",
+      "deadline": "2026-09-18T18:10:22.596Z",
       "category": "Social Welfare",
       "state": "All",
-      "ministry": "Ministry of Finance",
-      "id": "scheme-0000-0000-0000-0000000000011"
-    },
-    {
-      "title": "Pradhan Mantri Mudra Yojana (PMMY)",
-      "description": "Collateral-free loans up to ₹10 Lakh to micro and small non-corporate enterprises to kickstart or expand their business ventures.",
-      "min_benefit_amount": 50000,
-      "max_benefit_amount": 1000000,
-      "eligibility_json": {
-        "occupation": [
-          "Entrepreneur",
-          "Business Owner",
-          "Trader",
-          "Artisan"
-        ],
-        "states": [
-          "All"
-        ]
-      },
-      "required_documents": [
-        "Business Plan/Proposal",
-        "Identity & Address Proof",
-        "Equipment/Asset Quotations"
-      ],
-      "prerequisites": [
-        "Business Plan/Proposal"
-      ],
-      "application_url": "https://www.mudra.org.in",
-      "deadline": "2026-12-12T07:33:14.329Z",
-      "category": "Business",
-      "state": "All",
-      "ministry": "Ministry of Finance",
-      "id": "scheme-0000-0000-0000-0000000000012"
+      "ministry": "GiveIndia Foundation",
+      "provider_type": "NGO",
+      "provider_name": "GiveIndia NGO",
+      "id": "scheme-0000-0000-0000-000000000007"
     },
     {
       "title": "Post-Matric Scholarship for SC/ST/OBC Students",
@@ -448,92 +294,783 @@
       "required_documents": [
         "Caste Certificate",
         "Income Certificate",
-        "Fee Receipt",
-        "Mark Sheet"
+        "Marksheet",
+        "Aadhaar Card"
       ],
       "prerequisites": [
         "Caste Certificate",
         "Income Certificate"
       ],
       "application_url": "https://scholarships.gov.in",
-      "deadline": "2026-09-28T07:33:14.329Z",
+      "deadline": "2026-09-28T18:10:22.596Z",
       "category": "Education",
       "state": "All",
       "ministry": "Ministry of Social Justice and Empowerment",
-      "id": "scheme-0000-0000-0000-0000000000013"
+      "provider_type": "Government",
+      "provider_name": "Government of India",
+      "id": "scheme-0000-0000-0000-000000000008"
     },
     {
-      "title": "PM Vishwakarma Scheme",
-      "description": "Support for traditional artisans and craftspeople through skill upgradation, toolkit incentives, and low-interest enterprise development loans.",
-      "min_benefit_amount": 15000,
-      "max_benefit_amount": 300000,
+      "title": "Central Sector Scheme of Scholarship for College and University Students",
+      "description": "A flagship central government initiative aimed at providing direct financial support to meritorious students from economically disadvantaged backgrounds to meet their day-to-day expenses while pursuing undergraduate and postgraduate higher education.",
+      "min_benefit_amount": 20000,
+      "max_benefit_amount": 20000,
       "eligibility_json": {
-        "occupation": [
-          "Artisan",
-          "Carpenter",
-          "Blacksmith",
-          "Sculptor",
-          "Potter"
+        "max_income": 450000,
+        "education": [
+          "Undergraduate",
+          "Postgraduate",
+          "Professional Courses"
         ],
         "states": [
           "All"
         ]
       },
       "required_documents": [
-        "Artisan Identity Card",
         "Aadhaar Card",
-        "Bank Account Details"
+        "Income Certificate",
+        "Caste Certificate",
+        "Marksheet",
+        "Bank Passbook"
       ],
       "prerequisites": [
-        "Artisan Identity Card"
+        "Income Certificate",
+        "Marksheet"
       ],
-      "application_url": "https://pmvishwakarma.gov.in",
-      "deadline": "2026-11-12T07:33:14.329Z",
-      "category": "Business",
+      "application_url": "https://www.buddy4study.com/article/central-scholarships",
+      "deadline": "2026-09-13T18:10:22.596Z",
+      "category": "Higher Education",
       "state": "All",
-      "ministry": "Ministry of Micro, Small and Medium Enterprises",
-      "id": "scheme-0000-0000-0000-0000000000014"
+      "ministry": "Ministry of Education",
+      "provider_type": "Government",
+      "provider_name": "Ministry of Education",
+      "id": "scheme-0000-0000-0000-000000000009"
     },
     {
-      "title": "Kerala Vidyajyothi Scheme",
-      "description": "Scholarship assistance for physically handicapped students studying in Government and Aided educational institutions in Kerala.",
-      "min_benefit_amount": 4000,
-      "max_benefit_amount": 10000,
+      "title": "NSP Central Sector Scholarship for Top-Class Education for SC Students",
+      "description": "Provides comprehensive financial support including full tuition fee coverage, living expenses, stationary allowances, and device grants to SC students who secure admission in notified top-class institutions.",
+      "min_benefit_amount": 200000,
+      "max_benefit_amount": 200000,
       "eligibility_json": {
-        "states": [
-          "Kerala"
+        "max_income": 800000,
+        "category": [
+          "SC"
         ],
         "education": [
           "Undergraduate",
-          "Postgraduate",
-          "High School"
+          "Postgraduate"
+        ],
+        "states": [
+          "All"
+        ]
+      },
+      "required_documents": [
+        "Caste Certificate",
+        "Aadhaar Card",
+        "Income Certificate",
+        "College ID Card",
+        "Bank Passbook"
+      ],
+      "prerequisites": [
+        "Caste Certificate",
+        "Income Certificate"
+      ],
+      "application_url": "https://www.buddy4study.com/article/government-scholarships-neet-candidates",
+      "deadline": "2026-09-23T18:10:22.596Z",
+      "category": "Top-Class Education",
+      "state": "All",
+      "ministry": "Ministry of Social Justice and Empowerment",
+      "provider_type": "Government",
+      "provider_name": "Ministry of Social Justice and Empowerment",
+      "id": "scheme-0000-0000-0000-0000000000010"
+    },
+    {
+      "title": "PM YASASVI Central Sector Scheme of Top Class Education",
+      "description": "An initiative empowering students from socially and economically disadvantaged backgrounds, providing full tuition fee coverage and living expenses for students belonging to OBC, EBC, and DNT categories enrolled in notified institutions.",
+      "min_benefit_amount": 200000,
+      "max_benefit_amount": 200000,
+      "eligibility_json": {
+        "max_income": 250000,
+        "category": [
+          "OBC",
+          "EBC",
+          "DNT"
+        ],
+        "education": [
+          "Class 9 to 12",
+          "Undergraduate"
+        ],
+        "states": [
+          "All"
+        ]
+      },
+      "required_documents": [
+        "Caste Certificate",
+        "Income Certificate",
+        "Aadhaar Card",
+        "College ID Card",
+        "Bank Passbook"
+      ],
+      "prerequisites": [
+        "Caste Certificate",
+        "Income Certificate"
+      ],
+      "application_url": "https://www.buddy4study.com/article/national-scholarship-portal",
+      "deadline": "2026-09-18T18:10:22.596Z",
+      "category": "Top-Class Education",
+      "state": "All",
+      "ministry": "Ministry of Social Justice & Empowerment",
+      "provider_type": "Government",
+      "provider_name": "Ministry of Social Justice & Empowerment",
+      "id": "scheme-0000-0000-0000-0000000000011"
+    },
+    {
+      "title": "Post-Matric Scholarships for Minorities",
+      "description": "Financial assistance aimed at promoting education among economically weaker sections of minority communities, preventing dropouts from secondary education through to doctoral studies.",
+      "min_benefit_amount": 10000,
+      "max_benefit_amount": 10000,
+      "eligibility_json": {
+        "max_income": 200000,
+        "category": [
+          "Muslims",
+          "Christians",
+          "Sikhs",
+          "Buddhists",
+          "Jains",
+          "Parsis"
+        ],
+        "education": [
+          "Class 11",
+          "Class 12",
+          "Undergraduate",
+          "Postgraduate"
+        ],
+        "states": [
+          "All"
+        ]
+      },
+      "required_documents": [
+        "Income Certificate",
+        "Minority Certificate",
+        "Aadhaar Card",
+        "Marksheet",
+        "Bank Passbook"
+      ],
+      "prerequisites": [
+        "Income Certificate"
+      ],
+      "application_url": "https://www.buddy4study.com/article/state-scholarships",
+      "deadline": "2026-09-03T18:10:22.596Z",
+      "category": "Minority Welfare",
+      "state": "All",
+      "ministry": "Ministry of Minority Affairs",
+      "provider_type": "Government",
+      "provider_name": "Ministry of Minority Affairs",
+      "id": "scheme-0000-0000-0000-0000000000012"
+    },
+    {
+      "title": "INSPIRE Scholarship Programme (SHE)",
+      "description": "Offers substantial financial support to students ranking in the top 1% of Class 12 board examinations to pursue Natural and Basic Science courses, coupled with mandatory summer research projects.",
+      "min_benefit_amount": 60000,
+      "max_benefit_amount": 60000,
+      "eligibility_json": {
+        "education": [
+          "B.Sc",
+          "Integrated M.Sc",
+          "B.S.",
+          "M.S."
+        ],
+        "states": [
+          "All"
+        ]
+      },
+      "required_documents": [
+        "Marksheet",
+        "Board Rank Certificate",
+        "Aadhaar Card",
+        "College ID Card",
+        "Bank Passbook"
+      ],
+      "prerequisites": [
+        "Marksheet"
+      ],
+      "application_url": "https://www.buddy4study.com/article/government-scholarships",
+      "deadline": "2026-09-28T18:10:22.596Z",
+      "category": "Science and Research",
+      "state": "All",
+      "ministry": "Department of Science and Technology",
+      "provider_type": "Government",
+      "provider_name": "Department of Science and Technology",
+      "id": "scheme-0000-0000-0000-0000000000013"
+    },
+    {
+      "title": "Post Matric Scholarship for Students with Disabilities",
+      "description": "A comprehensive support scheme covering tuition and specific disability-related allowances such as reader charges and transport allowances for students with a benchmark disability of 40% or more.",
+      "min_benefit_amount": 4000,
+      "max_benefit_amount": 4000,
+      "eligibility_json": {
+        "max_income": 250000,
+        "education": [
+          "Class 11",
+          "Class 12",
+          "Undergraduate",
+          "Postgraduate"
+        ],
+        "differently_abled_required": true,
+        "states": [
+          "All"
         ]
       },
       "required_documents": [
         "Disability Certificate",
-        "Bonafide Certificate",
-        "Income Certificate"
+        "Income Certificate",
+        "Aadhaar Card",
+        "College ID Card",
+        "Bank Passbook"
       ],
       "prerequisites": [
-        "Disability Certificate"
+        "Disability Certificate",
+        "Income Certificate"
       ],
-      "application_url": "http://sjd.kerala.gov.in",
-      "deadline": "2026-10-13T07:33:14.329Z",
-      "category": "Education",
-      "state": "Kerala",
-      "ministry": "Social Justice Department, Government of Kerala",
+      "application_url": "https://www.buddy4study.com/article/means-scholarship",
+      "deadline": "2026-09-08T18:10:22.596Z",
+      "category": "Disability Welfare",
+      "state": "All",
+      "ministry": "Department of Empowerment of Persons with Disabilities",
+      "provider_type": "Government",
+      "provider_name": "Department of Empowerment of Persons with Disabilities",
+      "id": "scheme-0000-0000-0000-0000000000014"
+    },
+    {
+      "title": "Free Coaching Scheme for SC and OBC Students",
+      "description": "Provides specialized coaching fee assistance and monthly stipends to marginalized students preparing for highly competitive entrance examinations including JEE, NEET, and CLAT.",
+      "min_benefit_amount": 120000,
+      "max_benefit_amount": 120000,
+      "eligibility_json": {
+        "max_income": 800000,
+        "category": [
+          "SC",
+          "OBC"
+        ],
+        "education": [
+          "Class 12",
+          "Undergraduate"
+        ],
+        "states": [
+          "All"
+        ]
+      },
+      "required_documents": [
+        "Caste Certificate",
+        "Income Certificate",
+        "Aadhaar Card",
+        "Admit Card",
+        "Bank Passbook"
+      ],
+      "prerequisites": [
+        "Caste Certificate",
+        "Income Certificate"
+      ],
+      "application_url": "https://www.buddy4study.com/article/post-matric-scholarships-for-sc-students",
+      "deadline": "2026-10-03T18:10:22.596Z",
+      "category": "Competitive Exam Coaching",
+      "state": "All",
+      "ministry": "Ministry of Social Justice and Empowerment",
+      "provider_type": "Government",
+      "provider_name": "Ministry of Social Justice and Empowerment",
       "id": "scheme-0000-0000-0000-0000000000015"
+    },
+    {
+      "title": "Financial Assistance for Wards of Beedi/Cine/IOMC/LSDM Workers",
+      "description": "Targeted welfare providing pre-matric and post-matric scholarships specifically to the children of laborers working in the Beedi, Cine, and Mica mining industries.",
+      "min_benefit_amount": 25000,
+      "max_benefit_amount": 25000,
+      "eligibility_json": {
+        "max_income": 100000,
+        "occupation": [
+          "Beedi Worker",
+          "Cine Worker",
+          "IOMC Worker",
+          "LSDM Worker"
+        ],
+        "education": [
+          "Class 1 to 10",
+          "Class 11 to 12",
+          "Undergraduate"
+        ],
+        "states": [
+          "All"
+        ]
+      },
+      "required_documents": [
+        "Worker Certificate",
+        "Income Certificate",
+        "Aadhaar Card",
+        "College ID Card",
+        "Bank Passbook"
+      ],
+      "prerequisites": [
+        "Worker Certificate",
+        "Income Certificate"
+      ],
+      "application_url": "https://www.buddy4study.com/article/scholarships-after-12th-in-india",
+      "deadline": "2026-08-29T18:10:22.596Z",
+      "category": "Occupational Welfare",
+      "state": "All",
+      "ministry": "Ministry of Labour and Employment",
+      "provider_type": "Government",
+      "provider_name": "Ministry of Labour and Employment",
+      "id": "scheme-0000-0000-0000-0000000000016"
+    },
+    {
+      "title": "SBIF Asha Scholarship Program for Overseas Education",
+      "description": "A high-value scholarship initiative designed to support meritorious students from SC and ST backgrounds to pursue postgraduate and master's degrees at premier global universities.",
+      "min_benefit_amount": 2000000,
+      "max_benefit_amount": 2000000,
+      "eligibility_json": {
+        "max_income": 600000,
+        "category": [
+          "SC",
+          "ST"
+        ],
+        "education": [
+          "Postgraduate"
+        ],
+        "states": [
+          "All"
+        ]
+      },
+      "required_documents": [
+        "Caste Certificate",
+        "Admission Letter",
+        "Aadhaar Card",
+        "Income Certificate",
+        "Passport"
+      ],
+      "prerequisites": [
+        "Caste Certificate",
+        "Admission Letter",
+        "Passport"
+      ],
+      "application_url": "https://www.buddy4study.com/page/sbi-asha-scholarship-program",
+      "deadline": "2026-10-13T18:10:22.596Z",
+      "category": "Overseas Education",
+      "state": "All",
+      "ministry": "SBI Foundation CSR",
+      "provider_type": "Private Sector",
+      "provider_name": "SBI Foundation",
+      "id": "scheme-0000-0000-0000-0000000000017"
+    },
+    {
+      "title": "SBI Platinum Jubilee Asha Scholarship for IIM/IIT Students",
+      "description": "Massive financial support targeting students admitted to top-tier institutions including the Indian Institutes of Technology (IITs) and Indian Institutes of Management (IIMs).",
+      "min_benefit_amount": 1500000,
+      "max_benefit_amount": 1500000,
+      "eligibility_json": {
+        "max_income": 600000,
+        "education": [
+          "Undergraduate",
+          "Postgraduate"
+        ],
+        "states": [
+          "All"
+        ]
+      },
+      "required_documents": [
+        "Admission Letter",
+        "Aadhaar Card",
+        "Income Certificate",
+        "Marksheet",
+        "College ID Card"
+      ],
+      "prerequisites": [
+        "Admission Letter",
+        "Income Certificate"
+      ],
+      "application_url": "https://www.buddy4study.com/page/sbi-asha-scholarship-program-for-overseas-education",
+      "deadline": "2026-10-08T18:10:22.596Z",
+      "category": "Elite Domestic Education",
+      "state": "All",
+      "ministry": "SBI Foundation CSR",
+      "provider_type": "Private Sector",
+      "provider_name": "SBI Foundation",
+      "id": "scheme-0000-0000-0000-0000000000018"
+    },
+    {
+      "title": "HDFC Bank Parivartan's ECSS Programme (COVID Crisis)",
+      "description": "A rapid-intervention corporate scholarship intended to provide immediate financial relief to students facing extreme familial financial crises, including the loss of a primary earning member during the pandemic.",
+      "min_benefit_amount": 75000,
+      "max_benefit_amount": 75000,
+      "eligibility_json": {
+        "max_income": 600000,
+        "education": [
+          "Class 1 to 12",
+          "Undergraduate",
+          "Postgraduate",
+          "Diploma"
+        ],
+        "states": [
+          "All"
+        ]
+      },
+      "required_documents": [
+        "Crisis Certificate",
+        "Aadhaar Card",
+        "Income Certificate",
+        "Marksheet",
+        "Bank Passbook"
+      ],
+      "prerequisites": [
+        "Crisis Certificate",
+        "Income Certificate"
+      ],
+      "application_url": "https://www.buddy4study.com/page/hdfc-bank-parivartans-covid-crisis-support-scholarship-program",
+      "deadline": "2026-09-03T18:10:22.596Z",
+      "category": "Crisis Intervention",
+      "state": "All",
+      "ministry": "HDFC Bank Corporate CSR",
+      "provider_type": "Private Sector",
+      "provider_name": "HDFC Bank",
+      "id": "scheme-0000-0000-0000-0000000000019"
+    },
+    {
+      "title": "Tata Capital Pankh Scholarship Program",
+      "description": "A tiered merit-cum-means scholarship subsidizing up to 80% of tuition fees for students across schooling, diploma, and professional undergraduate degree sectors.",
+      "min_benefit_amount": 100000,
+      "max_benefit_amount": 100000,
+      "eligibility_json": {
+        "max_income": 250000,
+        "education": [
+          "Class 11",
+          "Class 12",
+          "Undergraduate",
+          "Diploma",
+          "ITI"
+        ],
+        "states": [
+          "All"
+        ]
+      },
+      "required_documents": [
+        "Fee Receipt",
+        "Income Certificate",
+        "Aadhaar Card",
+        "Marksheet",
+        "Bank Passbook"
+      ],
+      "prerequisites": [
+        "Income Certificate",
+        "Marksheet"
+      ],
+      "application_url": "https://www.buddy4study.com/article/the-tata-capital-pankh-scholarship",
+      "deadline": "2026-09-18T18:10:22.596Z",
+      "category": "Merit-Cum-Means",
+      "state": "All",
+      "ministry": "Tata Capital Corporate CSR",
+      "provider_type": "Private Sector",
+      "provider_name": "Tata Capital Limited",
+      "id": "scheme-0000-0000-0000-0000000000020"
+    },
+    {
+      "title": "Amazon Future Engineer Scholarship",
+      "description": "Dedicated funding for young women pursuing degrees in computer science and allied branches, supplemented with laptops, career mentorship, and internship pathways.",
+      "min_benefit_amount": 50000,
+      "max_benefit_amount": 50000,
+      "eligibility_json": {
+        "max_income": 300000,
+        "gender": [
+          "Female"
+        ],
+        "education": [
+          "B.Tech",
+          "B.E.",
+          "Integrated M.Tech"
+        ],
+        "states": [
+          "All"
+        ]
+      },
+      "required_documents": [
+        "College ID Card",
+        "Aadhaar Card",
+        "Income Certificate",
+        "Marksheet",
+        "Bank Passbook"
+      ],
+      "prerequisites": [
+        "College ID Card",
+        "Income Certificate"
+      ],
+      "application_url": "https://www.buddy4study.com/page/amazon-future-engineer-scholarship",
+      "deadline": "2026-09-23T18:10:22.596Z",
+      "category": "Women in STEM",
+      "state": "All",
+      "ministry": "Amazon Corporate CSR",
+      "provider_type": "Private Sector",
+      "provider_name": "Amazon India",
+      "id": "scheme-0000-0000-0000-0000000000021"
+    },
+    {
+      "title": "Rolls-Royce Unnati Scholarship for Women Engineering Students",
+      "description": "Corporate CSR initiative designed to bolster female representation in engineering disciplines through sustained annual financial backing for undergraduate engineering students.",
+      "min_benefit_amount": 48000,
+      "max_benefit_amount": 48000,
+      "eligibility_json": {
+        "max_income": 400000,
+        "gender": [
+          "Female"
+        ],
+        "education": [
+          "B.Tech",
+          "B.E."
+        ],
+        "states": [
+          "All"
+        ]
+      },
+      "required_documents": [
+        "College ID Card",
+        "Aadhaar Card",
+        "Income Certificate",
+        "Marksheet",
+        "Bank Passbook"
+      ],
+      "prerequisites": [
+        "College ID Card",
+        "Income Certificate"
+      ],
+      "application_url": "https://www.buddy4study.com/article/rolls-royce-unnati-scholarships-for-women-engineering-students",
+      "deadline": "2026-09-13T18:10:22.596Z",
+      "category": "Women in STEM",
+      "state": "All",
+      "ministry": "Rolls-Royce CSR",
+      "provider_type": "Private Sector",
+      "provider_name": "Rolls-Royce India",
+      "id": "scheme-0000-0000-0000-0000000000022"
+    },
+    {
+      "title": "LIC Golden Jubilee Scholarship Scheme",
+      "description": "Supports economically weaker section (EWS) students with high academic merit to pursue diploma, vocational, and professional undergraduate courses after Class 12.",
+      "min_benefit_amount": 40000,
+      "max_benefit_amount": 40000,
+      "eligibility_json": {
+        "max_income": 250000,
+        "education": [
+          "Class 12",
+          "Undergraduate",
+          "Diploma"
+        ],
+        "states": [
+          "All"
+        ]
+      },
+      "required_documents": [
+        "Marksheet",
+        "Income Certificate",
+        "Aadhaar Card",
+        "College ID Card",
+        "Bank Passbook"
+      ],
+      "prerequisites": [
+        "Marksheet",
+        "Income Certificate"
+      ],
+      "application_url": "https://www.buddy4study.com/page/lic-golden-jubilee-scholarships",
+      "deadline": "2026-09-28T18:10:22.596Z",
+      "category": "General Higher Education",
+      "state": "All",
+      "ministry": "LIC Golden Jubilee Foundation",
+      "provider_type": "Private Sector",
+      "provider_name": "Life Insurance Corporation of India",
+      "id": "scheme-0000-0000-0000-0000000000023"
+    },
+    {
+      "title": "TATA AIA Paras Scholarship Program",
+      "description": "A highly specialized diversity inclusion program offering academic funding explicitly to transgender students and persons with disabilities enrolled in undergraduate curricula.",
+      "min_benefit_amount": 30000,
+      "max_benefit_amount": 30000,
+      "eligibility_json": {
+        "education": [
+          "Undergraduate"
+        ],
+        "differently_abled_required": true,
+        "states": [
+          "All"
+        ]
+      },
+      "required_documents": [
+        "Disability Certificate",
+        "College ID Card",
+        "Aadhaar Card",
+        "Marksheet",
+        "Bank Passbook"
+      ],
+      "prerequisites": [
+        "Disability Certificate",
+        "College ID Card"
+      ],
+      "application_url": "https://www.buddy4study.com/page/tata-aia-paras-scholarship-program",
+      "deadline": "2026-10-03T18:10:22.596Z",
+      "category": "Diversity and Inclusion",
+      "state": "All",
+      "ministry": "TATA AIA Corporate CSR",
+      "provider_type": "Private Sector",
+      "provider_name": "TATA AIA Life Insurance Company Limited",
+      "id": "scheme-0000-0000-0000-0000000000024"
+    },
+    {
+      "title": "Foundation For Excellence Scholarship for Technical Courses",
+      "description": "A rigorous NGO-led program providing multi-year funding, technical skilling, and intensive mentorship to first-year engineering, medical, and law candidates from lower-income backgrounds.",
+      "min_benefit_amount": 50000,
+      "max_benefit_amount": 50000,
+      "eligibility_json": {
+        "max_income": 300000,
+        "education": [
+          "B.Tech",
+          "B.E.",
+          "MBBS",
+          "LLB"
+        ],
+        "states": [
+          "All"
+        ]
+      },
+      "required_documents": [
+        "Admission Letter",
+        "Income Certificate",
+        "Aadhaar Card",
+        "Marksheet",
+        "Bank Passbook"
+      ],
+      "prerequisites": [
+        "Admission Letter",
+        "Income Certificate"
+      ],
+      "application_url": "https://www.buddy4study.com/page/foundation-for-excellence-scholarship-for-technical-courses",
+      "deadline": "2026-09-23T18:10:22.596Z",
+      "category": "Technical Education",
+      "state": "All",
+      "ministry": "FFE NGO Network",
+      "provider_type": "NGO",
+      "provider_name": "Foundation For Excellence (FFE)",
+      "id": "scheme-0000-0000-0000-0000000000025"
+    },
+    {
+      "title": "Azim Premji Scholarship",
+      "description": "A sustained initiative by the Azim Premji Foundation focused primarily on supporting young women from underprivileged segments to complete their collegiate education with full fee coverage.",
+      "min_benefit_amount": 30000,
+      "max_benefit_amount": 30000,
+      "eligibility_json": {
+        "gender": [
+          "Female"
+        ],
+        "education": [
+          "Undergraduate"
+        ],
+        "states": [
+          "All"
+        ]
+      },
+      "required_documents": [
+        "College ID Card",
+        "Income Certificate",
+        "Aadhaar Card",
+        "Marksheet",
+        "Bank Passbook"
+      ],
+      "prerequisites": [
+        "College ID Card",
+        "Income Certificate"
+      ],
+      "application_url": "https://www.buddy4study.com/page/azim-premji-scholarship",
+      "deadline": "2026-09-18T18:10:22.596Z",
+      "category": "Women's Education",
+      "state": "All",
+      "ministry": "Azim Premji Foundation",
+      "provider_type": "NGO",
+      "provider_name": "Azim Premji Foundation",
+      "id": "scheme-0000-0000-0000-0000000000026"
+    },
+    {
+      "title": "Lila Poonawalla Foundation Scholarships",
+      "description": "Empowers academically bright but financially constrained female students in the Pune, Amaravati, and Wardha regions to pursue undergraduate and postgraduate degrees without economic disruption.",
+      "min_benefit_amount": 50000,
+      "max_benefit_amount": 50000,
+      "eligibility_json": {
+        "gender": [
+          "Female"
+        ],
+        "education": [
+          "Undergraduate",
+          "Postgraduate"
+        ],
+        "states": [
+          "All"
+        ]
+      },
+      "required_documents": [
+        "Residency Certificate",
+        "Income Certificate",
+        "Aadhaar Card",
+        "Marksheet",
+        "Bank Passbook"
+      ],
+      "prerequisites": [
+        "Residency Certificate",
+        "Income Certificate"
+      ],
+      "application_url": "https://www.buddy4study.com/page/lila-poonawalla-foundation-scholarships",
+      "deadline": "2026-09-13T18:10:22.596Z",
+      "category": "Regional Women's Empowerment",
+      "state": "All",
+      "ministry": "Lila Poonawalla Trust",
+      "provider_type": "NGO",
+      "provider_name": "Lila Poonawalla Foundation",
+      "id": "scheme-0000-0000-0000-0000000000027"
+    },
+    {
+      "title": "K.C. Mahindra All India Talent Scholarship",
+      "description": "Provides essential financial grants to highly motivated students from lower-income backgrounds aiming to secure technical diplomas from recognized government polytechnics.",
+      "min_benefit_amount": 10000,
+      "max_benefit_amount": 10000,
+      "eligibility_json": {
+        "education": [
+          "Diploma",
+          "Polytechnic"
+        ],
+        "states": [
+          "All"
+        ]
+      },
+      "required_documents": [
+        "Admission Letter",
+        "Marksheet",
+        "Aadhaar Card",
+        "Income Certificate",
+        "Bank Passbook"
+      ],
+      "prerequisites": [
+        "Admission Letter"
+      ],
+      "application_url": "https://www.buddy4study.com/page/k.c.-mahindra-all-india-talent-scholarship",
+      "deadline": "2026-09-28T18:10:22.596Z",
+      "category": "Vocational and Diploma",
+      "state": "All",
+      "ministry": "K.C. Mahindra Education Trust",
+      "provider_type": "NGO",
+      "provider_name": "K.C. Mahindra Education Trust",
+      "id": "scheme-0000-0000-0000-0000000000028"
     }
   ],
   "applications": [
     {
       "id": "app-0000-0000-0000-000000000001",
       "user_id": "00000000-0000-0000-0000-000000000001",
-      "scheme_id": "scheme-0000-0000-0000-000000000003",
+      "scheme_id": "scheme-0000-0000-0000-000000000006",
       "status": "Rejected",
       "rejection_reason": "Income certificate copy was blurry and could not be verified by the block development officer.",
-      "submitted_at": "2026-08-04T07:34:20.314Z",
-      "updated_at": "2026-08-14T07:34:20.314Z"
+      "submitted_at": "2026-08-04T18:12:47.834Z",
+      "updated_at": "2026-08-14T18:12:47.834Z"
     },
     {
       "id": "app-0000-0000-0000-000000000002",
@@ -541,26 +1078,26 @@
       "scheme_id": "scheme-0000-0000-0000-000000000001",
       "status": "Delayed",
       "rejection_reason": "Processing delayed by Higher Education Department for more than 45 days without response.",
-      "submitted_at": "2026-06-30T07:34:20.314Z",
-      "updated_at": "2026-08-14T07:34:20.314Z"
+      "submitted_at": "2026-06-30T18:12:47.834Z",
+      "updated_at": "2026-08-14T18:12:47.834Z"
     },
     {
       "id": "app-0000-0000-0000-000000000003",
       "user_id": "00000000-0000-0000-0000-000000000001",
-      "scheme_id": "scheme-0000-0000-0000-0000000000013",
+      "scheme_id": "scheme-0000-0000-0000-000000000008",
       "status": "Approved",
       "rejection_reason": null,
-      "submitted_at": "2026-07-25T07:34:20.314Z",
-      "updated_at": "2026-08-14T07:34:20.314Z"
+      "submitted_at": "2026-07-25T18:12:47.834Z",
+      "updated_at": "2026-08-14T18:12:47.834Z"
     },
     {
-      "id": "app-6iw4m46gj",
-      "user_id": "00000000-0000-0000-0000-000000000002",
-      "scheme_id": "scheme-0000-0000-0000-000000000002",
+      "id": "app-1iet0w1hx",
+      "user_id": "16094b3e-b382-4bbd-9982-6df50780d24f",
+      "scheme_id": "scheme-0000-0000-0000-000000000001",
       "status": "Pending",
       "rejection_reason": null,
-      "submitted_at": "2026-08-14T10:45:55.126Z",
-      "updated_at": "2026-08-14T10:45:55.126Z"
+      "submitted_at": "2026-08-14T18:18:07.464Z",
+      "updated_at": "2026-08-14T18:18:07.464Z"
     }
   ],
   "family_members": [
@@ -597,15 +1134,6 @@
           "status": "Approved"
         }
       ]
-    },
-    {
-      "id": "family-dut6ju7a2",
-      "user_id": "f1bb42c8-7656-4bbe-9880-873caab172fe",
-      "name": "Anjali Nath",
-      "relation": "Father",
-      "age": 26,
-      "occupation": "Student",
-      "annual_income": 0
     }
   ],
   "documents": [
@@ -617,7 +1145,7 @@
       "file_size": 45600,
       "encrypted_data": "U0FUVVJOWF9FTkNSWVBURURfQUFESEFBUl9DQVJEX0NBTExPVVRfVEVYVF9GSUxFX0RBVEE=",
       "iv": "c2F0dXJueF9pdg==",
-      "uploaded_at": "2026-08-09T07:34:20.314Z"
+      "uploaded_at": "2026-08-09T18:12:47.834Z"
     },
     {
       "id": "doc-0000-0000-0000-000000000002",
@@ -627,7 +1155,7 @@
       "file_size": 32400,
       "encrypted_data": "U0FUVVJOWF9FTkNSWVBURURfSU5DT01FX0NFUlRJRklDQVRFX0NBTExPVVRfVEVYVF9GSUxFX0RBVEE=",
       "iv": "c2F0dXJueF9pdg==",
-      "uploaded_at": "2026-08-12T07:34:20.314Z"
+      "uploaded_at": "2026-08-12T18:12:47.834Z"
     }
   ]
 }

@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useTransition } from "react";
-import { Calendar, CheckCircle2, ChevronRight, Loader2, IndianRupee } from "lucide-react";
-import { Scheme } from "@/lib/db";
+import React, { useState, useTransition } from "react";
+import { Calendar, CheckCircle2, ChevronRight, Loader2, IndianRupee, X, ExternalLink, FileText, Check, AlertTriangle, Sparkles } from "lucide-react";
+import { Scheme, User } from "@/lib/db";
 import { applyToScheme } from "@/app/actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,18 +11,20 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 interface SchemeCardProps {
   scheme: Scheme;
   hasApplied: boolean;
+  user?: User;
 }
 
-export function SchemeCard({ scheme, hasApplied }: SchemeCardProps) {
+export function SchemeCard({ scheme, hasApplied, user }: SchemeCardProps) {
   const [isPending, startTransition] = useTransition();
+  const [showModal, setShowModal] = useState(false);
 
-  const handleDownloadICS = () => {
+  const handleDownloadICS = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent opening modal
     if (!scheme.deadline) return;
     
     const deadlineDate = new Date(scheme.deadline);
     const deadlineStr = deadlineDate.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
     
-    // Create event that starts 1 day before the deadline as a reminder
     const startDate = new Date(deadlineDate.getTime() - 24 * 60 * 60 * 1000);
     const startStr = startDate.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
     
@@ -52,7 +54,8 @@ export function SchemeCard({ scheme, hasApplied }: SchemeCardProps) {
     URL.revokeObjectURL(url);
   };
 
-  const handleApply = () => {
+  const handleApply = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent opening modal
     startTransition(async () => {
       const result = await applyToScheme(scheme.id);
       if (!result.success) {
@@ -69,97 +72,325 @@ export function SchemeCard({ scheme, hasApplied }: SchemeCardProps) {
       })
     : "No deadline";
 
+  // Document matching logic helper
+  const hasDocument = (requiredDoc: string, uploadedDocs: string[] | null | undefined = []) => {
+    const docs = uploadedDocs || [];
+    const normRequired = requiredDoc.toLowerCase().replace(/[^a-z0-9]/g, "");
+    return docs.some(uploaded => {
+      const normUploaded = uploaded.toLowerCase().replace(/[^a-z0-9]/g, "");
+      return normUploaded.includes(normRequired) || normRequired.includes(normUploaded);
+    });
+  };
+
+  // Eligibility matching checks
+  const isIncomeEligible = !scheme.eligibility_json?.max_income || !user?.annual_income || user.annual_income <= scheme.eligibility_json.max_income;
+  const isCasteEligible = !scheme.eligibility_json?.category || !user?.caste_category || scheme.eligibility_json.category.map((c: string) => c.toLowerCase()).includes(user.caste_category.toLowerCase());
+  const isEducationEligible = !scheme.eligibility_json?.education || !user?.education || scheme.eligibility_json.education.map((e: string) => e.toLowerCase()).includes(user.education.toLowerCase());
+
   return (
-    <Card className="flex flex-col h-full bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition-shadow">
-      <CardHeader className="p-5 pb-3">
-        <div className="flex justify-between items-start gap-2 mb-2 flex-wrap">
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <Badge variant="secondary" className="bg-slate-100 text-slate-600 font-medium text-[11px]">
-              {scheme.category || "General"}
-            </Badge>
-            {scheme.provider_type === "NGO" && (
-              <Badge className="bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-[10px]">
-                💚 NGO
+    <>
+      {/* Interactive Card */}
+      <Card 
+        onClick={() => setShowModal(true)}
+        className="flex flex-col h-full bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all cursor-pointer group"
+      >
+        <CardHeader className="p-5 pb-3">
+          <div className="flex justify-between items-start gap-2 mb-2 flex-wrap">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <Badge variant="secondary" className="bg-slate-100 text-slate-600 font-medium text-[11px]">
+                {scheme.category || "General"}
               </Badge>
-            )}
-            {scheme.provider_type === "Private Sector" && (
-              <Badge className="bg-purple-50 text-purple-700 border border-purple-200 font-bold text-[10px]">
-                💜 Private Sector
-              </Badge>
-            )}
-            {(!scheme.provider_type || scheme.provider_type === "Government") && (
-              <Badge className="bg-blue-50 text-blue-700 border border-blue-200 font-bold text-[10px]">
-                🏛️ Government
-              </Badge>
+              {scheme.provider_type === "NGO" && (
+                <Badge className="bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-[10px]">
+                  💚 NGO
+                </Badge>
+              )}
+              {scheme.provider_type === "Private Sector" && (
+                <Badge className="bg-purple-50 text-purple-700 border border-purple-200 font-bold text-[10px]">
+                  💜 Private Sector
+                </Badge>
+              )}
+              {(!scheme.provider_type || scheme.provider_type === "Government") && (
+                <Badge className="bg-blue-50 text-blue-700 border border-blue-200 font-bold text-[10px]">
+                  🏛️ Government
+                </Badge>
+              )}
+            </div>
+            {scheme.max_benefit_amount && (
+              <div className="flex items-center text-emerald-600 font-bold text-lg">
+                <IndianRupee className="h-4.5 w-4.5 mr-0.5" />
+                {scheme.max_benefit_amount.toLocaleString("en-IN")}
+              </div>
             )}
           </div>
-          {scheme.max_benefit_amount && (
-            <div className="flex items-center text-emerald-600 font-bold text-lg">
-              <IndianRupee className="h-4.5 w-4.5 mr-0.5" />
-              {scheme.max_benefit_amount.toLocaleString("en-IN")}
+          <CardTitle className="text-base font-bold text-slate-900 leading-tight group-hover:text-blue-600 transition-colors">
+            {scheme.title}
+          </CardTitle>
+          <CardDescription className="text-slate-400 text-[11px] mt-1">
+            {scheme.provider_name || scheme.ministry}
+          </CardDescription>
+        </CardHeader>
+        
+        <CardContent className="p-5 pt-0 pb-4 flex-1">
+          <p className="text-slate-600 text-xs leading-relaxed line-clamp-3">
+            {scheme.description}
+          </p>
+          
+          {scheme.deadline && (
+            <div className="flex items-center gap-2 mt-4 text-[11px] font-semibold text-slate-500">
+              <Calendar className="h-3.5 w-3.5 text-slate-400" />
+              Deadline: <span className="text-slate-800">{formattedDeadline}</span>
             </div>
           )}
-        </div>
-        <CardTitle className="text-lg font-bold text-slate-900 leading-tight">
-          {scheme.title}
-        </CardTitle>
-        <CardDescription className="text-slate-400 text-xs mt-1">
-          {scheme.ministry}
-        </CardDescription>
-      </CardHeader>
-      
-      <CardContent className="p-5 pt-0 pb-4 flex-1">
-        <p className="text-slate-600 text-sm leading-relaxed">
-          {scheme.description}
-        </p>
+        </CardContent>
         
-        {scheme.deadline && (
-          <div className="flex items-center gap-2 mt-4 text-xs font-semibold text-slate-500">
-            <Calendar className="h-4 w-4 text-slate-400" />
-            Deadline: <span className="text-slate-800">{formattedDeadline}</span>
-          </div>
-        )}
-      </CardContent>
-      
-      <CardFooter className="p-5 pt-0 border-t border-slate-100 flex gap-3 mt-auto">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleDownloadICS}
-          disabled={!scheme.deadline}
-          className="flex-1 border-slate-200 text-slate-600 hover:bg-slate-50 cursor-pointer text-xs"
-          style={{ minHeight: "44px" }}
-        >
-          <Calendar className="h-4 w-4 mr-1.5" /> Save Deadline
-        </Button>
-        
-        {hasApplied ? (
+        <CardFooter className="p-5 pt-0 border-t border-slate-100 flex gap-3 mt-auto">
           <Button
-            disabled
-            variant="secondary"
-            className="flex-1 bg-emerald-50 text-emerald-600 font-medium border border-emerald-100 text-xs"
-            style={{ minHeight: "44px" }}
-          >
-            <CheckCircle2 className="h-4 w-4 mr-1.5" /> Applied
-          </Button>
-        ) : (
-          <Button
+            variant="outline"
             size="sm"
-            onClick={handleApply}
-            disabled={isPending}
-            className="flex-1 bg-slate-900 hover:bg-slate-800 text-white font-medium cursor-pointer text-xs"
+            onClick={handleDownloadICS}
+            disabled={!scheme.deadline}
+            className="flex-1 border-slate-200 text-slate-600 hover:bg-slate-50 cursor-pointer text-xs"
             style={{ minHeight: "44px" }}
           >
-            {isPending ? (
-              <Loader2 className="h-4 w-4 animate-spin mr-1.5" />
-            ) : (
-              <>
-                Apply Now <ChevronRight className="h-4 w-4 ml-1" />
-              </>
-            )}
+            <Calendar className="h-4 w-4 mr-1.5" /> Save Reminder
           </Button>
-        )}
-      </CardFooter>
-    </Card>
+          
+          {hasApplied ? (
+            <Button
+              disabled
+              variant="secondary"
+              className="flex-1 bg-emerald-50 text-emerald-600 font-medium border border-emerald-100 text-xs"
+              style={{ minHeight: "44px" }}
+            >
+              <CheckCircle2 className="h-4 w-4 mr-1.5" /> Applied
+            </Button>
+          ) : (
+            <Button
+              size="sm"
+              onClick={handleApply}
+              disabled={isPending}
+              className="flex-1 bg-slate-900 hover:bg-slate-800 text-white font-medium cursor-pointer text-xs"
+              style={{ minHeight: "44px" }}
+            >
+              {isPending ? (
+                <Loader2 className="h-4 w-4 animate-spin mr-1.5" />
+              ) : (
+                <>
+                  Apply Now <ChevronRight className="h-4 w-4 ml-1" />
+                </>
+              )}
+            </Button>
+          )}
+        </CardFooter>
+      </Card>
+
+      {/* Brief View Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-xl overflow-hidden max-h-[90vh] flex flex-col animate-in zoom-in-95 duration-200 border border-slate-150">
+            {/* Modal Header */}
+            <div className="flex items-start justify-between p-6 border-b border-slate-100 bg-slate-50/50">
+              <div className="space-y-1.5">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <Badge variant="secondary" className="bg-slate-150 text-slate-700 text-[10px] font-bold">
+                    {scheme.category || "General"}
+                  </Badge>
+                  {scheme.provider_type && (
+                    <Badge className={`border font-extrabold text-[10px] ${
+                      scheme.provider_type === "Government" ? "bg-blue-50 text-blue-700 border-blue-200" :
+                      scheme.provider_type === "NGO" ? "bg-emerald-50 text-emerald-700 border-emerald-200" :
+                      "bg-purple-50 text-purple-700 border-purple-200"
+                    }`}>
+                      {scheme.provider_type}
+                    </Badge>
+                  )}
+                </div>
+                <h2 className="text-xl font-extrabold text-slate-900 leading-tight">
+                  {scheme.title}
+                </h2>
+                <p className="text-xs text-slate-500">
+                  Funded by {scheme.provider_name || scheme.ministry}
+                </p>
+              </div>
+              <button 
+                onClick={() => setShowModal(false)}
+                className="text-slate-400 hover:text-slate-600 p-1.5 hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 overflow-y-auto space-y-6 flex-1">
+              {/* Highlighted Benefit Box */}
+              <div className="p-5 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50/60 border border-emerald-100 flex items-center justify-between">
+                <div className="space-y-1">
+                  <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-wide flex items-center gap-1">
+                    <Sparkles className="h-3 w-3 text-emerald-600 animate-pulse" /> Financial Benefit
+                  </span>
+                  <p className="text-xs text-emerald-700 font-semibold max-w-md leading-normal">
+                    This program grants direct funding for higher education tuition fee coverage and study allowances.
+                  </p>
+                </div>
+                {scheme.max_benefit_amount && (
+                  <div className="text-right">
+                    <span className="text-[10px] font-bold text-emerald-850 block">Up to</span>
+                    <span className="text-2xl font-black text-emerald-600 flex items-center justify-end">
+                      <IndianRupee className="h-5 w-5 mr-0.5" />
+                      {scheme.max_benefit_amount.toLocaleString("en-IN")}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* Brief Idea */}
+              <div className="space-y-2">
+                <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Brief Overview</h4>
+                <p className="text-slate-700 text-sm leading-relaxed">
+                  {scheme.description}
+                </p>
+              </div>
+
+              {/* AI Audit Checklist Section */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 border-b border-slate-100 pb-2">
+                  <h3 className="text-sm font-bold text-slate-800 flex items-center gap-1.5">
+                    <Sparkles className="h-4 w-4 text-indigo-500 animate-pulse" />
+                    AI Instant Welfare Match Check
+                  </h3>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Left Column: Eligibility Audit */}
+                  <div className="space-y-3 bg-slate-50/50 p-4 rounded-xl border border-slate-100">
+                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Eligibility Match</h4>
+                    <ul className="space-y-2.5">
+                      <li className="flex items-start gap-2 text-xs">
+                        {isIncomeEligible ? (
+                          <span className="text-emerald-600 font-bold">✅</span>
+                        ) : (
+                          <span className="text-red-500 font-bold">❌</span>
+                        )}
+                        <div className="flex-1">
+                          <p className="font-semibold text-slate-750">Annual Household Income</p>
+                          <p className="text-slate-500 text-[10px]">
+                            {scheme.eligibility_json?.max_income
+                              ? `Income limit: ₹${scheme.eligibility_json.max_income.toLocaleString("en-IN")} (Your Profile: ₹${user?.annual_income?.toLocaleString("en-IN") || "N/A"})`
+                              : "No restrictive income limits apply"}
+                          </p>
+                        </div>
+                      </li>
+                      <li className="flex items-start gap-2 text-xs">
+                        {isCasteEligible ? (
+                          <span className="text-emerald-600 font-bold">✅</span>
+                        ) : (
+                          <span className="text-red-500 font-bold">❌</span>
+                        )}
+                        <div className="flex-1">
+                          <p className="font-semibold text-slate-750">Caste Category Match</p>
+                          <p className="text-slate-500 text-[10px]">
+                            {scheme.eligibility_json?.category
+                              ? `Eligible: ${scheme.eligibility_json.category.join(", ")} (Your Profile: ${user?.caste_category || "N/A"})`
+                              : "Open to all caste categories"}
+                          </p>
+                        </div>
+                      </li>
+                      <li className="flex items-start gap-2 text-xs">
+                        {isEducationEligible ? (
+                          <span className="text-emerald-600 font-bold">✅</span>
+                        ) : (
+                          <span className="text-red-500 font-bold">❌</span>
+                        )}
+                        <div className="flex-1">
+                          <p className="font-semibold text-slate-750">Education Criteria</p>
+                          <p className="text-slate-500 text-[10px]">
+                            {scheme.eligibility_json?.education
+                              ? `Required: ${scheme.eligibility_json.education.join(", ")} (Your Profile: ${user?.education || "N/A"})`
+                              : "No education limits apply"}
+                          </p>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Right Column: Required Documents Check */}
+                  <div className="space-y-3 bg-slate-50/50 p-4 rounded-xl border border-slate-100">
+                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Required Documents Audit</h4>
+                    {scheme.required_documents && scheme.required_documents.length > 0 ? (
+                      <ul className="space-y-2.5">
+                        {scheme.required_documents.map((doc, idx) => {
+                          const docAvailable = hasDocument(doc, user?.uploaded_documents);
+                          return (
+                            <li key={idx} className="flex items-center justify-between text-xs p-2 rounded-lg border bg-white border-slate-200">
+                              <span className="font-medium text-slate-700 truncate max-w-[180px]">{doc}</span>
+                              {docAvailable ? (
+                                <span className="inline-flex items-center gap-1 text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                                  ✅ Vault Checked
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1 text-[10px] text-red-600 font-bold bg-red-50 px-2 py-0.5 rounded border border-red-200 line-through">
+                                  ❌ Upload Needed
+                                </span>
+                              )}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    ) : (
+                      <p className="text-slate-400 text-xs italic">No documents specified.</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-6 border-t border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+                <Calendar className="h-4 w-4 text-slate-400" />
+                Deadline: <span className="text-slate-800">{formattedDeadline}</span>
+              </div>
+              <div className="flex items-center gap-3">
+                {scheme.application_url && (
+                  <a
+                    href={scheme.application_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-slate-900 border border-slate-250 bg-white hover:bg-slate-50 px-4 py-2.5 rounded-lg transition-colors"
+                  >
+                    Portal Link <ExternalLink className="h-3.5 w-3.5" />
+                  </a>
+                )}
+                {hasApplied ? (
+                  <button
+                    disabled
+                    className="bg-emerald-50 text-emerald-600 font-bold border border-emerald-100 px-6 py-2.5 rounded-lg text-xs flex items-center gap-1.5"
+                    style={{ minHeight: "44px" }}
+                  >
+                    <CheckCircle2 className="h-4 w-4" /> Applied
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleApply}
+                    disabled={isPending}
+                    className="bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-2.5 rounded-lg text-xs flex items-center gap-1.5 cursor-pointer"
+                    style={{ minHeight: "44px" }}
+                  >
+                    {isPending ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <>
+                        Confirm Apply <ChevronRight className="h-4 w-4" />
+                      </>
+                    )}
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

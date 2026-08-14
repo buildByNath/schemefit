@@ -14,7 +14,7 @@ export function VoiceOnboarding() {
   const [recognitionError, setRecognitionError] = useState("");
   const [isParsing, setIsParsing] = useState(false);
   const [isSaving, startTransition] = useTransition();
-  const [apiSource, setApiSource] = useState<"gemini" | "local" | null>(null);
+  const [apiSource, setApiSource] = useState<"gemini" | "groq" | "local" | null>(null);
 
   // Form State (Manual by default, pre-filled with standard values)
   const [fullName, setFullName] = useState("Rahul Menon");

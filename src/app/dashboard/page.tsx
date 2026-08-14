@@ -187,6 +187,7 @@ export default async function DashboardPage() {
                 key={scheme.id}
                 scheme={scheme}
                 hasApplied={appliedSchemeIdsSet.has(scheme.id)}
+                user={user || undefined}
               />
             ))}
           </div>
