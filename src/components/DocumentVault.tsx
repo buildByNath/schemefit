@@ -83,7 +83,7 @@ export function DocumentVault({ initialDocuments }: DocumentVaultProps) {
 
             // 2. Convert to Base64 to save in database
             const encryptedBase64 = arrayBufferToBase64(encryptedBuffer);
-            const ivBase64 = arrayBufferToBase64(iv);
+            const ivBase64 = arrayBufferToBase64(iv.buffer);
 
             // 3. Save to server db
             const result = await saveEncryptedDocumentAction({

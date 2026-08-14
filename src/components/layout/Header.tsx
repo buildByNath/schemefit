@@ -1,13 +1,9 @@
 import Link from "next/link";
 import { User, Bell } from "lucide-react";
 import { MobileNav } from "./MobileNav";
-import { cookies } from "next/headers";
 import { getUser } from "@/lib/db";
-import { ModeToggle } from "./ModeToggle";
 
 export async function Header() {
-  const cookieStore = await cookies();
-  const currentMode = cookieStore.get("user_mode")?.value || "demo";
   const activeUser = await getUser();
   const userName = activeUser?.full_name || "Guest User";
 
@@ -21,7 +17,7 @@ export async function Header() {
           <span className="hidden md:inline-block">SchemeFit</span>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-4">
-          <ModeToggle currentMode={currentMode} userName={userName} />
+          <span className="text-sm font-medium text-muted-foreground mr-2">{userName}</span>
 
           <button className="relative p-2 hover:bg-accent rounded-full transition-colors">
             <Bell className="h-5 w-5" />

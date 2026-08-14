@@ -5,6 +5,7 @@ import { Mic, MicOff, RefreshCw, Sparkles, Check, ChevronRight, Keyboard, Databa
 import { saveUserProfile } from "@/app/actions";
 import { useRouter } from "next/navigation";
 import { ParsedProfile } from "@/lib/parser";
+import confetti from "canvas-confetti";
 
 export function VoiceOnboarding() {
   const router = useRouter();
@@ -136,7 +137,8 @@ export function VoiceOnboarding() {
       });
 
       if (result.success) {
-        router.push("/dashboard");
+        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+        setTimeout(() => router.push("/dashboard"), 800);
       } else {
         alert(result.error || "Failed to save profile. Please try again.");
       }

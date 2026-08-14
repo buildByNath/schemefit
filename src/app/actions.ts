@@ -58,22 +58,6 @@ export async function resetDatabaseAction() {
   }
 }
 
-export async function toggleUserModeAction() {
-  try {
-    const cookieStore = await cookies();
-    const currentMode = cookieStore.get("user_mode")?.value || "demo";
-    const newMode = currentMode === "demo" ? "user" : "demo";
-    cookieStore.set("user_mode", newMode, { path: "/" });
-    
-    revalidatePath("/");
-    revalidatePath("/dashboard");
-    revalidatePath("/dashboard/applications");
-    return { success: true, mode: newMode };
-  } catch (error) {
-    console.error("Error in toggleUserModeAction:", error);
-    return { success: false, error: String(error) };
-  }
-}
 
 export async function addFamilyMemberAction(data: {
   name: string;

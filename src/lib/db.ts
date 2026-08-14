@@ -72,19 +72,6 @@ export interface UserDocument {
 }
 
 export async function getActiveUserId(): Promise<string> {
-  if (typeof window !== "undefined") {
-    return "00000000-0000-0000-0000-000000000001";
-  }
-  try {
-    const { cookies } = require("next/headers");
-    const cookieStore = await cookies();
-    const mode = cookieStore.get("user_mode")?.value;
-    if (mode === "user") {
-      return "00000000-0000-0000-0000-000000000002";
-    }
-  } catch (e) {
-    // Fallback if called outside request context (e.g. build time or seeding CLI)
-  }
   return "00000000-0000-0000-0000-000000000001";
 }
 
