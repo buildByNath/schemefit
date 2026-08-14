@@ -193,13 +193,15 @@ export function DocumentVault({ initialDocuments }: DocumentVaultProps) {
           </p>
         </div>
 
-        {/* Sync Indicator */}
-        <div className="flex items-center gap-2 bg-slate-800/80 px-4 py-2 border border-slate-700 rounded-lg shrink-0 text-xs font-semibold">
-          <CheckCircle2 className="h-4 w-4 text-emerald-400" />
-          <div className="text-left leading-tight">
-            <span className="block text-slate-200">Google Drive Backup</span>
-            <span className="text-[10px] text-slate-400 font-medium">Synchronized</span>
-          </div>
+        {/* Sync Indicator / Google Drive Connect */}
+        <div className="flex items-center gap-3 shrink-0">
+          <a
+            href="/api/auth/google-drive"
+            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 transition-colors px-4 py-2 border border-indigo-500 rounded-lg text-xs font-bold text-white shadow-sm"
+          >
+            <CloudLightning className="h-4 w-4" />
+            Connect Google Drive
+          </a>
         </div>
       </div>
 

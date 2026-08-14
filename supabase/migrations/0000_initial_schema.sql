@@ -10,6 +10,8 @@ CREATE TABLE public.users (
     district TEXT,
     occupation TEXT,
     education TEXT,
+    google_drive_access_token TEXT,
+    google_drive_refresh_token TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

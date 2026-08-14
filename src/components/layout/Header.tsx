@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { User, Bell } from "lucide-react";
+import { LogoutButton } from "./LogoutButton";
 import { MobileNav } from "./MobileNav";
 import { getUser } from "@/lib/db";
-
 export async function Header() {
   const activeUser = await getUser();
   const userName = activeUser?.full_name || "Guest User";
@@ -18,6 +18,7 @@ export async function Header() {
         </div>
         <div className="flex flex-1 items-center justify-end space-x-4">
           <span className="text-sm font-medium text-muted-foreground mr-2">{userName}</span>
+          <LogoutButton />
 
           <button className="relative p-2 hover:bg-accent rounded-full transition-colors">
             <Bell className="h-5 w-5" />

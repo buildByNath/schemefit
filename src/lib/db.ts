@@ -72,6 +72,21 @@ export interface UserDocument {
 }
 
 export async function getActiveUserId(): Promise<string> {
+  try {
+    const { createClient } = await import('@/utils/supabase/server');
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (user) {
+      return user.id;
+    }
+  } catch (error) {
+    // Fallback if not logged in or during build time
+    console.error("Error getting active user id:", error);
+  }
+  
+  // Fallback to a mock UUID if no one is logged in 
+  // (useful for development without Supabase connected)
   return "00000000-0000-0000-0000-000000000001";
 }
 

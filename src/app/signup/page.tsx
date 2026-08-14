@@ -4,24 +4,49 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { UserPlus, ArrowRight } from "lucide-react";
+import { createClient } from "@/utils/supabase/client";
 
 export default function SignupPage() {
   const router = useRouter();
+  const supabase = createClient();
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
   async function handleSignup(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setLoading(true);
 
-    // Mock Signup
-    setTimeout(() => {
+    const { error: signUpError, data } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: fullName,
+        }
+      }
+    });
+
+    if (signUpError) {
+      setError(signUpError.message);
       setLoading(false);
+      return;
+    }
+
+    // Usually Supabase requires email verification.
+    // If auto-confirm is on in Supabase, we can just redirect.
+    if (data.session) {
       router.push("/dashboard");
-    }, 1000);
+      router.refresh();
+    } else {
+      setSuccessMsg("Check your email for the confirmation link!");
+      setLoading(false);
+    }
   }
 
   return (
@@ -41,7 +66,24 @@ export default function SignupPage() {
               {error}
             </div>
           )}
+          {successMsg && (
+            <div className="p-3 text-sm text-green-700 bg-green-50 border border-green-200 rounded-lg">
+              {successMsg}
+            </div>
+          )}
           
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Full Name</label>
+            <input
+              type="text"
+              required
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              className="w-full h-11 px-3 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary text-sm"
+              placeholder="John Doe"
+            />
+          </div>
+
           <div className="space-y-2">
             <label className="text-sm font-medium">Email address</label>
             <input
