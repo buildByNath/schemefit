@@ -1,24 +1,19 @@
 import React from "react";
-import { redirect } from "next/navigation";
 import { getUser, getSchemes, getApplications } from "@/lib/db";
 import { getEligibleSchemes } from "@/lib/matching";
 import { BenefitsList } from "@/components/BenefitsList";
-import { Gift } from "lucide-react";
+import { Gift, AlertCircle } from "lucide-react";
+import Link from "next/link";
 
 export const revalidate = 0;
 
 export default async function BenefitsPage() {
   const user = await getUser();
-
-  if (!user || !user.annual_income || !user.caste_category) {
-    redirect("/");
-  }
+  const isProfileIncomplete = !user || !user.annual_income || !user.caste_category;
 
   const allSchemes = await getSchemes();
-  const userApps = await getApplications(user.id);
-  const eligibleSchemes = getEligibleSchemes(user, allSchemes);
-
-  // Pass plain string[] - Set is not serializable across the RSC boundary
+  const userApps = isProfileIncomplete ? [] : await getApplications(user!.id);
+  const eligibleSchemes = isProfileIncomplete ? [] : getEligibleSchemes(user!, allSchemes);
   const appliedSchemeIds = userApps.map(app => app.scheme_id);
 
   return (
@@ -36,11 +31,24 @@ export default async function BenefitsPage() {
         </p>
       </div>
 
-      <BenefitsList
-        eligibleSchemes={eligibleSchemes}
-        user={user}
-        appliedSchemeIds={appliedSchemeIds}
-      />
+      {isProfileIncomplete ? (
+        <div className="flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-xl p-6">
+          <AlertCircle className="h-6 w-6 text-amber-600 flex-shrink-0" />
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-amber-800">Complete your profile first</p>
+            <p className="text-xs text-amber-600 mt-0.5">We need your income and caste category to match you with eligible welfare schemes.</p>
+          </div>
+          <Link href="/" className="text-xs font-bold text-amber-700 bg-amber-100 hover:bg-amber-200 px-3 py-2 rounded-lg transition-colors">
+            Setup Profile →
+          </Link>
+        </div>
+      ) : (
+        <BenefitsList
+          eligibleSchemes={eligibleSchemes}
+          user={user!}
+          appliedSchemeIds={appliedSchemeIds}
+        />
+      )}
     </div>
   );
 }

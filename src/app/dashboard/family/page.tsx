@@ -1,38 +1,31 @@
 import React from "react";
-import { redirect } from "next/navigation";
 import { getUser, getSchemes, getApplications, getFamilyMembers } from "@/lib/db";
 import { getEligibleSchemes } from "@/lib/matching";
 import { FamilyWealth } from "@/components/FamilyWealth";
-import { Users } from "lucide-react";
+import { Users, AlertCircle } from "lucide-react";
 import { demoUser } from "@/lib/seed";
+import Link from "next/link";
 
 export const revalidate = 0; // Force dynamic rendering
 
 export default async function FamilyPage() {
   const user = await getUser();
-  
-  // If user details are not initialized (or empty), redirect to onboarding
-  if (!user || !user.annual_income || !user.caste_category) {
-    redirect("/");
-  }
+  const isProfileIncomplete = !user || !user.annual_income || !user.caste_category;
 
-  const familyMembers = await getFamilyMembers(user.id);
+  const familyMembers = await getFamilyMembers(user?.id);
   const allSchemes = await getSchemes();
-  const userApps = await getApplications(user.id);
+  const userApps = isProfileIncomplete ? [] : await getApplications(user!.id);
   
-  // Get eligible schemes for the household
-  const eligibleSchemes = getEligibleSchemes(user, allSchemes);
-  
-  // Pass as plain string[] — Set is NOT serializable across the Server→Client boundary
+  const eligibleSchemes = isProfileIncomplete ? [] : getEligibleSchemes(user!, allSchemes);
   const appliedSchemeIds = userApps.map(app => app.scheme_id);
-  const isDemo = user.id === demoUser.id;
+  const isDemo = user?.id === demoUser.id;
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto p-6 md:p-8 bg-slate-50 min-h-screen">
       <div className="space-y-1">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 font-bold text-[10px] uppercase tracking-wider">
           <Users className="h-3.5 w-3.5" />
-          Household Savings & Wealth
+          Household Savings &amp; Wealth
         </div>
         <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
           My Family Benefits Ledger
@@ -42,12 +35,25 @@ export default async function FamilyPage() {
         </p>
       </div>
 
-      <FamilyWealth
-        familyMembers={familyMembers}
-        eligibleSchemes={eligibleSchemes}
-        appliedSchemeIds={appliedSchemeIds}
-        isDemoMode={isDemo}
-      />
+      {isProfileIncomplete ? (
+        <div className="flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-xl p-6">
+          <AlertCircle className="h-6 w-6 text-amber-600 flex-shrink-0" />
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-amber-800">Complete your profile first</p>
+            <p className="text-xs text-amber-600 mt-0.5">We need your household details to calculate family benefits.</p>
+          </div>
+          <Link href="/" className="text-xs font-bold text-amber-700 bg-amber-100 hover:bg-amber-200 px-3 py-2 rounded-lg transition-colors">
+            Setup Profile →
+          </Link>
+        </div>
+      ) : (
+        <FamilyWealth
+          familyMembers={familyMembers}
+          eligibleSchemes={eligibleSchemes}
+          appliedSchemeIds={appliedSchemeIds}
+          isDemoMode={isDemo}
+        />
+      )}
     </div>
   );
 }

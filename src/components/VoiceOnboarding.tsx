@@ -138,7 +138,7 @@ export function VoiceOnboarding() {
 
       if (result.success) {
         confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-        setTimeout(() => router.push("/dashboard"), 800);
+        setTimeout(() => { window.location.href = "/dashboard"; }, 800);
       } else {
         alert(result.error || "Failed to save profile. Please try again.");
       }

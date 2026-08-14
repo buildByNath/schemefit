@@ -1,5 +1,4 @@
 import React from "react";
-import { redirect } from "next/navigation";
 import { getUser, getSchemes, getApplications, getFamilyMembers } from "@/lib/db";
 import { getEligibleSchemes } from "@/lib/matching";
 import { SchemeCard } from "@/components/SchemeCard";
@@ -14,17 +13,15 @@ export const revalidate = 0; // Force dynamic rendering
 export default async function DashboardPage() {
   const user = await getUser();
   
-  // If user details are not initialized (or empty), redirect to onboarding
-  if (!user || !user.annual_income || !user.caste_category) {
-    redirect("/");
-  }
+  // If user has no profile yet, show a gentle banner instead of redirecting
+  const isProfileIncomplete = !user || !user.annual_income || !user.caste_category;
 
   const allSchemes = await getSchemes();
-  const userApps = await getApplications(user.id);
-  const familyMembers = await getFamilyMembers(user.id);
+  const userApps = await getApplications(user?.id);
+  const familyMembers = await getFamilyMembers(user?.id);
   
   // Run the matching algorithm
-  const eligibleSchemes = getEligibleSchemes(user, allSchemes);
+  const eligibleSchemes = isProfileIncomplete ? [] : getEligibleSchemes(user!, allSchemes);
   
   // Sum up total benefits
   const totalBenefits = eligibleSchemes.reduce((sum, scheme) => {
@@ -38,20 +35,39 @@ export default async function DashboardPage() {
 
   // Set used server-side only — never passed to a client component, so no serialization issue
   const appliedSchemeIdsSet = new Set(userApps.map(app => app.scheme_id));
-  const isDemo = user.id === demoUser.id;
+  const isDemo = user?.id === demoUser.id;
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto p-6 md:p-8 bg-slate-50 min-h-screen">
+      
+      {/* Profile Incomplete Banner */}
+      {isProfileIncomplete && (
+        <div className="flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-xl p-4">
+          <AlertCircle className="h-5 w-5 text-amber-600 flex-shrink-0" />
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-amber-800">Your profile is incomplete</p>
+            <p className="text-xs text-amber-600">Fill in your details to start matching with welfare schemes.</p>
+          </div>
+          <Link
+            href="/"
+            className="text-xs font-bold text-amber-700 bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded-lg transition-colors"
+          >
+            Complete Profile →
+          </Link>
+        </div>
+      )}
+
       {/* Upper Status Bar */}
+      {!isProfileIncomplete && (
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
         <div className="space-y-1 flex-1">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Active Profile</span>
             <Badge variant="secondary" className="bg-blue-50 text-blue-600 font-bold text-[10px] uppercase border-blue-100">
-              {user.caste_category} Category
+              {user!.caste_category} Category
             </Badge>
             <Badge variant="secondary" className="bg-indigo-50 text-indigo-600 font-bold text-[10px] uppercase border-indigo-100">
-              Income: ₹{user.annual_income.toLocaleString("en-IN")}
+              Income: ₹{user!.annual_income!.toLocaleString("en-IN")}
             </Badge>
             {isDemo ? (
               <Badge className="bg-purple-100 text-purple-700 hover:bg-purple-200 border-0 font-bold text-[10px] uppercase">
@@ -64,10 +80,10 @@ export default async function DashboardPage() {
             )}
           </div>
           <h2 className="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">
-            Welcome back, {user.full_name}
+            Welcome back, {user!.full_name}
           </h2>
           <p className="text-slate-500 text-xs max-w-xl truncate">
-            Parsed Intake: &ldquo;{user.voice_raw_text || "Manual profile inputs"}&rdquo;
+            Parsed Intake: &ldquo;{user!.voice_raw_text || "Manual profile inputs"}&rdquo;
           </p>
         </div>
         
@@ -79,6 +95,7 @@ export default async function DashboardPage() {
           <RefreshCw className="h-3.5 w-3.5" /> Retake Voice Onboarding
         </Link>
       </div>
+      )}
 
       {/* Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

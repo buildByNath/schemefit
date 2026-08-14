@@ -1,20 +1,16 @@
 import React from "react";
-import { redirect } from "next/navigation";
 import { getUser, getUserDocuments } from "@/lib/db";
 import { DocumentVault } from "@/components/DocumentVault";
-import { Files } from "lucide-react";
+import { Files, AlertCircle } from "lucide-react";
+import Link from "next/link";
 
 export const revalidate = 0; // Force dynamic rendering
 
 export default async function DocumentsPage() {
   const user = await getUser();
+  const isProfileIncomplete = !user || !user.annual_income || !user.caste_category;
   
-  // If user details are not initialized (or empty), redirect to onboarding
-  if (!user || !user.annual_income || !user.caste_category) {
-    redirect("/");
-  }
-
-  const documents = await getUserDocuments(user.id);
+  const documents = isProfileIncomplete ? [] : await getUserDocuments(user!.id);
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto p-6 md:p-8 bg-slate-50 min-h-screen">
@@ -31,7 +27,20 @@ export default async function DocumentsPage() {
         </p>
       </div>
 
-      <DocumentVault initialDocuments={documents} />
+      {isProfileIncomplete ? (
+        <div className="flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-xl p-6">
+          <AlertCircle className="h-6 w-6 text-amber-600 flex-shrink-0" />
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-amber-800">Complete your profile first</p>
+            <p className="text-xs text-amber-600 mt-0.5">Set up your profile before uploading documents.</p>
+          </div>
+          <Link href="/" className="text-xs font-bold text-amber-700 bg-amber-100 hover:bg-amber-200 px-3 py-2 rounded-lg transition-colors">
+            Setup Profile →
+          </Link>
+        </div>
+      ) : (
+        <DocumentVault initialDocuments={documents} />
+      )}
     </div>
   );
 }

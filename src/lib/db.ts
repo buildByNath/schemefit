@@ -272,7 +272,9 @@ export async function updateUser(id?: string, updates?: Partial<User>): Promise<
   
   if (isSupabaseConfigured()) {
     try {
-      const { data, error } = await supabase
+      const { createClient: createServerClient } = await import('@/utils/supabase/server');
+      const authSupabase = await createServerClient();
+      const { data, error } = await authSupabase
         .from("users")
         .update(userUpdates)
         .eq("id", userId)
@@ -466,7 +468,7 @@ export async function getUserDocuments(userId?: string): Promise<UserDocument[]>
   if (isSupabaseConfigured()) {
     try {
       const { data, error } = await supabase
-        .from("user_documents")
+        .from("documents")
         .select("*")
         .eq("user_id", uid);
       if (error) throw error;
@@ -493,7 +495,7 @@ export async function addUserDocument(doc: Omit<UserDocument, "id" | "user_id" |
   if (isSupabaseConfigured()) {
     try {
       const { data, error } = await supabase
-        .from("user_documents")
+        .from("documents")
         .insert(newDoc)
         .select()
         .single();
@@ -515,7 +517,7 @@ export async function deleteUserDocument(id: string): Promise<boolean> {
   if (isSupabaseConfigured()) {
     try {
       const { error } = await supabase
-        .from("user_documents")
+        .from("documents")
         .delete()
         .eq("id", id);
       if (error) throw error;
