@@ -36,28 +36,33 @@ Important guidelines:
 - Always encourage users to visit official portals for final verification`;
 
     const conversationHistory = Array.isArray(history) ? history : [];
-    const conversationText = conversationHistory
-      .map((msg: { role: string; content: string }) =>
-        `${msg.role === "user" ? "User" : "Assistant"}: ${msg.content}`
-      )
-      .join("\n");
+    
+    // Map history to OpenAI format for Groq
+    const messages = [
+      { role: "system", content: systemPrompt },
+      ...conversationHistory.map((msg: { role: string; content: string }) => ({
+        role: msg.role === "user" ? "user" : "assistant",
+        content: msg.content
+      })),
+      { role: "user", content: question }
+    ];
 
-    const fullPrompt = `${systemPrompt}\n\n${conversationText}\nUser: ${question}\nAssistant:`;
-
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = process.env.GROQ_API_KEY;
     if (apiKey) {
       try {
         const response = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+          "https://api.groq.com/openai/v1/chat/completions",
           {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${apiKey}`
+            },
             body: JSON.stringify({
-              contents: [{ parts: [{ text: fullPrompt }] }],
-              generationConfig: {
-                temperature: 0.7,
-                maxOutputTokens: 512,
-              }
+              model: "llama3-8b-8192",
+              messages: messages,
+              temperature: 0.7,
+              max_tokens: 512,
             }),
             signal: AbortSignal.timeout(8000)
           }
@@ -65,16 +70,16 @@ Important guidelines:
 
         if (response.ok) {
           const data = await response.json();
-          const answer = data.candidates?.[0]?.content?.parts?.[0]?.text;
+          const answer = data.choices?.[0]?.message?.content;
           if (answer) {
-            return NextResponse.json({ answer: answer.trim(), source: "gemini" });
+            return NextResponse.json({ answer: answer.trim(), source: "groq" });
           }
         } else {
           const errText = await response.text();
-          console.error("Gemini chatbot API error:", response.status, errText);
+          console.error("Groq chatbot API error:", response.status, errText);
         }
       } catch (err) {
-        console.warn("Gemini chatbot API timeout, using fallback:", err);
+        console.warn("Groq chatbot API timeout, using fallback:", err);
       }
     }
 
