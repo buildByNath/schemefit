@@ -1,6 +1,6 @@
 "use server";
 
-import { updateUser, createApplication, seedMockData, getActiveUserId, addFamilyMember, addUserDocument, deleteUserDocument } from "@/lib/db";
+import { updateUser, createApplication, seedMockData, getActiveUserId, addFamilyMember, addUserDocument, deleteUserDocument, getSchemes } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
@@ -130,5 +130,15 @@ export async function deleteUserDocumentAction(id: string) {
   } catch (error) {
     console.error("Error in deleteUserDocumentAction:", error);
     return { success: false, error: String(error) };
+  }
+}
+
+export async function getAllSchemesAction() {
+  try {
+    const schemes = await getSchemes();
+    return { success: true, schemes };
+  } catch (error) {
+    console.error("Error in getAllSchemesAction:", error);
+    return { success: false, error: String(error), schemes: [] };
   }
 }

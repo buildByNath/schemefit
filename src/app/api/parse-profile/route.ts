@@ -30,7 +30,8 @@ Return ONLY a raw JSON object with these keys (no markdown formatting, no commen
                 }]
               }],
               generationConfig: { responseMimeType: "application/json" }
-            })
+            }),
+            signal: AbortSignal.timeout(2000)
           }
         );
 
@@ -41,6 +42,9 @@ Return ONLY a raw JSON object with these keys (no markdown formatting, no commen
             const parsed = JSON.parse(jsonText.trim());
             return NextResponse.json({ ...parsed, source: "gemini" });
           }
+        } else {
+          const errText = await response.text();
+          console.error("Gemini API error response:", response.status, errText);
         }
       } catch (err) {
         console.error("Gemini API call failed, falling back to local regex parser:", err);

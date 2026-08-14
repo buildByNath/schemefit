@@ -29,14 +29,14 @@ export function SchemeCard({ scheme, hasApplied }: SchemeCardProps) {
     const icsContent = [
       "BEGIN:VCALENDAR",
       "VERSION:2.0",
-      "PRODID:-//SaturnX//Scheme Calendar//EN",
+      "PRODID:-//SchemeFit//Scheme Calendar//EN",
       "BEGIN:VEVENT",
-      `UID:deadline-${scheme.id}@saturnx.in`,
+      `UID:deadline-${scheme.id}@schemefit.in`,
       `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z"}`,
       `DTSTART:${startStr}`,
       `DTEND:${deadlineStr}`,
       `SUMMARY:Apply for ${scheme.title}`,
-      `DESCRIPTION:Reminder to submit your application for the ${scheme.title} scholarship/scheme before the deadline! Link: ${scheme.application_url || "https://saturnx.in"}`,
+      `DESCRIPTION:Reminder to submit your application for the ${scheme.title} scholarship/scheme before the deadline! Link: ${scheme.application_url || "https://schemefit.in"}`,
       "END:VEVENT",
       "END:VCALENDAR"
     ].join("\r\n");

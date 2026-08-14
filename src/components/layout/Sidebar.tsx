@@ -21,6 +21,7 @@ const items = [
   { title: "My Documents", href: "/dashboard/documents", icon: Files },
   { title: "SmartDoc Studio", href: "/dashboard/smartdoc", icon: Settings },
   { title: "My Applications", href: "/dashboard/applications", icon: FileCheck },
+  { title: "AI Chatbot", href: "/dashboard/chatbot", icon: MessageSquare },
 ];
 
 export function Sidebar() {

@@ -90,7 +90,7 @@ export function ApplicationsList({ applications: initialApplications, user }: Ap
       
       // Meta Information block
       drawText(`Date: ${new Date().toLocaleDateString("en-IN")}`, 10, false, 15);
-      drawText(`Complaint Reference ID: SATURNX-${app.id.substring(0, 8).toUpperCase()}`, 10, true, 25);
+      drawText(`Complaint Reference ID: SCHEMEFIT-${app.id.substring(0, 8).toUpperCase()}`, 10, true, 25);
       
       // Address Block
       drawText("TO,", 11, true, 16);
@@ -133,7 +133,7 @@ export function ApplicationsList({ applications: initialApplications, user }: Ap
       drawText("Respected Sir/Madam,", 11, false, 25);
       
       // Body Paragraphs
-      const introText = `I, the undersigned applicant ${user.full_name}, residing in Ernakulam, Kerala, hereby submit this formal petition concerning my welfare application filed through the SATURNX portal. I belong to the ${user.caste_category} caste category, with an annual household income of Rs. ${user.annual_income?.toLocaleString("en-IN")} only, which places me fully within the specified eligibility criteria for this scheme.`;
+      const introText = `I, the undersigned applicant ${user.full_name}, residing in Ernakulam, Kerala, hereby submit this formal petition concerning my welfare application filed through the SchemeFit portal. I belong to the ${user.caste_category} caste category, with an annual household income of Rs. ${user.annual_income?.toLocaleString("en-IN")} only, which places me fully within the specified eligibility criteria for this scheme.`;
       
       wrapText(introText).forEach(line => {
         drawText(line, 11, false, 16);

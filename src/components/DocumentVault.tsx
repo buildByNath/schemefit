@@ -11,7 +11,7 @@ interface DocumentVaultProps {
   initialDocuments: UserDocument[];
 }
 
-const PASSPHRASE = "saturnx-vault-key-2026";
+const PASSPHRASE = "schemefit-vault-key-2026";
 
 export function DocumentVault({ initialDocuments }: DocumentVaultProps) {
   const [documents, setDocuments] = useState<UserDocument[]>(initialDocuments);

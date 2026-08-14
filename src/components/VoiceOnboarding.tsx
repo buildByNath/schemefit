@@ -36,7 +36,7 @@ export function VoiceOnboarding() {
         const recognition = new SpeechRecognition();
         recognition.continuous = false; // Stop after a single sentence
         recognition.interimResults = false;
-        recognition.lang = "en-IN";
+        recognition.lang = typeof navigator !== "undefined" ? navigator.language : "en-US";
 
         recognition.onstart = () => {
           setIsListening(true);
@@ -45,9 +45,11 @@ export function VoiceOnboarding() {
         };
 
         recognition.onerror = (event: any) => {
-          console.error("Speech recognition error:", event.error);
+          console.warn("Speech recognition warning/error:", event.error);
           if (event.error === "not-allowed") {
             setRecognitionError("Microphone access blocked. Please enable it in browser settings.");
+          } else if (event.error === "no-speech") {
+            setRecognitionError("No speech detected. Please tap the mic and try again, or fill the form manually.");
           } else {
             setRecognitionError(`Speech error: ${event.error}. Please try typing or manual edit.`);
           }

@@ -3,7 +3,7 @@ import { supabase } from "./supabase";
 export const demoUser = {
   id: "00000000-0000-0000-0000-000000000001",
   full_name: "Rahul Menon",
-  email: "rahul@demo.saturnx.in",
+  email: "rahul@demo.schemefit.in",
   annual_income: 250000,
   caste_category: "OBC",
   state: "Kerala",
@@ -16,7 +16,7 @@ export const demoUser = {
 export const customUser = {
   id: "00000000-0000-0000-0000-000000000002",
   full_name: "Guest User",
-  email: "guest@saturnx.in",
+  email: "guest@schemefit.in",
   annual_income: null,
   caste_category: null,
   state: null,

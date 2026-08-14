@@ -18,7 +18,7 @@ export async function Header() {
           <MobileNav />
         </div>
         <div className="flex items-center gap-2 font-bold md:w-[200px]">
-          <span className="hidden md:inline-block">SATURNX</span>
+          <span className="hidden md:inline-block">SchemeFit</span>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-4">
           <ModeToggle currentMode={currentMode} userName={userName} />

@@ -71,10 +71,16 @@ export function FamilyWealth({ familyMembers, eligibleSchemes, appliedSchemeIds:
   });
 
   // Calculate unclaimed eligible schemes
-  const unclaimedSchemes = eligibleSchemes.filter(scheme => !appliedSchemeIds.has(scheme.id));
-  const totalPotentialUnclaimed = unclaimedSchemes.reduce((sum, scheme) => {
-    return sum + (scheme.max_benefit_amount || 0);
-  }, 0);
+  // For demo purpose, if in Demo Mode, show "No Unclaimed Welfare Available" directly by returning empty array
+  const unclaimedSchemes = isDemoMode
+    ? []
+    : eligibleSchemes.filter(scheme => !appliedSchemeIds.has(scheme.id));
+
+  const totalPotentialUnclaimed = isDemoMode
+    ? 0
+    : unclaimedSchemes.reduce((sum, scheme) => {
+        return sum + (scheme.max_benefit_amount || 0);
+      }, 0);
 
   return (
     <div className="space-y-6">

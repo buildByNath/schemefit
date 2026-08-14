@@ -21,9 +21,9 @@ export function MobileNav() {
       </SheetTrigger>
       <SheetContent side="left" className="w-[280px] sm:w-[320px] p-0">
         <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-        <SheetDescription className="sr-only">Navigate through SATURNX</SheetDescription>
-        <div className="flex flex-col gap-2 p-4 pt-10">
-          <div className="text-xl font-bold mb-4 px-2">SATURNX</div>
+        <SheetDescription className="sr-only">Navigate through SchemeFit</SheetDescription>
+        <nav className="flex flex-col gap-4 mt-6">
+          <div className="text-xl font-bold mb-4 px-2">SchemeFit</div>
           {items.map((item) => {
             const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
             return (
@@ -41,7 +41,7 @@ export function MobileNav() {
               </Link>
             );
           })}
-        </div>
+        </nav>
       </SheetContent>
     </Sheet>
   );

@@ -7,7 +7,7 @@ import { Sidebar } from "@/components/layout/Sidebar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "SATURNX - The Smart Scheme Intelligence Engine",
+  title: "SchemeFit - The Smart Scheme Intelligence Engine",
   description: "Discover and prepare for government benefits you may be eligible for.",
 };
 

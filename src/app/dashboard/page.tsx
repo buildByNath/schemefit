@@ -4,7 +4,7 @@ import { getUser, getSchemes, getApplications, getFamilyMembers } from "@/lib/db
 import { getEligibleSchemes } from "@/lib/matching";
 import { SchemeCard } from "@/components/SchemeCard";
 import { FamilySection } from "@/components/FamilySection";
-import { Sparkles, RefreshCw, AlertCircle, TrendingUp, CheckCircle, FileText } from "lucide-react";
+import { Sparkles, RefreshCw, AlertCircle, TrendingUp, CheckCircle, FileText, Info } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { demoUser } from "@/lib/seed";
@@ -148,19 +148,19 @@ export default async function DashboardPage() {
         <div className="flex items-center justify-between">
           <h3 className="font-bold text-lg text-slate-850 flex items-center gap-2">
             <Sparkles className="h-4.5 w-4.5 text-blue-600 animate-pulse" />
-            Recommended Schemes & Scholarships
+            Unclaimed Welfare Cash Values Waiting For You
           </h3>
           <span className="text-xs text-slate-500 font-medium">
-            {eligibleSchemes.length} programs available
+            {isDemo ? 0 : eligibleSchemes.length} programs available
           </span>
         </div>
 
-        {eligibleSchemes.length === 0 ? (
+        {isDemo || eligibleSchemes.length === 0 ? (
           <div className="bg-white border border-slate-200 rounded-xl p-10 shadow-sm text-center">
-            <AlertCircle className="h-10 w-10 text-slate-400 mx-auto mb-3" />
-            <h4 className="font-bold text-slate-800 text-lg mb-1">No Matching Schemes Found</h4>
+            <Info className="h-10 w-10 text-slate-400 mx-auto mb-3" />
+            <h4 className="font-bold text-slate-800 text-lg mb-1">No Unclaimed Welfare Available</h4>
             <p className="text-slate-500 text-sm max-w-sm mx-auto">
-              We couldn&apos;t find any schemes matching your specific parameters. You can try retaking the voice onboarding and adjust your annual income or category.
+              Your household has already applied for or claimed all eligible matching schemes!
             </p>
           </div>
         ) : (
