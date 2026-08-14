@@ -430,6 +430,7 @@ export function VoiceOnboarding() {
                   <option value="Student">Student</option>
                   <option value="Farmer">Farmer</option>
                   <option value="Worker">Worker</option>
+                  <option value="NGO/Private sector">NGO / Private Sector Sponsor</option>
                   <option value="None">None</option>
                 </select>
               </div>

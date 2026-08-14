@@ -21,6 +21,11 @@ export interface User {
   is_differently_abled?: boolean | null;
   bpl_status?: boolean | null;
   uploaded_documents?: string[];
+  role?: "student" | "ngo" | "private_sector" | null;
+  organization_name?: string | null;
+  registration_no?: string | null;
+  official_email?: string | null;
+  website_url?: string | null;
   created_at?: string;
   updated_at?: string;
 }
@@ -40,6 +45,9 @@ export interface Scheme {
   state?: string;
   ministry?: string;
   status?: string;
+  provider_type?: "Government" | "NGO" | "Private Sector" | null;
+  provider_name?: string | null;
+  created_by_user_id?: string | null;
   created_at?: string;
 }
 
@@ -588,3 +596,74 @@ export async function seedMockData() {
   readLocalDb();
   return { success: true };
 }
+
+export async function createScheme(schemeData: Omit<Scheme, "id" | "created_at">): Promise<Scheme> {
+  const uid = await getActiveUserId();
+  const now = new Date().toISOString();
+  const newScheme: Scheme = {
+    id: `scheme-${Math.random().toString(36).substr(2, 9)}`,
+    created_at: now,
+    created_by_user_id: uid,
+    provider_type: schemeData.provider_type || "NGO",
+    provider_name: schemeData.provider_name || schemeData.ministry || "Private / NGO Organization",
+    ...schemeData
+  };
+
+  if (isSupabaseConfigured()) {
+    try {
+      const { data, error } = await supabase
+        .from("schemes")
+        .insert(newScheme)
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
+    } catch (err) {
+      console.error("Supabase createScheme error, falling back to local:", err);
+    }
+  }
+
+  // Local fallback
+  const db = readLocalDb();
+  db.schemes.unshift(newScheme);
+  writeLocalDb(db);
+  return newScheme;
+}
+
+export async function getProviderSchemes(providerUserId?: string): Promise<Scheme[]> {
+  const uid = providerUserId || await getActiveUserId();
+  const allSchemes = await getSchemes();
+  return allSchemes.filter(s => s.created_by_user_id === uid || (s.provider_type && s.provider_type !== "Government"));
+}
+
+export async function getProviderApplications(providerUserId?: string): Promise<{ application: Application; student: User | null; scheme: Scheme | null }[]> {
+  const uid = providerUserId || await getActiveUserId();
+  const db = readLocalDb();
+  
+  // Get schemes belonging to this provider or all non-government schemes for demo
+  const providerSchemes = db.schemes.filter(s => s.created_by_user_id === uid || (s.provider_type && s.provider_type !== "Government"));
+  const providerSchemeIds = new Set(providerSchemes.map(s => s.id));
+
+  const apps = db.applications.filter(a => providerSchemeIds.has(a.scheme_id));
+  return apps.map(app => {
+    const student = db.users.find(u => u.id === app.user_id) || null;
+    const scheme = db.schemes.find(s => s.id === app.scheme_id) || null;
+    return { application: app, student, scheme };
+  });
+}
+
+export async function updateApplicationStatus(applicationId: string, status: string, rejectionReason?: string): Promise<boolean> {
+  const db = readLocalDb();
+  const appIndex = db.applications.findIndex(a => a.id === applicationId);
+  if (appIndex !== -1) {
+    db.applications[appIndex].status = status;
+    if (rejectionReason !== undefined) {
+      db.applications[appIndex].rejection_reason = rejectionReason;
+    }
+    db.applications[appIndex].updated_at = new Date().toISOString();
+    writeLocalDb(db);
+    return true;
+  }
+  return false;
+}
+

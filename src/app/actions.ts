@@ -1,6 +1,15 @@
 "use server";
 
-import { updateUser, createApplication, seedMockData, getActiveUserId, addFamilyMember, addUserDocument, deleteUserDocument, getSchemes } from "@/lib/db";
+import { updateUser, createApplication, seedMockData, getActiveUserId, addFamilyMember, addUserDocument, deleteUserDocument, getSchemes, createScheme, getProviderSchemes, getProviderApplications, updateApplicationStatus, getUser } from "@/lib/db";
+
+export async function getCurrentUserAction() {
+  try {
+    const user = await getUser();
+    return { success: true, user };
+  } catch (error) {
+    return { success: false, error: String(error), user: null };
+  }
+}
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
@@ -126,3 +135,65 @@ export async function getAllSchemesAction() {
     return { success: false, error: String(error), schemes: [] };
   }
 }
+
+export async function createProviderSchemeAction(data: {
+  title: string;
+  description: string;
+  min_benefit_amount: number;
+  max_benefit_amount: number;
+  category: string;
+  provider_type: "NGO" | "Private Sector";
+  provider_name: string;
+  application_url?: string;
+  deadline?: string;
+  required_documents?: string[];
+}) {
+  try {
+    const scheme = await createScheme({
+      ...data,
+      state: "All",
+      ministry: data.provider_name,
+      status: "Active",
+      eligibility_json: { max_income: 500000, states: ["All"] }
+    });
+    revalidatePath("/dashboard");
+    revalidatePath("/dashboard/provider");
+    return { success: true, scheme };
+  } catch (error) {
+    console.error("Error in createProviderSchemeAction:", error);
+    return { success: false, error: String(error) };
+  }
+}
+
+export async function getProviderSchemesAction() {
+  try {
+    const schemes = await getProviderSchemes();
+    return { success: true, schemes };
+  } catch (error) {
+    console.error("Error in getProviderSchemesAction:", error);
+    return { success: false, error: String(error), schemes: [] };
+  }
+}
+
+export async function getProviderApplicationsAction() {
+  try {
+    const data = await getProviderApplications();
+    return { success: true, applications: data };
+  } catch (error) {
+    console.error("Error in getProviderApplicationsAction:", error);
+    return { success: false, error: String(error), applications: [] };
+  }
+}
+
+export async function updateApplicationStatusAction(applicationId: string, status: string, rejectionReason?: string) {
+  try {
+    await updateApplicationStatus(applicationId, status, rejectionReason);
+    revalidatePath("/dashboard/provider");
+    revalidatePath("/dashboard/applications");
+    return { success: true };
+  } catch (error) {
+    console.error("Error in updateApplicationStatusAction:", error);
+    return { success: false, error: String(error) };
+  }
+}
+

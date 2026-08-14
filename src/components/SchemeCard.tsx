@@ -72,10 +72,27 @@ export function SchemeCard({ scheme, hasApplied }: SchemeCardProps) {
   return (
     <Card className="flex flex-col h-full bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition-shadow">
       <CardHeader className="p-5 pb-3">
-        <div className="flex justify-between items-start gap-2 mb-2">
-          <Badge variant="secondary" className="bg-slate-100 text-slate-600 font-medium">
-            {scheme.category || "General"}
-          </Badge>
+        <div className="flex justify-between items-start gap-2 mb-2 flex-wrap">
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <Badge variant="secondary" className="bg-slate-100 text-slate-600 font-medium text-[11px]">
+              {scheme.category || "General"}
+            </Badge>
+            {scheme.provider_type === "NGO" && (
+              <Badge className="bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-[10px]">
+                💚 NGO
+              </Badge>
+            )}
+            {scheme.provider_type === "Private Sector" && (
+              <Badge className="bg-purple-50 text-purple-700 border border-purple-200 font-bold text-[10px]">
+                💜 Private Sector
+              </Badge>
+            )}
+            {(!scheme.provider_type || scheme.provider_type === "Government") && (
+              <Badge className="bg-blue-50 text-blue-700 border border-blue-200 font-bold text-[10px]">
+                🏛️ Government
+              </Badge>
+            )}
+          </div>
           {scheme.max_benefit_amount && (
             <div className="flex items-center text-emerald-600 font-bold text-lg">
               <IndianRupee className="h-4.5 w-4.5 mr-0.5" />
