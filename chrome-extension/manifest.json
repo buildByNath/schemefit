@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "SchemeFit Autofill",
+  "version": "1.0.0",
+  "description": "Autofill your details on government welfare portals directly from your SchemeFit profile.",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "128": "icon.png"
+    }
+  },
+  "icons": {
+    "128": "icon.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "css": ["content.css"],
+      "js": ["content.js"]
+    }
+  ]
+}

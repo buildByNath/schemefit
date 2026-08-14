@@ -1,0 +1,31 @@
+#schemefit-autofill-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 999999;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 9999px;
+    padding: 12px 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+#schemefit-autofill-btn:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+}
+
+#schemefit-autofill-btn svg {
+    display: inline-block;
+    vertical-align: middle;
+}
