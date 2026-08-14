@@ -247,7 +247,7 @@ export function VoiceOnboarding() {
               )}
               {apiSource && (
                 <div className="absolute right-3 bottom-3 flex items-center gap-1 text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-150">
-                  <Check className="h-3 w-3" /> Auto-Filled via {apiSource === "gemini" ? "Gemini AI" : "Local AI"}
+                  <Check className="h-3 w-3" /> Auto-Filled via {apiSource === "gemini" ? "Gemini AI" : apiSource === "groq" ? "Groq AI" : "Local AI"}
                 </div>
               )}
             </div>

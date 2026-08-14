@@ -8,18 +8,22 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Text is required" }, { status: 400 });
     }
 
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = process.env.GROQ_API_KEY;
     if (apiKey) {
       try {
         const response = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+          "https://api.groq.com/openai/v1/chat/completions",
           {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${apiKey}`
+            },
             body: JSON.stringify({
-              contents: [{
-                parts: [{
-                  text: `You are an AI profile extractor. Extract demographic parameters from the user's spoken transcription: "${text}".
+              model: "llama3-8b-8192",
+              messages: [{
+                  role: "system",
+                  content: `You are an AI profile extractor. Extract demographic parameters from the user's spoken transcription: "${text}".
 Return ONLY a raw JSON object with these keys (no markdown formatting, no comments):
 {
   "full_name": string (extract full name if mentioned e.g. "Rahul", "Rahul Menon", else null),
@@ -35,9 +39,9 @@ Return ONLY a raw JSON object with these keys (no markdown formatting, no commen
   "bpl_status": boolean (true if they mention BPL, below poverty line, or BPL card. Default: false),
   "home_state": string (state name if mentioned e.g. "Kerala", "Maharashtra", else null)
 }`
-                }]
               }],
-              generationConfig: { responseMimeType: "application/json" }
+              temperature: 0.1,
+              response_format: { type: "json_object" }
             }),
             signal: AbortSignal.timeout(8000)
           }
@@ -45,17 +49,17 @@ Return ONLY a raw JSON object with these keys (no markdown formatting, no commen
 
         if (response.ok) {
           const data = await response.json();
-          const jsonText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+          const jsonText = data.choices?.[0]?.message?.content;
           if (jsonText) {
             const parsed = JSON.parse(jsonText.trim());
-            return NextResponse.json({ ...parsed, source: "gemini" });
+            return NextResponse.json({ ...parsed, source: "groq" });
           }
         } else {
           const errText = await response.text();
-          console.error("Gemini API error response:", response.status, errText);
+          console.error("Groq API error response:", response.status, errText);
         }
       } catch (err) {
-        console.error("Gemini API call failed, falling back to local regex parser:", err);
+        console.error("Groq API call failed, falling back to local regex parser:", err);
       }
     }
 
