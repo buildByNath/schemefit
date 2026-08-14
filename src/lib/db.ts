@@ -14,6 +14,12 @@ export interface User {
   district?: string | null;
   occupation?: string | null;
   education?: string | null;
+  date_of_birth?: string | null;
+  gender?: string | null;
+  marital_status?: string | null;
+  religion?: string | null;
+  is_differently_abled?: boolean | null;
+  bpl_status?: boolean | null;
   uploaded_documents?: string[];
   created_at?: string;
   updated_at?: string;
@@ -230,7 +236,11 @@ export async function getUser(id?: string): Promise<User | null> {
   
   if (isSupabaseConfigured()) {
     try {
-      const { data, error } = await supabase
+      // Always use the auth-aware server client so the session cookie is sent
+      const { createClient: createServerClient } = await import('@/utils/supabase/server');
+      const authSupabase = await createServerClient();
+
+      const { data, error } = await authSupabase
         .from("users")
         .select("*")
         .eq("id", userId)
@@ -240,17 +250,18 @@ export async function getUser(id?: string): Promise<User | null> {
       
       // Auto-create user in public.users if they exist in auth but not public yet
       if (!data) {
-         const { data: authData } = await supabase.auth.getUser();
+         const { data: authData } = await authSupabase.auth.getUser();
          if (authData?.user && authData.user.id === userId) {
-            const { data: newUser } = await supabase
+            const { data: newUser, error: insertError } = await authSupabase
               .from("users")
               .insert({
                 id: userId,
                 email: authData.user.email,
-                full_name: authData.user.user_metadata?.full_name || "Unknown User"
+                full_name: authData.user.user_metadata?.full_name || "New User"
               })
               .select()
               .single();
+            if (insertError) console.error("Auto-create user error:", insertError);
             return newUser;
          }
       }
@@ -274,10 +285,32 @@ export async function updateUser(id?: string, updates?: Partial<User>): Promise<
     try {
       const { createClient: createServerClient } = await import('@/utils/supabase/server');
       const authSupabase = await createServerClient();
+
+      // Get auth user details so we can fill required fields for upsert
+      const { data: authData } = await authSupabase.auth.getUser();
+
+      // Use UPSERT so this works even if the public.users row doesn't exist yet
       const { data, error } = await authSupabase
         .from("users")
-        .update(userUpdates)
-        .eq("id", userId)
+        .upsert({
+          id: userId,
+          email: authData?.user?.email || userUpdates.email || "",
+          full_name: userUpdates.full_name || authData?.user?.user_metadata?.full_name || "New User",
+          annual_income: userUpdates.annual_income,
+          caste_category: userUpdates.caste_category,
+          state: userUpdates.state,
+          district: userUpdates.district,
+          occupation: userUpdates.occupation,
+          education: userUpdates.education,
+          voice_raw_text: userUpdates.voice_raw_text,
+          date_of_birth: userUpdates.date_of_birth,
+          gender: userUpdates.gender,
+          marital_status: userUpdates.marital_status,
+          religion: userUpdates.religion,
+          is_differently_abled: userUpdates.is_differently_abled,
+          bpl_status: userUpdates.bpl_status,
+          updated_at: new Date().toISOString(),
+        }, { onConflict: "id" })
         .select()
         .single();
       if (error) throw error;

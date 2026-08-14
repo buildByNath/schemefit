@@ -54,15 +54,15 @@
     },
     {
       "id": "f1bb42c8-7656-4bbe-9880-873caab172fe",
-      "full_name": "Nath Official",
+      "full_name": "Rahul",
       "email": "new@user.com",
       "created_at": "2026-08-14T14:18:30.811Z",
-      "updated_at": "2026-08-14T14:54:14.702Z",
+      "updated_at": "2026-08-14T16:22:57.791Z",
       "voice_raw_text": "Manually typed",
       "annual_income": 250000,
-      "caste_category": "General",
-      "education": "Undergraduate",
-      "occupation": "Student",
+      "caste_category": "OBC",
+      "education": "Postgraduate",
+      "occupation": "Farmer",
       "state": "Kerala"
     }
   ],

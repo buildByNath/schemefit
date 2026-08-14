@@ -134,6 +134,13 @@ export function VoiceOnboarding() {
         caste_category: profile.caste_category,
         education: profile.education,
         occupation: profile.occupation,
+        date_of_birth: profile.date_of_birth,
+        gender: profile.gender,
+        marital_status: profile.marital_status,
+        religion: profile.religion,
+        is_differently_abled: profile.is_differently_abled,
+        bpl_status: profile.bpl_status,
+        state: profile.home_state,
       });
 
       if (result.success) {
@@ -245,24 +252,125 @@ export function VoiceOnboarding() {
             Profile Details (Manual Inputs)
           </h3>
 
-          <div className="space-y-4">
+          <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 pb-2">
             <div className="space-y-1">
               <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                Full Name
+                Full Legal Name <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                className="w-full px-3 py-2 text-slate-800 border border-slate-200 rounded-lg text-xs bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
-                style={{ minHeight: "36px" }}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="As per Aadhaar/Bank"
+                className="w-full px-3 py-2 text-slate-800 border border-slate-200 rounded-lg text-sm bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                required
+              />
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                  Date of Birth
+                </label>
+                <input
+                  type="date"
+                  value={profile.date_of_birth || ""}
+                  onChange={(e) => setProfile({ ...profile, date_of_birth: e.target.value })}
+                  className="w-full px-3 py-2 text-slate-800 border border-slate-200 rounded-lg text-sm bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4 pt-2 border-t border-slate-100">
+                <label className="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-200">
+                  <input
+                    type="checkbox"
+                    checked={profile.is_differently_abled || false}
+                    onChange={(e) => setProfile({ ...profile, is_differently_abled: e.target.checked })}
+                    className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4"
+                  />
+                  <span className="text-xs font-semibold text-slate-700">Differently Abled</span>
+                </label>
+
+                <label className="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-200">
+                  <input
+                    type="checkbox"
+                    checked={profile.bpl_status || false}
+                    onChange={(e) => setProfile({ ...profile, bpl_status: e.target.checked })}
+                    className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4"
+                  />
+                  <span className="text-xs font-semibold text-slate-700">BPL Card Holder</span>
+                </label>
+              </div>
+            </div>
+
+            <div className="space-y-1 pt-2">
+              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                Home State
+              </label>
+              <input
+                type="text"
+                value={profile.home_state || ""}
+                onChange={(e) => setProfile({ ...profile, home_state: e.target.value })}
+                className="w-full px-3 py-2 text-slate-800 border border-slate-200 rounded-lg text-sm bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
                 <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                  Annual Household Income (₹)
+                  Gender
+                </label>
+                <select
+                  value={profile.gender || ""}
+                  onChange={(e) => setProfile({ ...profile, gender: e.target.value })}
+                  className="w-full px-3 py-2 text-slate-800 border border-slate-200 rounded-lg text-sm bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                >
+                  <option value="">Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div className="space-y-1">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                  Marital Status
+                </label>
+                <select
+                  value={profile.marital_status || ""}
+                  onChange={(e) => setProfile({ ...profile, marital_status: e.target.value })}
+                  className="w-full px-3 py-2 text-slate-800 border border-slate-200 rounded-lg text-sm bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                >
+                  <option value="">Select Status</option>
+                  <option value="Single">Single</option>
+                  <option value="Married">Married</option>
+                  <option value="Divorced">Divorced</option>
+                  <option value="Widowed">Widowed</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                  Religion
+                </label>
+                <select
+                  value={profile.religion || ""}
+                  onChange={(e) => setProfile({ ...profile, religion: e.target.value })}
+                  className="w-full px-3 py-2 text-slate-800 border border-slate-200 rounded-lg text-sm bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                >
+                  <option value="">Select Religion</option>
+                  <option value="Hindu">Hindu</option>
+                  <option value="Muslim">Muslim</option>
+                  <option value="Christian">Christian</option>
+                  <option value="Sikh">Sikh</option>
+                  <option value="Buddhist">Buddhist</option>
+                  <option value="Jain">Jain</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div className="space-y-1">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                  Annual Household Income (₹) <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="number"
@@ -270,11 +378,12 @@ export function VoiceOnboarding() {
                   onChange={(e) =>
                     setProfile({ ...profile, annual_income: parseInt(e.target.value) || 0 })
                   }
-                  className="w-full px-3 py-2 text-slate-800 border border-slate-200 rounded-lg text-xs bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
-                  style={{ minHeight: "36px" }}
+                  className="w-full px-3 py-2 text-slate-800 border border-slate-200 rounded-lg text-sm bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
               </div>
+            </div>
 
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="space-y-1">
                 <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                   Caste Category
@@ -286,15 +395,15 @@ export function VoiceOnboarding() {
                   style={{ minHeight: "36px" }}
                 >
                   <option value="General">General / Open</option>
-                  <option value="OBC">OBC (Other Backward Classes)</option>
-                  <option value="SC">SC (Scheduled Caste)</option>
-                  <option value="ST">ST (Scheduled Tribe)</option>
+                  <option value="OBC">OBC</option>
+                  <option value="SC">SC</option>
+                  <option value="ST">ST</option>
                 </select>
               </div>
 
               <div className="space-y-1">
                 <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                  Education Level
+                  Education
                 </label>
                 <select
                   value={profile.education || "Undergraduate"}
@@ -302,9 +411,9 @@ export function VoiceOnboarding() {
                   className="w-full px-3 py-2 text-slate-800 border border-slate-200 rounded-lg text-xs bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
                   style={{ minHeight: "36px" }}
                 >
-                  <option value="School">School Education</option>
-                  <option value="Undergraduate">Undergraduate Degree</option>
-                  <option value="Postgraduate">Postgraduate / Masters</option>
+                  <option value="School">School</option>
+                  <option value="Undergraduate">Undergrad</option>
+                  <option value="Postgraduate">Postgrad</option>
                 </select>
               </div>
 
@@ -318,10 +427,10 @@ export function VoiceOnboarding() {
                   className="w-full px-3 py-2 text-slate-800 border border-slate-200 rounded-lg text-xs bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
                   style={{ minHeight: "36px" }}
                 >
-                  <option value="Student">Student (Full Time)</option>
-                  <option value="Farmer">Farmer / Agriculture Worker</option>
-                  <option value="Worker">Other Worker</option>
-                  <option value="None">Unemployed / None</option>
+                  <option value="Student">Student</option>
+                  <option value="Farmer">Farmer</option>
+                  <option value="Worker">Worker</option>
+                  <option value="None">None</option>
                 </select>
               </div>
             </div>

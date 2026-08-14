@@ -3,6 +3,13 @@ export interface ParsedProfile {
   caste_category: string;
   education: string;
   occupation: string;
+  date_of_birth?: string | null;
+  gender?: string | null;
+  marital_status?: string | null;
+  religion?: string | null;
+  is_differently_abled?: boolean | null;
+  bpl_status?: boolean | null;
+  home_state?: string | null;
 }
 
 export function parseSpeechText(text: string): ParsedProfile {
