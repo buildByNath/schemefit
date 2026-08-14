@@ -3,9 +3,14 @@ import { User, Bell } from "lucide-react";
 import { LogoutButton } from "./LogoutButton";
 import { MobileNav } from "./MobileNav";
 import { getUser } from "@/lib/db";
+import { createClient } from "@/utils/supabase/server";
+
 export async function Header() {
   const activeUser = await getUser();
-  const userName = activeUser?.full_name || "Guest User";
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  const userName = activeUser?.full_name || user?.user_metadata?.full_name || "Guest User";
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -14,7 +19,7 @@ export async function Header() {
           <MobileNav />
         </div>
         <div className="flex items-center gap-2 font-bold md:w-[200px]">
-          <span className="hidden md:inline-block">SchemeFit</span>
+          <span className="hidden md:inline-block text-xl tracking-tight">SchemeFit</span>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-4">
           <span className="text-sm font-medium text-muted-foreground mr-2">{userName}</span>

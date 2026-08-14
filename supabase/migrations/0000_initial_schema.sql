@@ -1,3 +1,12 @@
+-- 0. Clean Slate (Drop existing tables if they exist)
+DROP TABLE IF EXISTS public.saved_deadlines CASCADE;
+DROP TABLE IF EXISTS public.notifications CASCADE;
+DROP TABLE IF EXISTS public.documents CASCADE;
+DROP TABLE IF EXISTS public.applications CASCADE;
+DROP TABLE IF EXISTS public.family_members CASCADE;
+DROP TABLE IF EXISTS public.schemes CASCADE;
+DROP TABLE IF EXISTS public.users CASCADE;
+
 -- 1. Users Table
 CREATE TABLE public.users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

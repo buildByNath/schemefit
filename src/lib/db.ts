@@ -235,7 +235,26 @@ export async function getUser(id?: string): Promise<User | null> {
         .select("*")
         .eq("id", userId)
         .maybeSingle();
+        
       if (error) throw error;
+      
+      // Auto-create user in public.users if they exist in auth but not public yet
+      if (!data) {
+         const { data: authData } = await supabase.auth.getUser();
+         if (authData?.user && authData.user.id === userId) {
+            const { data: newUser } = await supabase
+              .from("users")
+              .insert({
+                id: userId,
+                email: authData.user.email,
+                full_name: authData.user.user_metadata?.full_name || "Unknown User"
+              })
+              .select()
+              .single();
+            return newUser;
+         }
+      }
+      
       return data;
     } catch (err) {
       console.error("Supabase getUser error, falling back to local:", err);

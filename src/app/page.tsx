@@ -12,7 +12,7 @@ export default async function Home() {
       <header className="border-b border-slate-200 bg-white">
         <div className="container mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2 font-bold text-xl text-slate-900 tracking-tight">
-            <span>SATURN<span className="text-blue-600">X</span></span>
+            <span>SchemeFit</span>
           </div>
           {user && (
             <Link
