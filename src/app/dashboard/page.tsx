@@ -157,6 +157,15 @@ export default async function DashboardPage() {
         </div>
       </div>
 
+      {/* Hidden element for Chrome Extension Sync */}
+      {user && (
+        <div 
+          id="schemefit-extension-sync-data" 
+          data-profile={JSON.stringify(user)} 
+          style={{ display: 'none' }}
+        />
+      )}
+
       {/* Household Profile Section */}
       <FamilySection initialMembers={familyMembers} isDemoMode={isDemo} />
 

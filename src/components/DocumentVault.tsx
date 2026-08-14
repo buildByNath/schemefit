@@ -18,6 +18,17 @@ export function DocumentVault({ initialDocuments }: DocumentVaultProps) {
   const [uploadError, setUploadError] = useState("");
   const [isPending, startTransition] = useTransition();
   const [activeDeletingId, setActiveDeletingId] = useState<string | null>(null);
+  const [documentCategory, setDocumentCategory] = useState("Aadhaar Card");
+
+  const categories = [
+    "Aadhaar Card",
+    "PAN Card",
+    "Income Certificate",
+    "Caste Certificate",
+    "Bank Passbook",
+    "Marksheet / Degree",
+    "Other"
+  ];
 
   // Client-Side Crypto Helper: Get Cryptographic Key
   const getCryptoKey = async (): Promise<CryptoKey> => {
@@ -91,7 +102,8 @@ export function DocumentVault({ initialDocuments }: DocumentVaultProps) {
               file_type: file.type || "application/octet-stream",
               file_size: file.size,
               encrypted_data: encryptedBase64,
-              iv: ivBase64
+              iv: ivBase64,
+              document_category: documentCategory
             });
 
             if (result.success && result.doc) {
@@ -215,10 +227,22 @@ export function DocumentVault({ initialDocuments }: DocumentVaultProps) {
               Upload New Document
             </CardTitle>
             <CardDescription className="text-xs text-slate-500">
-              Drag and drop or browse files to encrypt and save to your vault.
+              Select category and browse files to encrypt and save.
             </CardDescription>
           </CardHeader>
           <CardContent className="p-6 space-y-4">
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-slate-700 block">Document Type</label>
+              <select 
+                value={documentCategory}
+                onChange={(e) => setDocumentCategory(e.target.value)}
+                className="w-full border border-slate-200 rounded-lg p-2.5 text-sm bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              >
+                {categories.map(c => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
+            </div>
             <div className="border border-dashed border-slate-250 bg-slate-50/50 rounded-xl p-8 text-center hover:bg-slate-50 transition-colors relative">
               <input
                 type="file"
@@ -275,9 +299,16 @@ export function DocumentVault({ initialDocuments }: DocumentVaultProps) {
                         <FileText className="h-5 w-5" />
                       </div>
                       <div className="min-w-0">
-                        <h4 className="font-bold text-xs text-slate-900 leading-tight truncate">
-                          {doc.name}
-                        </h4>
+                        <div className="flex items-center gap-2">
+                          <h4 className="font-bold text-xs text-slate-900 leading-tight truncate">
+                            {doc.name}
+                          </h4>
+                          {doc.document_category && doc.document_category !== 'Other' && (
+                            <span className="bg-indigo-100 text-indigo-700 text-[9px] px-1.5 py-0.5 rounded uppercase font-bold">
+                              {doc.document_category}
+                            </span>
+                          )}
+                        </div>
                         <div className="flex items-center gap-2 text-[10px] text-slate-400 font-semibold mt-1">
                           <span>{(doc.file_size / 1024).toFixed(1)} KB</span>
                           <span>•</span>

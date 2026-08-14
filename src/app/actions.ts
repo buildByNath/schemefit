@@ -117,6 +117,7 @@ export async function saveEncryptedDocumentAction(data: {
   file_size: number;
   encrypted_data: string;
   iv: string;
+  document_category?: string;
 }) {
   try {
     const doc = await addUserDocument(data);

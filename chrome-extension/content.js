@@ -86,7 +86,20 @@ function fillInput(input, value) {
 
 // Check if we have forms and user is logged in
 function init() {
-    // Only inject if there are significant form inputs on the page
+    // 1. Sync Profile Data if on SchemeFit Dashboard
+    const syncElement = document.getElementById("schemefit-extension-sync-data");
+    if (syncElement) {
+        try {
+            const profileData = JSON.parse(syncElement.getAttribute("data-profile"));
+            chrome.storage.local.set({ userProfile: profileData }, () => {
+                console.log("SchemeFit Autofill: Profile synced successfully from dashboard!");
+            });
+        } catch (e) {
+            console.error("SchemeFit Autofill: Failed to parse sync data.", e);
+        }
+    }
+
+    // 2. Only inject if there are significant form inputs on the page
     const inputs = document.querySelectorAll("input[type='text'], input[type='email'], input[type='number'], select");
     
     if (inputs.length >= 3) {

@@ -56,6 +56,19 @@ export function SchemeCard({ scheme, hasApplied, user }: SchemeCardProps) {
 
   const handleApply = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent opening modal
+
+    const missingDocs = scheme.required_documents?.filter(doc => !hasDocument(doc, user?.uploaded_documents)) || [];
+    if (missingDocs.length > 0) {
+      const proceed = window.confirm(`You are missing some required documents:\n- ${missingDocs.join("\n- ")}\n\nDo you want to proceed anyway?`);
+      if (!proceed) return;
+    }
+
+    if (!scheme.provider_type || scheme.provider_type === "Government") {
+      if (scheme.application_url) {
+        window.open(scheme.application_url, "_blank");
+      }
+    }
+
     startTransition(async () => {
       const result = await applyToScheme(scheme.id);
       if (!result.success) {
@@ -177,7 +190,7 @@ export function SchemeCard({ scheme, hasApplied, user }: SchemeCardProps) {
                 <Loader2 className="h-4 w-4 animate-spin mr-1.5" />
               ) : (
                 <>
-                  Apply Now <ChevronRight className="h-4 w-4 ml-1" />
+                  {!scheme.provider_type || scheme.provider_type === "Government" ? "Go to Portal (Autofill)" : "One-Click Apply"} <ChevronRight className="h-4 w-4 ml-1" />
                 </>
               )}
             </Button>
@@ -352,14 +365,14 @@ export function SchemeCard({ scheme, hasApplied, user }: SchemeCardProps) {
                 Deadline: <span className="text-slate-800">{formattedDeadline}</span>
               </div>
               <div className="flex items-center gap-3">
-                {scheme.application_url && (
+                {(!scheme.provider_type || scheme.provider_type === "Government") && scheme.application_url && (
                   <a
                     href={scheme.application_url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-slate-900 border border-slate-250 bg-white hover:bg-slate-50 px-4 py-2.5 rounded-lg transition-colors"
                   >
-                    Portal Link <ExternalLink className="h-3.5 w-3.5" />
+                    For more information click here <ExternalLink className="h-3.5 w-3.5" />
                   </a>
                 )}
                 {hasApplied ? (
@@ -381,7 +394,7 @@ export function SchemeCard({ scheme, hasApplied, user }: SchemeCardProps) {
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
                       <>
-                        Confirm Apply <ChevronRight className="h-4 w-4" />
+                        {!scheme.provider_type || scheme.provider_type === "Government" ? "Apply & Autofill" : "One-Click Apply (Internal)"} <ChevronRight className="h-4 w-4" />
                       </>
                     )}
                   </button>

@@ -83,6 +83,7 @@ export interface UserDocument {
   encrypted_data: string;
   iv: string;
   uploaded_at: string;
+  document_category?: string;
 }
 
 export async function getActiveUserId(): Promise<string> {
@@ -530,6 +531,7 @@ export async function addUserDocument(doc: Omit<UserDocument, "id" | "user_id" |
     id: `doc-${Math.random().toString(36).substr(2, 9)}`,
     user_id: uid,
     uploaded_at: new Date().toISOString(),
+    document_category: doc.document_category || "Other",
     ...doc
   };
 
