@@ -2,15 +2,24 @@ import { supabase } from "./supabase";
 
 export const demoUser = {
   id: "00000000-0000-0000-0000-000000000001",
-  full_name: "Rahul Menon",
-  email: "rahul@demo.schemefit.in",
-  annual_income: 250000,
+  full_name: "Nath",
+  email: "nathshaj20006@gmail.com",
+  annual_income: 150000,
   caste_category: "OBC",
-  state: "Kerala",
-  district: "Ernakulam",
-  occupation: "Student",
-  education: "Undergraduate",
-  uploaded_documents: ["Aadhaar Card", "Bank Passbook", "Marksheet", "College ID Card"]
+  state: "Himachal Pradesh",
+  district: "Shimla",
+  address: "Main Street, Tehsil Shimla",
+  occupation: "Unemployed",
+  education: "Graduate",
+  date_of_birth: "2001-05-15",
+  gender: "Male",
+  phone: "9876543210",
+  is_differently_abled: false,
+  aadhar: "123456789012",
+  bank_account: "998877665544",
+  ifsc_code: "SBIN0001234",
+  bank_name: "State Bank of India",
+  uploaded_documents: ["Aadhaar Card", "Bank Passbook", "Marksheet", "Employment Registration Card", "Income Certificate", "Bonafide Himachali Certificate", "Declaration Form C"]
 };
 
 export const customUser = {

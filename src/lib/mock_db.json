@@ -2,21 +2,33 @@
   "users": [
     {
       "id": "00000000-0000-0000-0000-000000000001",
-      "full_name": "Rahul Menon",
-      "email": "rahul@demo.schemefit.in",
-      "annual_income": 250000,
+      "full_name": "Nath",
+      "email": "nathshaj20006@gmail.com",
+      "annual_income": 150000,
       "caste_category": "OBC",
-      "state": "Kerala",
-      "district": "Ernakulam",
-      "occupation": "Student",
-      "education": "Undergraduate",
+      "state": "Himachal Pradesh",
+      "district": "Shimla",
+      "occupation": "Unemployed",
+      "education": "Graduate",
       "uploaded_documents": [
         "Aadhaar Card",
         "Bank Passbook",
         "Marksheet",
-        "College ID Card"
+        "Employment Registration Card",
+        "Income Certificate",
+        "Bonafide Himachali Certificate",
+        "Declaration Form C"
       ],
-      "voice_raw_text": "I am an OBC student with 2.5 lakh income, studying undergraduate course in Kerala."
+      "voice_raw_text": "I am an OBC student with 2.5 lakh income, studying undergraduate course in Kerala.",
+      "address": "Main Street, Tehsil Shimla",
+      "date_of_birth": "2001-05-15",
+      "gender": "Male",
+      "phone": "9876543210",
+      "is_differently_abled": false,
+      "aadhar": "123456789012",
+      "bank_account": "998877665544",
+      "ifsc_code": "SBIN0001234",
+      "bank_name": "State Bank of India"
     },
     {
       "id": "00000000-0000-0000-0000-000000000002",

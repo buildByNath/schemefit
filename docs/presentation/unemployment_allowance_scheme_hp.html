@@ -1,0 +1,544 @@
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+.uas-wrap{font-family:'Segoe UI',Arial,sans-serif;background:var(--surface-2);color:var(--text-primary);font-size:15px;border:0.5px solid var(--border);border-radius:12px;overflow:hidden}
+.top-nav{display:flex;align-items:center;padding:0 24px;height:60px;border-bottom:0.5px solid var(--border);background:var(--surface-2)}
+.top-nav .logo-wrap{display:flex;align-items:center;gap:14px}
+.logo-text{font-size:22px;font-weight:500}
+.logo-text span.my{color:#1a7c3e}
+.logo-text span.scheme{color:var(--text-primary)}
+.divider-v{width:1px;height:32px;background:var(--border-strong);margin:0 14px}
+.digital-india{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-secondary)}
+.di-circle{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#ff9933,#fff,#138808);border:1px solid var(--border)}
+.search-bar{flex:1;margin:0 32px;max-width:500px}
+.search-bar input{width:100%;padding:8px 14px;border:1px solid var(--border);border-radius:6px;font-size:14px;color:var(--text-primary);outline:none;background:var(--surface-2)}
+.nav-actions{display:flex;align-items:center;gap:16px;margin-left:auto}
+.bell-icon{font-size:18px;color:var(--text-secondary)}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:#1a7c3e;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500}
+.lang-btn{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-primary);border:none;background:none;font-family:inherit}
+.lang-icon{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#ff9933,#138808);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:500}
+.theme-btn{width:28px;height:28px;border-radius:50%;background:var(--text-primary);display:flex;align-items:center;justify-content:center;font-size:13px}
+.secondary-nav{padding:10px 24px;border-bottom:0.5px solid var(--border);font-size:13px}
+.back-link{color:#7c3aed;text-decoration:none;display:inline-flex;align-items:center;gap:4px;cursor:pointer}
+.main-layout{display:flex}
+.left-sidebar{width:200px;flex-shrink:0;border-right:0.5px solid var(--border);padding:20px 0}
+.sidebar-nav a{display:block;padding:10px 20px;font-size:14px;color:var(--text-secondary);text-decoration:none;cursor:pointer;border-left:3px solid transparent}
+.sidebar-nav a:hover{background:var(--surface-1);color:#1a7c3e}
+.sidebar-nav a.active{color:#1a7c3e;font-weight:500;border-left-color:#1a7c3e;background:var(--bg-success)}
+.main-content{flex:1;padding:28px 32px;min-width:0}
+.scheme-state{font-size:13px;color:var(--text-secondary);margin-bottom:6px}
+.scheme-title{font-size:24px;font-weight:500;color:var(--text-primary);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.bookmark-icon{width:28px;height:28px;border:1.5px solid var(--border-strong);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-secondary);flex-shrink:0}
+.tags-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px}
+.tag{border:1px solid #1a7c3e;color:#1a7c3e;padding:4px 14px;border-radius:20px;font-size:13px}
+.check-eligibility-btn{display:inline-block;border:1.5px solid #1a7c3e;color:#1a7c3e;padding:8px 24px;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;background:none;margin-bottom:32px}
+.check-eligibility-btn:hover{background:#1a7c3e;color:#fff}
+.section{margin-bottom:36px}
+.section h2{font-size:18px;font-weight:500;color:var(--text-primary);margin-bottom:14px;padding-bottom:8px;border-bottom:0.5px solid var(--border)}
+.detail-text{font-size:14px;color:var(--text-secondary);line-height:1.8;margin-bottom:12px}
+ol.detail-list,ul.detail-list{padding-left:22px;margin-top:8px}
+ol.detail-list li,ul.detail-list li{font-size:14px;color:var(--text-secondary);line-height:1.7;margin-bottom:6px}
+ol.detail-list li b,ul.detail-list li b{color:var(--text-primary);font-weight:500}
+.benefit-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+.benefit-card{border:0.5px solid var(--border);border-radius:10px;padding:18px;background:var(--surface-1)}
+.benefit-card .amount{font-size:24px;font-weight:500;color:#1a7c3e;margin-bottom:6px}
+.benefit-card .cat{font-size:13px;font-weight:500;color:var(--text-primary);margin-bottom:6px}
+.benefit-card .desc{font-size:13px;color:var(--text-secondary);line-height:1.5}
+.benefit-card .badge{display:inline-block;background:var(--bg-success);color:var(--text-success);font-size:11px;padding:3px 10px;border-radius:10px;font-weight:500;margin-bottom:10px}
+.elig-table{width:100%;border-collapse:collapse;margin-top:8px;table-layout:fixed}
+.elig-table th{background:var(--surface-1);font-size:12px;font-weight:500;padding:9px 10px;text-align:left;border:0.5px solid var(--border);color:var(--text-primary)}
+.elig-table td{font-size:12px;padding:9px 10px;border:0.5px solid var(--border);color:var(--text-secondary);vertical-align:top;line-height:1.5}
+.check-icon{color:var(--text-success);font-weight:500;margin-right:4px}
+.cross-icon{color:var(--text-danger);font-weight:500;margin-right:4px}
+.excl-list{list-style:none;padding:0;margin-top:8px}
+.excl-list li{display:flex;gap:10px;padding:10px 14px;border:0.5px solid var(--border-danger);border-radius:6px;margin-bottom:8px;background:var(--bg-danger);font-size:13px;color:var(--text-secondary);line-height:1.5}
+.excl-list li::before{content:"\2715";color:var(--text-danger);font-weight:500;flex-shrink:0;margin-top:1px}
+.process-tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:0.5px solid var(--border)}
+.process-tab{padding:9px 20px;font-size:14px;font-weight:500;cursor:pointer;color:var(--text-secondary);border-bottom:2px solid transparent;margin-bottom:-1px}
+.process-tab.active{color:#1a7c3e;border-bottom-color:#1a7c3e}
+.process-steps{list-style:none;padding:0;counter-reset:step}
+.process-steps li{display:flex;gap:14px;margin-bottom:12px;padding:14px;border:0.5px solid var(--border);border-radius:8px;background:var(--surface-1)}
+.step-number{width:26px;height:26px;border-radius:50%;background:#1a7c3e;color:#fff;font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-content{font-size:13px;color:var(--text-secondary);line-height:1.6}
+.note-box{background:var(--bg-warning);border:0.5px solid var(--border-warning);border-radius:6px;padding:14px;margin-top:14px;font-size:13px;color:var(--text-warning);line-height:1.6}
+.docs-list{list-style:none;padding:0}
+.docs-list li{display:flex;gap:10px;align-items:flex-start;padding:11px 14px;border:0.5px solid var(--border);border-radius:6px;margin-bottom:8px;font-size:13px;color:var(--text-secondary);background:var(--surface-1);line-height:1.5}
+.docs-list li i{flex-shrink:0;color:var(--text-secondary);font-size:16px;margin-top:1px}
+.faq-item{border:0.5px solid var(--border);border-radius:8px;margin-bottom:9px;overflow:hidden}
+.faq-q{padding:13px 15px;font-size:13px;font-weight:500;color:var(--text-primary);cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:var(--surface-1)}
+.faq-q.open{color:#1a7c3e}
+.faq-chevron{font-size:12px;color:var(--text-secondary);transition:transform 0.2s}
+.faq-chevron.open{transform:rotate(180deg)}
+.faq-a{display:none;padding:13px 15px;font-size:13px;color:var(--text-secondary);line-height:1.7;border-top:0.5px solid var(--border)}
+.faq-a.open{display:block}
+.sources-list{list-style:none;padding:0}
+.sources-list li{margin-bottom:10px;font-size:13px;color:var(--text-accent)}
+.apply-form{background:var(--surface-1);border:0.5px solid var(--border);border-radius:10px;padding:24px;margin-top:8px}
+.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.form-field label{font-size:12px;font-weight:500;color:var(--text-secondary)}
+.form-section-label{font-size:12px;font-weight:500;color:#1a7c3e;text-transform:uppercase;letter-spacing:0.05em;margin:18px 0 10px;padding-bottom:5px;border-bottom:0.5px solid var(--border)}
+.form-section-label:first-child{margin-top:0}
+.err{font-size:11px;color:var(--text-danger);margin-top:2px;display:none}
+.decl-row{display:flex;align-items:flex-start;gap:10px;margin:18px 0;padding:13px;border:0.5px solid var(--border);border-radius:6px;background:var(--surface-2)}
+.decl-row input{margin-top:3px;accent-color:#1a7c3e;width:15px;height:15px;flex-shrink:0}
+.decl-row label{font-size:12px;color:var(--text-secondary);line-height:1.6;cursor:pointer}
+.form-submit-btn{width:100%;background:#1a7c3e;color:#fff;border:none;padding:12px;border-radius:7px;font-size:14px;font-weight:500;cursor:pointer;margin-top:4px}
+.form-submit-btn:hover{background:#15643a}
+.full-width{grid-column:1/-1}
+.req-star{color:var(--text-danger)}
+.quick-info{font-size:12px;line-height:1.9;color:var(--text-secondary);background:var(--surface-1);border-radius:10px;padding:16px;margin-bottom:20px}
+.quick-info b{color:var(--text-primary);font-weight:500}
+.quick-info div{margin-bottom:2px}
+@media(max-width:800px){.left-sidebar{display:none}.form-grid-2{grid-template-columns:1fr}.benefit-cards{grid-template-columns:1fr}.top-nav .search-bar{display:none}}
+.modal-overlay{display:none;position:relative;background:rgba(0,0,0,0.45);padding:40px 16px;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--surface-2);border-radius:12px;padding:32px;max-width:420px;width:100%;text-align:center;margin:0 auto;border:0.5px solid var(--border)}
+.modal-icon{font-size:44px;margin-bottom:14px;color:var(--text-success)}
+.modal-box h2{font-size:18px;font-weight:500;color:var(--text-primary);margin-bottom:10px}
+.modal-box p{font-size:13px;color:var(--text-secondary);margin-bottom:18px;line-height:1.6}
+.modal-ref{background:var(--bg-success);border:0.5px solid var(--border-success);border-radius:6px;padding:12px;font-size:13px;color:var(--text-success);margin-bottom:16px}
+.modal-ref b{font-size:14px;display:block;margin-bottom:4px;font-weight:500}
+.modal-detail-row{display:flex;justify-content:space-between;font-size:12px;padding:6px 0;border-bottom:0.5px solid var(--border)}
+.modal-detail-row:last-child{border:none}
+.modal-detail-row span:first-child{color:var(--text-secondary)}
+.modal-detail-row span:last-child{font-weight:500;color:var(--text-primary)}
+.modal-details-box{background:var(--surface-1);border-radius:6px;padding:12px;margin-bottom:18px;text-align:left}
+.modal-close-btn{background:#1a7c3e;color:#fff;border:none;padding:9px 28px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer}
+.elig-modal{display:none;position:relative;background:rgba(0,0,0,0.45);padding:40px 16px;align-items:center;justify-content:center}
+.elig-modal.open{display:flex}
+.elig-modal-box{background:var(--surface-2);border-radius:12px;padding:28px;max-width:440px;width:100%;border:0.5px solid var(--border);margin:0 auto}
+.elig-modal-box h2{font-size:16px;font-weight:500;color:var(--text-primary);margin-bottom:18px}
+.elig-field{margin-bottom:12px}
+.elig-field label{font-size:12px;font-weight:500;color:var(--text-secondary);display:block;margin-bottom:5px}
+.elig-btns{display:flex;gap:10px;margin-top:18px}
+.elig-check-btn{flex:1;background:#1a7c3e;color:#fff;border:none;padding:10px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer}
+.elig-cancel-btn{flex:1;background:none;color:var(--text-secondary);border:1px solid var(--border-strong);padding:10px;border-radius:6px;font-size:13px;cursor:pointer}
+.elig-result{margin-top:14px;padding:13px;border-radius:6px;font-size:12px;line-height:1.6;display:none}
+.elig-result.eligible{background:var(--bg-success);color:var(--text-success);border:0.5px solid var(--border-success)}
+.elig-result.noteligible{background:var(--bg-danger);color:var(--text-danger);border:0.5px solid var(--border-danger)}
+footer{background:#1a3c26;color:#e8f3ec;padding:28px 24px 18px;margin-top:8px}
+.footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;font-size:12px}
+.footer-col h4{font-size:13px;font-weight:500;margin-bottom:10px;color:#86efac}
+.footer-col p{color:#d1d5db;line-height:1.8}
+.footer-bottom{text-align:center;font-size:11px;color:#9ca3af;border-top:1px solid #2d6a4f;padding-top:16px;margin-top:20px}
+@media(max-width:800px){.footer-grid{grid-template-columns:1fr 1fr}}
+</style>
+<div class="uas-wrap">
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Himachal Pradesh Unemployment Allowance Scheme information page with eligibility checker and application form</h2>
+
+<div class="top-nav">
+  <div class="logo-wrap">
+    <div class="logo-text"><span class="my">my</span><span class="scheme">Scheme</span></div>
+    <div class="divider-v"></div>
+    <div class="digital-india"><div class="di-circle"></div><span>Digital India</span></div>
+  </div>
+  <div class="search-bar"><input type="text" placeholder="Enter scheme name to search..."></div>
+  <div class="nav-actions">
+    <i class="ti ti-bell bell-icon" aria-hidden="true"></i>
+    <div class="user-avatar">N</div>
+    <button class="lang-btn"><div class="lang-icon">अ</div>English</button>
+    <div class="theme-btn"><i class="ti ti-moon" style="color:#fff;font-size:14px" aria-hidden="true"></i></div>
+  </div>
+</div>
+
+<div class="secondary-nav"><span class="back-link"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</span></div>
+
+<div class="main-layout">
+  <div class="left-sidebar">
+    <nav class="sidebar-nav">
+      <a class="active" data-t="details">Details</a>
+      <a data-t="benefits">Benefits</a>
+      <a data-t="eligibility">Eligibility</a>
+      <a data-t="exclusions">Exclusions</a>
+      <a data-t="application">Application process</a>
+      <a data-t="documents">Documents required</a>
+      <a data-t="apply-form">Apply online</a>
+      <a data-t="faq">Frequently asked questions</a>
+      <a data-t="sources">Sources and references</a>
+    </nav>
+  </div>
+
+  <div class="main-content">
+    <p class="scheme-state">Himachal Pradesh</p>
+    <div class="scheme-title">Unemployment Allowance Scheme<div class="bookmark-icon"><i class="ti ti-bookmark" aria-hidden="true"></i></div></div>
+
+    <div class="tags-row">
+      <span class="tag">Allowance</span>
+      <span class="tag">Employment exchange</span>
+      <span class="tag">Unemployed youth</span>
+    </div>
+
+    <button class="check-eligibility-btn" id="openEligBtn">Check eligibility</button>
+
+    <div class="quick-info">
+      <div><b>State:</b> Himachal Pradesh</div>
+      <div><b>Ministry:</b> Labour and Employment</div>
+      <div><b>Allowance:</b> Rs 1,000 to Rs 1,500 per month</div>
+      <div><b>Duration:</b> Up to 2 years</div>
+      <div><b>Age:</b> 20 to 35 years</div>
+      <div><b>Processing:</b> 45 days</div>
+    </div>
+
+    <div class="section" id="details">
+      <h2>Details</h2>
+      <p class="detail-text">The Department of Labour and Employment, Government of Himachal Pradesh introduced the Unemployment Allowance Scheme to provide allowance to eligible educated unemployed youth of Himachal Pradesh, so they can sustain themselves for a certain period.</p>
+      <p class="detail-text">The scheme aims to provide:</p>
+      <ol class="detail-list">
+        <li><b>Financial support:</b> a monthly unemployment allowance to educated unemployed youth, offering a basic financial support system.</li>
+        <li><b>Empowerment of educated youth:</b> targeted support while candidates search for employment opportunities.</li>
+        <li><b>Stability in lives:</b> a regular income to help meet basic needs during the job search.</li>
+        <li><b>Inclusive approach:</b> a higher amount of assistance for physically challenged individuals.</li>
+        <li><b>Age-appropriate eligibility:</b> focused on the 20 to 35 year age group.</li>
+      </ol>
+    </div>
+
+    <div class="section" id="benefits">
+      <h2>Benefits</h2>
+      <p class="detail-text">Allowance is payable for a maximum of <b>two years</b>, subject to fulfilling eligibility criteria and timely submission of attested marksheets and a self-declaration (Form C).</p>
+      <div class="benefit-cards">
+        <div class="benefit-card">
+          <div class="badge">Physically challenged</div>
+          <div class="amount">Rs 1,500 / month</div>
+          <div class="cat">Persons with 50%+ permanent disability</div>
+          <div class="desc">For physically challenged persons with minimum 50% permanent disability recorded in their Employment Exchange record (X-I).</div>
+        </div>
+        <div class="benefit-card">
+          <div class="badge">General category</div>
+          <div class="amount">Rs 1,000 / month</div>
+          <div class="cat">All other eligible applicants</div>
+          <div class="desc">For all other categories of educated unemployed persons who fulfil the eligibility criteria of the scheme.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" id="eligibility">
+      <h2>Eligibility</h2>
+      <p class="detail-text">An educated unemployed applicant is eligible for the grant of Unemployment Allowance if they fulfil the following criteria:</p>
+      <table class="elig-table">
+        <tr><th style="width:26px">#</th><th style="width:36%">Criterion</th><th>Requirement</th></tr>
+        <tr><td>1</td><td>Employment status</td><td><span class="check-icon">&#10003;</span>Must be unemployed, not employed in government, PSU, private sector, or self-employed</td></tr>
+        <tr><td>2</td><td>Residency</td><td><span class="check-icon">&#10003;</span>Must be a bonafide Himachali</td></tr>
+        <tr><td>3</td><td>Education</td><td><span class="check-icon">&#10003;</span>Must have passed minimum 10+2 from a recognised board or institution</td></tr>
+        <tr><td>4</td><td>Exchange registration</td><td><span class="check-icon">&#10003;</span>Registered with an Employment Exchange in HP for at least 1 year as on date of application</td></tr>
+        <tr><td>5</td><td>Age</td><td><span class="check-icon">&#10003;</span>Above 20 and below 35 years as on date of application</td></tr>
+        <tr><td>6</td><td>Family income</td><td><span class="check-icon">&#10003;</span>Annual family income from all sources under Rs 2,00,000</td></tr>
+        <tr><td>7</td><td>Self-employment</td><td><span class="cross-icon">&#10007;</span>Must not be self-employed</td></tr>
+        <tr><td>8</td><td>Dismissed employee</td><td><span class="cross-icon">&#10007;</span>Must not be a dismissed government employee</td></tr>
+        <tr><td>9</td><td>Criminal record</td><td><span class="cross-icon">&#10007;</span>Must not be convicted of an offence with 48+ hours imprisonment</td></tr>
+        <tr><td>10</td><td>Student status</td><td><span class="cross-icon">&#10007;</span>Must not be a regular student pursuing any course</td></tr>
+        <tr><td>11</td><td>Other allowances</td><td><span class="cross-icon">&#10007;</span>Must not be availing Skill Development Allowance</td></tr>
+      </table>
+    </div>
+
+    <div class="section" id="exclusions">
+      <h2>Exclusions</h2>
+      <p class="detail-text">The following categories of persons are not eligible to receive the Unemployment Allowance:</p>
+      <ul class="excl-list">
+        <li>Government, PSU, local body, or quasi-government employees dismissed from service.</li>
+        <li>Persons imprisoned for a period of 48 hours or more.</li>
+        <li>Persons whose family income was Rs 2,00,000 or more in the year preceding application.</li>
+        <li>Persons who are not bonafide Himachalis.</li>
+        <li>Persons below 20 years or above 35 years of age.</li>
+      </ul>
+    </div>
+
+    <div class="section" id="application">
+      <h2>Application process</h2>
+      <div class="process-tabs">
+        <span class="process-tab active" data-tab="online">Online</span>
+        <span class="process-tab" data-tab="offline">Offline</span>
+      </div>
+      <div id="tab-online">
+        <ol class="process-steps">
+          <li><div class="step-number">1</div><div class="step-content">Visit the Department of Labour and Employment, Government of Himachal Pradesh official website.</div></li>
+          <li><div class="step-number">2</div><div class="step-content">Click on "Check eligibility for Unemployment Allowance" on the website.</div></li>
+          <li><div class="step-number">3</div><div class="step-content">Enter your Employment Exchange registration number and captcha to check your eligibility status.</div></li>
+          <li><div class="step-number">4</div><div class="step-content">Once found eligible, click "Apply online".</div></li>
+          <li><div class="step-number">5</div><div class="step-content">Enter your registration number, date of birth, and captcha, then click Proceed.</div></li>
+          <li><div class="step-number">6</div><div class="step-content">Fill in basic details including bank account details, verified by the bank with stamp and signature.</div></li>
+          <li><div class="step-number">7</div><div class="step-content">Take a printout of the filled application form.</div></li>
+          <li><div class="step-number">8</div><div class="step-content">Attach attested copies of all required documents and submit to the District or Sub-Employment Exchange Office.</div></li>
+        </ol>
+        <div class="note-box"><b>Note:</b> Selection or rejection of applications is decided within 45 days. The outcome is communicated to applicants by SMS.</div>
+      </div>
+      <div id="tab-offline" style="display:none">
+        <ol class="process-steps">
+          <li><div class="step-number">1</div><div class="step-content">Visit your nearest District or Sub-Employment Exchange Office in Himachal Pradesh.</div></li>
+          <li><div class="step-number">2</div><div class="step-content">Collect the application form for the Unemployment Allowance Scheme from the office.</div></li>
+          <li><div class="step-number">3</div><div class="step-content">Fill in all required details in block letters, including bank account details.</div></li>
+          <li><div class="step-number">4</div><div class="step-content">Attach attested copies of all required documents with the completed form.</div></li>
+          <li><div class="step-number">5</div><div class="step-content">Submit the completed form with all documents to the Employment Exchange Office.</div></li>
+        </ol>
+        <div class="note-box"><b>Note:</b> Decisions are communicated within 45 days by SMS to the registered mobile number.</div>
+      </div>
+    </div>
+
+    <div class="section" id="documents">
+      <h2>Documents required</h2>
+      <ul class="docs-list">
+        <li><i class="ti ti-file" aria-hidden="true"></i>Attested copy of Employment Registration Card (X-10)</li>
+        <li><i class="ti ti-file" aria-hidden="true"></i>Attested copy of a valid family income certificate, not more than 6 months old</li>
+        <li><i class="ti ti-file" aria-hidden="true"></i>Income certificate stating the applicant is not employed in government or PSU roles</li>
+        <li><i class="ti ti-file" aria-hidden="true"></i>Self-certified Declaration Form C, declaring unemployment</li>
+        <li><i class="ti ti-file" aria-hidden="true"></i>Attested copy of Bonafide Himachali Certificate</li>
+        <li><i class="ti ti-file" aria-hidden="true"></i>Bank details verified by the bank branch officer, IFSC code mandatory</li>
+        <li><i class="ti ti-file" aria-hidden="true"></i>Attested copies of 10th or 12th certificate and age proof</li>
+        <li><i class="ti ti-file" aria-hidden="true"></i>Attested copy of Aadhaar card</li>
+      </ul>
+    </div>
+
+    <div class="section" id="apply-form">
+      <h2>Apply online</h2>
+      <div class="apply-form">
+        <form id="applicationForm">
+          <div class="form-section-label">Personal information</div>
+          <div class="form-grid-2">
+            <div class="form-field"><label>Full name <span class="req-star">*</span></label><input type="text" name="fullName" placeholder="As per Aadhaar card"><span class="err" id="e-fullName">This field is required</span></div>
+            <div class="form-field"><label>Date of birth <span class="req-star">*</span></label><input type="date" name="dob"><span class="err" id="e-dob">This field is required</span></div>
+            <div class="form-field"><label>Gender <span class="req-star">*</span></label><select name="gender"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select><span class="err" id="e-gender">This field is required</span></div>
+            <div class="form-field"><label>Category</label><select name="category"><option value="">Select</option><option>General</option><option>SC</option><option>ST</option><option>OBC</option></select></div>
+          </div>
+          <div class="form-section-label">Contact details</div>
+          <div class="form-grid-2">
+            <div class="form-field"><label>Mobile number <span class="req-star">*</span></label><input type="tel" name="mobile" placeholder="10-digit mobile number"><span class="err" id="e-mobile">Enter a valid 10-digit number</span></div>
+            <div class="form-field"><label>Email address <span class="req-star">*</span></label><input type="email" name="email" placeholder="name@example.com"><span class="err" id="e-email">Enter a valid email address</span></div>
+            <div class="form-field"><label>District <span class="req-star">*</span></label><select name="district"><option value="">Select district</option><option>Bilaspur</option><option>Chamba</option><option>Hamirpur</option><option>Kangra</option><option>Kinnaur</option><option>Kullu</option><option>Lahaul and Spiti</option><option>Mandi</option><option>Shimla</option><option>Sirmaur</option><option>Solan</option><option>Una</option></select><span class="err" id="e-district">This field is required</span></div>
+            <div class="form-field"><label>Address <span class="req-star">*</span></label><input type="text" name="address" placeholder="Village or town, Tehsil"><span class="err" id="e-address">This field is required</span></div>
+          </div>
+          <div class="form-section-label">Employment and education</div>
+          <div class="form-grid-2">
+            <div class="form-field"><label>Employment Exchange reg. no. <span class="req-star">*</span></label><input type="text" name="exchangeReg" placeholder="EX-HP-XXXXX"><span class="err" id="e-exchangeReg">This field is required</span></div>
+            <div class="form-field"><label>Educational qualification <span class="req-star">*</span></label><select name="education"><option value="">Select qualification</option><option>10+2 / senior secondary</option><option>Graduate</option><option>Post graduate</option><option>Diploma / ITI</option><option>Professional degree</option></select><span class="err" id="e-education">This field is required</span></div>
+            <div class="form-field"><label>Physically challenged (50%+ disability)</label><select name="disability"><option value="no">No</option><option value="yes">Yes</option></select></div>
+            <div class="form-field"><label>Annual family income <span class="req-star">*</span></label><select name="familyIncome"><option value="">Select range</option><option>Below Rs 50,000</option><option>Rs 50,001 to Rs 1,00,000</option><option>Rs 1,00,001 to Rs 2,00,000</option></select><span class="err" id="e-familyIncome">This field is required</span></div>
+          </div>
+          <div class="form-section-label">Identity and bank details</div>
+          <div class="form-grid-2">
+            <div class="form-field"><label>Aadhaar number <span class="req-star">*</span></label><input type="text" name="aadhar" placeholder="12-digit Aadhaar number" maxlength="12"><span class="err" id="e-aadhar">Enter a valid 12-digit Aadhaar number</span></div>
+            <div class="form-field"><label>Bank account number <span class="req-star">*</span></label><input type="text" name="bankAccount" placeholder="Bank account number"><span class="err" id="e-bankAccount">This field is required</span></div>
+            <div class="form-field"><label>IFSC code <span class="req-star">*</span></label><input type="text" name="ifscCode" placeholder="e.g. SBIN0001234" maxlength="11"><span class="err" id="e-ifscCode">Enter a valid IFSC code</span></div>
+            <div class="form-field"><label>Bank name</label><input type="text" name="bankName" placeholder="Bank name"></div>
+          </div>
+          <div class="decl-row">
+            <input type="checkbox" id="declaration" name="declaration">
+            <label for="declaration">I hereby declare that all information provided in this application is true, correct, and complete to the best of my knowledge. I understand that false information will lead to rejection of my application or cancellation of the allowance if found ineligible later.</label>
+          </div>
+          <span class="err" id="e-declaration" style="margin-bottom:10px;display:none">You must accept the declaration to proceed</span>
+          <button type="submit" class="form-submit-btn">Submit application</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="section" id="faq">
+      <h2>Frequently asked questions</h2>
+      <div class="faq-item"><div class="faq-q">Who is eligible to apply for the Unemployment Allowance Scheme in Himachal Pradesh?<span class="faq-chevron"><i class="ti ti-chevron-down" aria-hidden="true"></i></span></div><div class="faq-a">Eligible applicants must be bonafide Himachali residents, aged 20 to 35, with minimum 10+2 qualification, registered with an Employment Exchange in HP for at least 1 year, unemployed, and with an annual family income below Rs 2 lakh.</div></div>
+      <div class="faq-item"><div class="faq-q">Is there an online application process for the scheme?<span class="faq-chevron"><i class="ti ti-chevron-down" aria-hidden="true"></i></span></div><div class="faq-a">Yes. Applications can be submitted online via the Department of Labour and Employment website. After filling the form, a printout must be taken and submitted with attested documents to the District or Sub-Employment Exchange Office.</div></div>
+      <div class="faq-item"><div class="faq-q">What documents are required for the application?<span class="faq-chevron"><i class="ti ti-chevron-down" aria-hidden="true"></i></span></div><div class="faq-a">Required documents include an attested Employment Registration Card, income certificate not older than 6 months, self-certified Declaration Form C, Bonafide Himachali Certificate, educational certificates, Aadhaar card, and verified bank details with IFSC code.</div></div>
+      <div class="faq-item"><div class="faq-q">Where should the application and documents be submitted?<span class="faq-chevron"><i class="ti ti-chevron-down" aria-hidden="true"></i></span></div><div class="faq-a">The application form along with all attached documents must be submitted to the District or Sub-Employment Exchange Office in the applicant's district.</div></div>
+      <div class="faq-item"><div class="faq-q">How long does the selection process take?<span class="faq-chevron"><i class="ti ti-chevron-down" aria-hidden="true"></i></span></div><div class="faq-a">The Employment Exchange Office scrutinises the application and communicates the decision within 45 days of submission, notifying applicants by SMS.</div></div>
+      <div class="faq-item"><div class="faq-q">Can physically challenged individuals apply for the scheme?<span class="faq-chevron"><i class="ti ti-chevron-down" aria-hidden="true"></i></span></div><div class="faq-a">Yes. Physically challenged persons with minimum 50% permanent disability recorded in their Employment Exchange record (X-I) can apply and receive Rs 1,500 per month, higher than the general category amount of Rs 1,000.</div></div>
+    </div>
+
+    <div class="section" id="sources">
+      <h2>Sources and references</h2>
+      <ul class="sources-list">
+        <li><i class="ti ti-external-link" aria-hidden="true"></i> Scheme guidelines, Department of Labour and Employment, HP</li>
+        <li><i class="ti ti-external-link" aria-hidden="true"></i> Department of Labour and Employment, Himachal Pradesh, official website</li>
+        <li><i class="ti ti-external-link" aria-hidden="true"></i> Online status check portal, Employment Exchange HP</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col"><h4>myScheme</h4><p>A Government of India platform to help citizens discover and access government schemes across all departments.</p></div>
+    <div class="footer-col"><h4>Important links</h4><p>HP Labour Department</p><p>Employment Exchange HP</p><p>Digital India Portal</p></div>
+    <div class="footer-col"><h4>Contact</h4><p>Department of Labour and Employment, Government of Himachal Pradesh, Shimla 171001</p><p>0177-2623156</p></div>
+    <div class="footer-col"><h4>Office hours</h4><p>Monday to Friday, 9:00 AM to 5:00 PM</p></div>
+  </div>
+  <div class="footer-bottom">Government of Himachal Pradesh, Department of Labour and Employment. Designed and developed by National Informatics Centre (NIC).</div>
+</footer>
+
+<div class="modal-overlay" id="successModal">
+  <div class="modal-box">
+    <div class="modal-icon"><i class="ti ti-circle-check" aria-hidden="true"></i></div>
+    <h2>Application submitted successfully</h2>
+    <p>You have successfully enrolled for the Unemployment Allowance Scheme. Your application has been received and will be reviewed within 45 days.</p>
+    <div class="modal-ref"><b id="refNumber">UAS-2026-XXXXXXXXX</b>Save your reference number for future correspondence</div>
+    <div class="modal-details-box" id="modalDetails"></div>
+    <p style="font-size:11px;color:var(--text-muted);margin-bottom:14px">You will receive updates on your registered mobile number via SMS.</p>
+    <button class="modal-close-btn" id="closeModalBtn">Return to home</button>
+  </div>
+</div>
+
+<div class="elig-modal" id="eligModal">
+  <div class="elig-modal-box">
+    <h2>Check your eligibility</h2>
+    <div class="elig-field"><label>Age (in years) *</label><input type="number" id="e-age" placeholder="e.g. 25" min="1" max="100"></div>
+    <div class="elig-field"><label>Educational qualification *</label><select id="e-qual"><option value="">Select</option><option value="below10">Below 10th</option><option value="10th">10th pass</option><option value="12th">10+2 / 12th pass</option><option value="graduate">Graduate or above</option></select></div>
+    <div class="elig-field"><label>Are you a bonafide Himachali? *</label><select id="e-himachali"><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select></div>
+    <div class="elig-field"><label>Annual family income *</label><select id="e-income"><option value="">Select</option><option value="below2l">Below Rs 2,00,000</option><option value="above2l">Rs 2,00,000 or above</option></select></div>
+    <div class="elig-field"><label>Registered with Employment Exchange for 1+ year? *</label><select id="e-reg"><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select></div>
+    <div class="elig-field"><label>Currently employed or a regular student? *</label><select id="e-employed"><option value="">Select</option><option value="no">No</option><option value="yes">Yes</option></select></div>
+    <div id="elig-result" class="elig-result"></div>
+    <div class="elig-btns"><button class="elig-check-btn" id="eligCheckBtn">Check now</button><button class="elig-cancel-btn" id="eligCancelBtn">Cancel</button></div>
+  </div>
+</div>
+
+</div>
+
+<script>
+(function(){
+  var root = document.currentScript.closest('.uas-wrap') || document;
+
+  root.querySelectorAll('.sidebar-nav a').forEach(function(a){
+    a.addEventListener('click', function(){
+      root.querySelectorAll('.sidebar-nav a').forEach(function(x){x.classList.remove('active')});
+      a.classList.add('active');
+      var target = root.querySelector('#' + a.getAttribute('data-t'));
+      if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+
+  root.querySelectorAll('.process-tab').forEach(function(t){
+    t.addEventListener('click', function(){
+      root.querySelectorAll('.process-tab').forEach(function(x){x.classList.remove('active')});
+      t.classList.add('active');
+      var tab = t.getAttribute('data-tab');
+      root.querySelector('#tab-online').style.display = tab==='online' ? 'block' : 'none';
+      root.querySelector('#tab-offline').style.display = tab==='offline' ? 'block' : 'none';
+    });
+  });
+
+  root.querySelectorAll('.faq-q').forEach(function(q){
+    q.addEventListener('click', function(){
+      var ans = q.nextElementSibling;
+      var chev = q.querySelector('.faq-chevron');
+      var isOpen = ans.classList.contains('open');
+      root.querySelectorAll('.faq-a').forEach(function(a){a.classList.remove('open')});
+      root.querySelectorAll('.faq-q').forEach(function(x){x.classList.remove('open')});
+      root.querySelectorAll('.faq-chevron').forEach(function(c){c.classList.remove('open')});
+      if(!isOpen){ans.classList.add('open');q.classList.add('open');chev.classList.add('open');}
+    });
+  });
+
+  root.querySelector('#openEligBtn').addEventListener('click', function(){
+    root.querySelector('#eligModal').classList.add('open');
+  });
+  root.querySelector('#eligCancelBtn').addEventListener('click', function(){
+    root.querySelector('#eligModal').classList.remove('open');
+  });
+
+  root.querySelector('#eligCheckBtn').addEventListener('click', function(){
+    var age = parseInt(root.querySelector('#e-age').value);
+    var qual = root.querySelector('#e-qual').value;
+    var himachali = root.querySelector('#e-himachali').value;
+    var income = root.querySelector('#e-income').value;
+    var reg = root.querySelector('#e-reg').value;
+    var employed = root.querySelector('#e-employed').value;
+    var result = root.querySelector('#elig-result');
+
+    if(!age||!qual||!himachali||!income||!reg||!employed){
+      result.style.display='block';
+      result.className='elig-result noteligible';
+      result.textContent='Fill in all fields to check eligibility.';
+      return;
+    }
+
+    var reasons = [];
+    if(age<20||age>=35) reasons.push('Age must be between 20 and 35 years.');
+    if(qual==='below10'||qual==='10th') reasons.push('Minimum 10+2 qualification is required.');
+    if(himachali==='no') reasons.push('Must be a bonafide Himachali resident.');
+    if(income==='above2l') reasons.push('Annual family income must be below Rs 2,00,000.');
+    if(reg==='no') reasons.push('Must be registered with Employment Exchange for at least 1 year.');
+    if(employed==='yes') reasons.push('Must not be currently employed or a regular student.');
+
+    result.style.display='block';
+    if(reasons.length===0){
+      result.className='elig-result eligible';
+      result.innerHTML='<b>You appear to be eligible.</b> Proceed to fill the application form and submit it with all required documents to your nearest Employment Exchange Office.';
+    } else {
+      var lis = reasons.map(function(r){return '<li>'+r+'</li>'}).join('');
+      result.className='elig-result noteligible';
+      result.innerHTML='<b>You may not be eligible due to:</b><ul style="margin-top:6px;padding-left:16px">'+lis+'</ul>';
+    }
+  });
+
+  var form = root.querySelector('#applicationForm');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var valid = true;
+    var required = ['fullName','dob','gender','mobile','email','district','address','exchangeReg','education','familyIncome','aadhar','bankAccount','ifscCode'];
+    required.forEach(function(f){
+      var el = form.elements[f];
+      var err = root.querySelector('#e-'+f);
+      if(!el || !el.value.trim()){
+        if(err) err.style.display='block';
+        valid=false;
+      } else {
+        if(err) err.style.display='none';
+      }
+    });
+
+    var mobile = form.elements['mobile'].value;
+    if(mobile && !/^[0-9]{10}$/.test(mobile)){
+      root.querySelector('#e-mobile').style.display='block';
+      valid=false;
+    }
+    var email = form.elements['email'].value;
+    if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+      root.querySelector('#e-email').style.display='block';
+      valid=false;
+    }
+    var aadhar = form.elements['aadhar'].value;
+    if(aadhar && !/^[0-9]{12}$/.test(aadhar)){
+      root.querySelector('#e-aadhar').style.display='block';
+      valid=false;
+    }
+    var decl = form.elements['declaration'];
+    var declErr = root.querySelector('#e-declaration');
+    if(!decl.checked){
+      declErr.style.display='block';
+      valid=false;
+    } else {
+      declErr.style.display='none';
+    }
+
+    if(!valid) return;
+
+    // Record the application in the SchemeFit database on actual form submission
+    fetch("/api/apply-real", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ schemeTitle: "Unemployment Allowance Scheme", action: "submit" })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data.success) {
+        console.log("Application recorded successfully in SchemeFit database.");
+      } else {
+        console.error("Failed to record application in database:", data.error);
+      }
+    })
+    .catch(function(err) {
+      console.error("Network error recording application:", err);
+    });
+
+    var ref = 'UAS-2026-'+Math.random().toString(36).substr(2,9).toUpperCase();
+    root.querySelector('#refNumber').textContent = ref;
+    root.querySelector('#modalDetails').innerHTML =
+      '<div class="modal-detail-row"><span>Name</span><span>'+form.elements['fullName'].value+'</span></div>'+
+      '<div class="modal-detail-row"><span>Mobile</span><span>'+form.elements['mobile'].value+'</span></div>'+
+      '<div class="modal-detail-row"><span>Email</span><span>'+form.elements['email'].value+'</span></div>'+
+      '<div class="modal-detail-row"><span>District</span><span>'+form.elements['district'].value+'</span></div>'+
+      '<div class="modal-detail-row"><span>EX reg. no.</span><span>'+form.elements['exchangeReg'].value+'</span></div>';
+    root.querySelector('#successModal').classList.add('open');
+    form.reset();
+  });
+
+  root.querySelector('#closeModalBtn').addEventListener('click', function(){
+    root.querySelector('#successModal').classList.remove('open');
+  });
+})();
+</script>

@@ -66,7 +66,7 @@ function autofillForms(profile) {
         } else if (name === "mobile") {
             fillInput(input, profile.phone || "9876543210");
         } else if (name === "email") {
-            fillInput(input, profile.email);
+            fillInput(input, profile.email || "nathshaj20006@gmail.com");
         } else if (name === "district") {
             let district = "Shimla";
             if (profile.district) {
@@ -79,11 +79,11 @@ function autofillForms(profile) {
             }
             fillInput(input, district);
         } else if (name === "address") {
-            fillInput(input, profile.address || "123 Main Street, Shimla");
+            fillInput(input, profile.address || "Main Street, Tehsil Shimla");
         } else if (name === "exchangereg") {
             fillInput(input, "EX-HP-84920");
         } else if (name === "education") {
-            let edu = "10+2 / senior secondary";
+            let edu = "Graduate";
             if (profile.education) {
                 const e = profile.education.toLowerCase();
                 if (e.includes("post")) edu = "Post graduate";
@@ -97,13 +97,13 @@ function autofillForms(profile) {
         } else if (name === "familyincome") {
             fillInput(input, profile.annual_income || 150000);
         } else if (name === "aadhar") {
-            fillInput(input, "123456789012");
+            fillInput(input, profile.aadhar || "123456789012");
         } else if (name === "bankaccount") {
-            fillInput(input, "998877665544");
+            fillInput(input, profile.bank_account || "998877665544");
         } else if (name === "ifsccode") {
-            fillInput(input, "SBIN0001234");
+            fillInput(input, profile.ifsc_code || "SBIN0001234");
         } else if (name === "bankname") {
-            fillInput(input, "State Bank of India");
+            fillInput(input, profile.bank_name || "State Bank of India");
         } else if (name === "declaration") {
             fillInput(input, true);
         }
@@ -198,6 +198,7 @@ function init() {
         chrome.storage.local.get(["userProfile"], (result) => {
             if (result.userProfile) {
                 injectAutofillButton(result.userProfile);
+                autofillForms(result.userProfile);
             }
         });
     }
