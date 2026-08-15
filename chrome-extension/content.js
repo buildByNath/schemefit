@@ -43,7 +43,7 @@ function autofillForms(profile) {
         if (name === "fullname") {
             fillInput(input, profile.full_name);
         } else if (name === "dob") {
-            let dob = profile.date_of_birth || "1998-05-12";
+            let dob = profile.date_of_birth || "2001-01-17";
             if (dob && dob.includes('T')) dob = dob.split('T')[0];
             fillInput(input, dob);
         } else if (name === "gender") {
@@ -64,7 +64,7 @@ function autofillForms(profile) {
             }
             fillInput(input, cat);
         } else if (name === "mobile") {
-            fillInput(input, profile.phone || "9876543210");
+            fillInput(input, profile.phone || "5698745621");
         } else if (name === "email") {
             fillInput(input, profile.email || "nathshaj20006@gmail.com");
         } else if (name === "district") {
@@ -95,15 +95,15 @@ function autofillForms(profile) {
         } else if (name === "disability") {
             fillInput(input, profile.is_differently_abled ? "yes" : "no");
         } else if (name === "familyincome") {
-            fillInput(input, profile.annual_income || 150000);
+            fillInput(input, profile.annual_income || 250000);
         } else if (name === "aadhar") {
-            fillInput(input, profile.aadhar || "123456789012");
+            fillInput(input, profile.aadhar || "587965458561");
         } else if (name === "bankaccount") {
-            fillInput(input, profile.bank_account || "998877665544");
+            fillInput(input, profile.bank_account || "45620000125");
         } else if (name === "ifsccode") {
             fillInput(input, profile.ifsc_code || "SBIN0001234");
         } else if (name === "bankname") {
-            fillInput(input, profile.bank_name || "State Bank of India");
+            fillInput(input, profile.bank_name || "SBI");
         } else if (name === "declaration") {
             fillInput(input, true);
         }
