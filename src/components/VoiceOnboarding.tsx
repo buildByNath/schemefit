@@ -119,6 +119,15 @@ export function VoiceOnboarding() {
           is_differently_abled: data.is_differently_abled ?? prev.is_differently_abled,
           bpl_status: data.bpl_status ?? prev.bpl_status,
           home_state: data.home_state ?? prev.home_state,
+          phone: data.phone ?? prev.phone,
+          email: data.email ?? prev.email,
+          district: data.district ?? prev.district,
+          address: data.address ?? prev.address,
+          exchange_reg: data.exchange_reg ?? prev.exchange_reg,
+          aadhar: data.aadhar ?? prev.aadhar,
+          bank_account: data.bank_account ?? prev.bank_account,
+          ifsc_code: data.ifsc_code ?? prev.ifsc_code,
+          bank_name: data.bank_name ?? prev.bank_name,
         }));
         setApiSource(data.source || "local");
       }
@@ -457,6 +466,105 @@ export function VoiceOnboarding() {
                 </select>
               </div>
             </div>
+
+            <div className="pt-4 mt-2 border-t border-slate-100">
+              <h4 className="font-bold text-slate-800 text-xs mb-3">Contact Details</h4>
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div className="space-y-1">
+                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Mobile Number</label>
+                  <input
+                    type="tel"
+                    value={profile.phone || ""}
+                    onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
+                    className="w-full px-3 py-2 text-slate-800 border border-slate-200 rounded-lg text-sm bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Email Address</label>
+                  <input
+                    type="email"
+                    value={profile.email || ""}
+                    onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+                    className="w-full px-3 py-2 text-slate-800 border border-slate-200 rounded-lg text-sm bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">District</label>
+                  <input
+                    type="text"
+                    value={profile.district || ""}
+                    onChange={(e) => setProfile({ ...profile, district: e.target.value })}
+                    className="w-full px-3 py-2 text-slate-800 border border-slate-200 rounded-lg text-sm bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Address / Town</label>
+                  <input
+                    type="text"
+                    value={profile.address || ""}
+                    onChange={(e) => setProfile({ ...profile, address: e.target.value })}
+                    className="w-full px-3 py-2 text-slate-800 border border-slate-200 rounded-lg text-sm bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-4 mt-2 border-t border-slate-100">
+              <h4 className="font-bold text-slate-800 text-xs mb-3">Identity & Bank Details</h4>
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div className="space-y-1">
+                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Aadhaar Number</label>
+                  <input
+                    type="text"
+                    value={profile.aadhar || ""}
+                    onChange={(e) => setProfile({ ...profile, aadhar: e.target.value })}
+                    className="w-full px-3 py-2 text-slate-800 border border-slate-200 rounded-lg text-sm bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Employment Exchange No.</label>
+                  <input
+                    type="text"
+                    value={profile.exchange_reg || ""}
+                    onChange={(e) => setProfile({ ...profile, exchange_reg: e.target.value })}
+                    placeholder="e.g. EX-HP-40291"
+                    className="w-full px-3 py-2 text-slate-800 border border-slate-200 rounded-lg text-sm bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="space-y-1">
+                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Bank Account</label>
+                  <input
+                    type="text"
+                    value={profile.bank_account || ""}
+                    onChange={(e) => setProfile({ ...profile, bank_account: e.target.value })}
+                    className="w-full px-3 py-2 text-slate-800 border border-slate-200 rounded-lg text-sm bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">IFSC Code</label>
+                  <input
+                    type="text"
+                    value={profile.ifsc_code || ""}
+                    onChange={(e) => setProfile({ ...profile, ifsc_code: e.target.value })}
+                    className="w-full px-3 py-2 text-slate-800 border border-slate-200 rounded-lg text-sm bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Bank Name</label>
+                  <input
+                    type="text"
+                    value={profile.bank_name || ""}
+                    onChange={(e) => setProfile({ ...profile, bank_name: e.target.value })}
+                    className="w-full px-3 py-2 text-slate-800 border border-slate-200 rounded-lg text-sm bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+            </div>
+
           </div>
 
           <div className="pt-4 border-t border-slate-100 flex justify-end">

@@ -20,12 +20,21 @@ export interface User {
   religion?: string | null;
   is_differently_abled?: boolean | null;
   bpl_status?: boolean | null;
+  address?: string | null;
+  phone?: string | null;
+  aadhar?: string | null;
+  bank_account?: string | null;
+  ifsc_code?: string | null;
+  bank_name?: string | null;
+  exchange_reg?: string | null;
   uploaded_documents?: string[];
   role?: "student" | "ngo" | "private_sector" | null;
   organization_name?: string | null;
   registration_no?: string | null;
   official_email?: string | null;
   website_url?: string | null;
+  google_drive_access_token?: string | null;
+  google_drive_refresh_token?: string | null;
   created_at?: string;
   updated_at?: string;
 }

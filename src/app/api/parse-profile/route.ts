@@ -35,7 +35,16 @@ Return ONLY a raw JSON object with these keys (no markdown formatting, no commen
   "religion": string (extract religion e.g. "Hindu", "Muslim", "Christian", "Sikh", etc., or null),
   "is_differently_abled": boolean (true if they mention disability, handicap, or being differently abled. Default: false),
   "bpl_status": boolean (true if they mention BPL, below poverty line, or BPL card. Default: false),
-  "home_state": string (state name if mentioned e.g. "Kerala", "Maharashtra", else null)
+  "home_state": string (state name if mentioned e.g. "Kerala", "Maharashtra", else null),
+  "phone": string (mobile number if mentioned, else null),
+  "email": string (email address if mentioned, else null),
+  "district": string (district or city if mentioned, else null),
+  "address": string (full address if mentioned, else null),
+  "exchange_reg": string (employment exchange registration number if mentioned, else null),
+  "aadhar": string (12-digit Aadhaar number if mentioned, else null),
+  "bank_account": string (bank account number if mentioned, else null),
+  "ifsc_code": string (bank IFSC code if mentioned, else null),
+  "bank_name": string (name of the bank if mentioned e.g. "SBI", else null)
 }`
                 }]
               }],
@@ -88,7 +97,16 @@ Return ONLY a raw JSON object with these keys (no markdown formatting, no commen
   "religion": string (extract religion e.g. "Hindu", "Muslim", "Christian", "Sikh", etc., or null),
   "is_differently_abled": boolean (true if they mention disability, handicap, or being differently abled. Default: false),
   "bpl_status": boolean (true if they mention BPL, below poverty line, or BPL card. Default: false),
-  "home_state": string (state name if mentioned e.g. "Kerala", "Maharashtra", else null)
+  "home_state": string (state name if mentioned e.g. "Kerala", "Maharashtra", else null),
+  "phone": string (mobile number if mentioned, else null),
+  "email": string (email address if mentioned, else null),
+  "district": string (district or city if mentioned, else null),
+  "address": string (full address if mentioned, else null),
+  "exchange_reg": string (employment exchange registration number if mentioned, else null),
+  "aadhar": string (12-digit Aadhaar number if mentioned, else null),
+  "bank_account": string (bank account number if mentioned, else null),
+  "ifsc_code": string (bank IFSC code if mentioned, else null),
+  "bank_name": string (name of the bank if mentioned e.g. "SBI", else null)
 }`
               }],
               temperature: 0.1,

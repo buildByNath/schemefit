@@ -68,7 +68,7 @@ function autofillForms(profile) {
         } else if (name === "email") {
             fillInput(input, profile.email || "nathshaj20006@gmail.com");
         } else if (name === "district") {
-            let district = profile.district || "palakkad";
+            let district = "Shimla";
             if (profile.district) {
                 const dist = profile.district.toLowerCase();
                 const hpDistricts = ["bilaspur", "chamba", "hamirpur", "kangra", "kinnaur", "kullu", "lahaul and spiti", "mandi", "shimla", "sirmaur", "solan", "una"];
@@ -109,7 +109,17 @@ function autofillForms(profile) {
         }
         
         // 2. Generic fallbacks for other forms
-        else if (isMatch(combinedString, ["name", "first", "last", "full"])) {
+        else if (isMatch(combinedString, ["bank", "ifsc", "account"])) {
+            if (isMatch(combinedString, ["name"])) {
+                fillInput(input, profile.bank_name);
+            } else if (isMatch(combinedString, ["ifsc"])) {
+                fillInput(input, profile.ifsc_code);
+            } else {
+                fillInput(input, profile.bank_account);
+            }
+        } else if (isMatch(combinedString, ["father", "mother", "spouse"])) {
+            // Ignore these so we don't accidentally fill the user's name
+        } else if (isMatch(combinedString, ["name", "first", "last", "full"])) {
             fillInput(input, profile.full_name);
         } else if (isMatch(combinedString, ["email", "mail"])) {
             fillInput(input, profile.email);
@@ -152,7 +162,7 @@ function fillInput(input, value) {
                 } else if (value >= 50000 && value <= 100000 && optText.includes("50,001")) {
                     input.value = option.value;
                     matched = true;
-                } else if (value > 100000 && value <= 200000 && optText.includes("1,00,001")) {
+                } else if (value > 100000 && optText.includes("1,00,001")) {
                     input.value = option.value;
                     matched = true;
                 }
@@ -169,6 +179,13 @@ function fillInput(input, value) {
         }
     } else {
         input.value = value;
+    }
+    
+    // Add visual highlight
+    if (input.type !== "hidden") {
+        input.style.border = "2px solid #10b981";
+        input.style.backgroundColor = "#ecfdf5";
+        input.style.transition = "all 0.3s ease";
     }
     
     // Dispatch events so frontend frameworks (React/Vue/Angular) detect the change

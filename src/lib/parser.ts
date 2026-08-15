@@ -11,6 +11,15 @@ export interface ParsedProfile {
   is_differently_abled?: boolean | null;
   bpl_status?: boolean | null;
   home_state?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  district?: string | null;
+  address?: string | null;
+  exchange_reg?: string | null;
+  aadhar?: string | null;
+  bank_account?: string | null;
+  ifsc_code?: string | null;
+  bank_name?: string | null;
 }
 
 export function parseSpeechText(text: string): ParsedProfile {
