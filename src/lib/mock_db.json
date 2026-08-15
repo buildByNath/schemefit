@@ -1223,6 +1223,27 @@
           "status": "Approved"
         }
       ]
+    },
+    {
+      "id": "family-anjali-corrected-001",
+      "user_id": "0d323896-b73b-4a6d-a823-fd6466e43a0d",
+      "name": "Anjali",
+      "relation": "Mother",
+      "age": 44,
+      "occupation": "Tailor",
+      "annual_income": 15000,
+      "claimed_benefits": [
+        {
+          "scheme_title": "Kerala Women Self-Employment Assistance",
+          "amount": 25000,
+          "status": "Approved"
+        },
+        {
+          "scheme_title": "National Family Benefit Scheme (NFBS)",
+          "amount": 10000,
+          "status": "Approved"
+        }
+      ]
     }
   ],
   "documents": [

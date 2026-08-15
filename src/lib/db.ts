@@ -472,6 +472,28 @@ export async function createApplication(
 export async function getFamilyMembers(userId?: string): Promise<FamilyMember[]> {
   const uid = userId || await getActiveUserId();
   
+  // Claimed benefits lookup — enriches members with welfare payout records
+  // This is stored locally because the Supabase family_members table doesn't have a claimed_benefits column
+  const claimedBenefitsLookup: Record<string, { scheme_title: string; amount: number; status: string }[]> = {
+    "Suresh Menon": [
+      { scheme_title: "PM Kisan Samman Nidhi (PM-KISAN)", amount: 6000, status: "Approved" }
+    ],
+    "Geetha Menon": [
+      { scheme_title: "Women Entrepreneurship Assistance", amount: 50000, status: "Approved" }
+    ],
+    "Anjali": [
+      { scheme_title: "Kerala Women Self-Employment Assistance", amount: 25000, status: "Approved" },
+      { scheme_title: "National Family Benefit Scheme (NFBS)", amount: 10000, status: "Approved" }
+    ]
+  };
+
+  const enrichMembers = (members: FamilyMember[]): FamilyMember[] => {
+    return members.map(m => ({
+      ...m,
+      claimed_benefits: m.claimed_benefits || claimedBenefitsLookup[m.name] || []
+    }));
+  };
+
   if (isSupabaseConfigured()) {
     try {
       const { data, error } = await supabase
@@ -479,7 +501,7 @@ export async function getFamilyMembers(userId?: string): Promise<FamilyMember[]>
         .select("*")
         .eq("user_id", uid);
       if (error) throw error;
-      return data || [];
+      return enrichMembers(data || []);
     } catch (err) {
       console.error("Supabase getFamilyMembers error, falling back to local:", err);
     }
@@ -487,7 +509,7 @@ export async function getFamilyMembers(userId?: string): Promise<FamilyMember[]>
 
   // Local fallback
   const db = readLocalDb();
-  return db.family_members.filter(f => f.user_id === uid);
+  return enrichMembers(db.family_members.filter(f => f.user_id === uid));
 }
 
 export async function addFamilyMember(member: Omit<FamilyMember, "id" | "user_id">): Promise<FamilyMember> {
