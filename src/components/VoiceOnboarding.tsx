@@ -38,11 +38,14 @@ export function VoiceOnboarding() {
         recognition.continuous = true;
         recognition.interimResults = false; // Keep false to avoid duplicate appends on interim changes
         recognition.lang = typeof navigator !== "undefined" ? navigator.language : "en-US";
+        
+        let manualStop = false;
 
         recognition.onstart = () => {
           setIsListening(true);
           setRecognitionError("");
           setApiSource(null);
+          manualStop = false;
         };
 
         recognition.onerror = (event: any) => {
@@ -50,18 +53,29 @@ export function VoiceOnboarding() {
           if (event.error === "not-allowed") {
             setRecognitionError("Microphone access blocked. Please enable it in browser settings.");
             setIsListening(false);
+            manualStop = true;
           } else if (event.error === "no-speech") {
-            // Do nothing on no-speech so it doesn't interrupt the user who might just be pausing
-            console.log("Ignored no-speech timeout");
-          } else {
-            setRecognitionError(`Speech error: ${event.error}. Please try typing or manual edit.`);
+            // Chrome times out quickly on silence. We'll restart in onend.
+            console.log("No-speech timeout - will auto-restart");
+          } else if (event.error === "network") {
+            setRecognitionError("Network error occurred. Please check your connection.");
             setIsListening(false);
+            manualStop = true;
+          } else {
+            console.log(`Speech error: ${event.error}. Will retry.`);
           }
         };
 
         recognition.onend = () => {
-          // If we want it to truly be continuous until the user clicks stop, we could restart it here
-          setIsListening(false);
+          if (!manualStop && recognitionRef.current) {
+            try {
+              recognitionRef.current.start();
+            } catch (e) {
+              setIsListening(false);
+            }
+          } else {
+            setIsListening(false);
+          }
         };
 
         let parseTimeout: NodeJS.Timeout;
@@ -99,7 +113,13 @@ export function VoiceOnboarding() {
     }
 
     if (isListening) {
-      recognitionRef.current.stop();
+      // Intentional stop
+      setIsListening(false);
+      try {
+        recognitionRef.current.stop();
+      } catch (err) {}
+      // We set a flag or just rely on the component state if we used a ref for manualStop, but since manualStop is inside the effect, let's just abort it
+      recognitionRef.current.abort(); 
     } else {
       setTranscript("");
       setRecognitionError("");
