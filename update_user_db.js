@@ -53,11 +53,18 @@ const supabaseUserData = {
   caste_category: "OBC",
   state: "Kerala",
   district: "palakkad",
+  address: "palakkad",
   occupation: "Unemployed",
   education: "Btech",
   date_of_birth: "2001-01-17",
   gender: "Male",
+  phone: "5698745621",
   is_differently_abled: false,
+  aadhar: "587965458561",
+  bank_account: "45620000125",
+  ifsc_code: "SBIN0001234",
+  bank_name: "SBI",
+  exchange_reg: "EX-HP-40291",
   uploaded_documents: ["Aadhaar Card", "Bank Passbook", "Marksheet", "Employment Registration Card", "Income Certificate", "Bonafide Himachali Certificate", "Declaration Form C"]
 };
 

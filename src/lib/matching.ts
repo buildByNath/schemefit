@@ -39,7 +39,26 @@ export function getEligibleSchemes(user: User, schemes: Scheme[]): Scheme[] {
     // 4. Education level check
     if (rules.education !== undefined && user.education) {
       const allowedEd = Array.isArray(rules.education) ? rules.education : [rules.education];
-      const match = allowedEd.some((ed: string) => ed.toLowerCase() === user.education?.toLowerCase());
+      const userEd = user.education.toLowerCase().trim();
+      // Normalize common Indian education abbreviations for broader matching
+      const educationAliases: Record<string, string[]> = {
+        "btech": ["undergraduate", "b.tech", "b.e.", "btech", "professional courses"],
+        "b.tech": ["undergraduate", "btech", "b.e.", "b.tech", "professional courses"],
+        "b.e.": ["undergraduate", "btech", "b.tech", "b.e.", "professional courses"],
+        "mtech": ["postgraduate", "m.tech", "mtech"],
+        "m.tech": ["postgraduate", "mtech", "m.tech"],
+        "mbbs": ["undergraduate", "mbbs", "professional courses"],
+        "mba": ["postgraduate", "mba"],
+        "bsc": ["undergraduate", "b.sc", "bsc"],
+        "msc": ["postgraduate", "m.sc", "msc", "integrated m.sc"],
+        "phd": ["postgraduate", "phd", "doctoral"],
+        "high school": ["high school", "class 12", "class 11 to 12"],
+        "diploma": ["diploma", "polytechnic", "iti"],
+      };
+      const userAliases = educationAliases[userEd] || [userEd];
+      const match = allowedEd.some((ed: string) => 
+        userAliases.includes(ed.toLowerCase()) || ed.toLowerCase() === userEd
+      );
       if (!match) {
         return false;
       }
@@ -54,13 +73,13 @@ export function getEligibleSchemes(user: User, schemes: Scheme[]): Scheme[] {
       }
     }
 
-    // 6. Gender check
-    if (rules.gender !== undefined) {
-      // Assuming demoUser is Male (Rahul Menon). If rule specifies Female only, skip
+    // 6. Gender check — use actual user gender from profile
+    if (rules.gender !== undefined && user.gender) {
       const allowedGender = Array.isArray(rules.gender) ? rules.gender : [rules.gender];
-      const isFemaleOnly = allowedGender.every((g: string) => g.toLowerCase() === "female");
-      if (isFemaleOnly) {
-        return false; // Rahul is Male
+      const userGender = user.gender.toLowerCase().trim();
+      const match = allowedGender.some((g: string) => g.toLowerCase() === userGender);
+      if (!match) {
+        return false;
       }
     }
     

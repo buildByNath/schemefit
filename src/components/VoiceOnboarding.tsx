@@ -15,6 +15,7 @@ export function VoiceOnboarding() {
   const [isParsing, setIsParsing] = useState(false);
   const [isSaving, startTransition] = useTransition();
   const [apiSource, setApiSource] = useState<"gemini" | "groq" | "local" | null>(null);
+  const fullTranscriptRef = useRef(""); // Holds the committed transcript to prevent stale state bugs
 
   // Form State (Manual by default, pre-filled with standard values)
   const [fullName, setFullName] = useState("Rahul Menon");
@@ -35,38 +36,73 @@ export function VoiceOnboarding() {
 
       if (SpeechRecognition) {
         const recognition = new SpeechRecognition();
-        recognition.continuous = false; // Stop after a single sentence
-        recognition.interimResults = false;
+        recognition.continuous = true;
+        recognition.interimResults = true; // MUST be true to capture single words instantly!
         recognition.lang = typeof navigator !== "undefined" ? navigator.language : "en-US";
+        
+        let manualStop = false;
 
         recognition.onstart = () => {
           setIsListening(true);
           setRecognitionError("");
           setApiSource(null);
+          manualStop = false;
         };
 
         recognition.onerror = (event: any) => {
           console.warn("Speech recognition warning/error:", event.error);
           if (event.error === "not-allowed") {
             setRecognitionError("Microphone access blocked. Please enable it in browser settings.");
+            setIsListening(false);
+            manualStop = true;
           } else if (event.error === "no-speech") {
-            setRecognitionError("No speech detected. Please tap the mic and try again, or fill the form manually.");
+            // Ignore no-speech. onend will auto-restart if manualStop is false.
+            console.log("Ignored no-speech");
           } else {
-            setRecognitionError(`Speech error: ${event.error}. Please try typing or manual edit.`);
+            console.log(`Speech error: ${event.error}. Auto-restarting.`);
           }
-          setIsListening(false);
         };
 
         recognition.onend = () => {
-          setIsListening(false);
+          if (!manualStop && recognitionRef.current) {
+            try {
+              recognitionRef.current.start();
+            } catch (e) {
+              setIsListening(false);
+            }
+          } else {
+            setIsListening(false);
+          }
         };
 
-        recognition.onresult = async (event: any) => {
-          const spokenText = event.results[0][0].transcript;
-          if (spokenText) {
-            setTranscript(spokenText);
-            await parseProfileText(spokenText);
+        let parseTimeout: NodeJS.Timeout;
+
+        recognition.onresult = (event: any) => {
+          let interimTranscript = "";
+          let finalTranscript = "";
+
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            if (event.results[i].isFinal) {
+              finalTranscript += event.results[i][0].transcript + " ";
+            } else {
+              interimTranscript += event.results[i][0].transcript;
+            }
           }
+          
+          if (finalTranscript) {
+            // Append final results to our ref
+            fullTranscriptRef.current = fullTranscriptRef.current + (fullTranscriptRef.current && !fullTranscriptRef.current.endsWith(" ") ? " " : "") + finalTranscript;
+          }
+          
+          const displayText = fullTranscriptRef.current + interimTranscript;
+          setTranscript(displayText);
+          
+          clearTimeout(parseTimeout);
+          parseTimeout = setTimeout(async () => {
+            if (displayText.trim().length > 0) {
+              await parseProfileText(displayText.trim());
+            }
+          }, 1500);
         };
 
         recognitionRef.current = recognition;
@@ -81,9 +117,14 @@ export function VoiceOnboarding() {
     }
 
     if (isListening) {
-      recognitionRef.current.stop();
+      // Intentional stop
+      setIsListening(false);
+      try {
+        recognitionRef.current.stop();
+      } catch (err) {}
+      recognitionRef.current.abort(); 
     } else {
-      setTranscript("");
+      fullTranscriptRef.current = transcript; // Sync current text box state
       setRecognitionError("");
       try {
         recognitionRef.current.start();
@@ -253,7 +294,10 @@ export function VoiceOnboarding() {
             <div className="relative">
               <textarea
                 value={transcript}
-                onChange={(e) => setTranscript(e.target.value)}
+                onChange={(e) => {
+                  setTranscript(e.target.value);
+                  fullTranscriptRef.current = e.target.value;
+                }}
                 placeholder="Spoken transcription will appear here... (You can also type a description here and click Parse)"
                 className="w-full min-h-[80px] p-3 text-slate-800 border border-slate-200 rounded-lg text-xs bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 resize-y"
               />
