@@ -22,19 +22,14 @@ export default async function DashboardPage() {
   const userApps = await getApplications(user?.id);
   const familyMembers = await getFamilyMembers(user?.id);
 
-  // Run the matching algorithm
-  const eligibleSchemes = isProfileIncomplete ? [] : getEligibleSchemes(user!, allSchemes);
+  // Show all schemes from database/JSON so no schemes are missing
+  let eligibleSchemes = isProfileIncomplete ? [] : [...allSchemes];
 
-  // Always append U-GO demo scheme at the end (for email automation demo)
-  const ugoScheme = allSchemes.find(s => s.id === "db859c25-f712-4022-9214-e25f6e80b2a6");
-  if (ugoScheme && !eligibleSchemes.find(s => s.id === ugoScheme.id)) {
-    eligibleSchemes.push(ugoScheme);
-  }
-
-  // Always append Unemployment Allowance Scheme at the end
-  const uasScheme = allSchemes.find(s => s.title.includes("Unemployment Allowance Scheme"));
-  if (uasScheme && !eligibleSchemes.find(s => s.id === uasScheme.id)) {
-    eligibleSchemes.push(uasScheme);
+  // Move U-GO scheme to the very last position
+  const ugoIndex = eligibleSchemes.findIndex(s => s.id === "db859c25-f712-4022-9214-e25f6e80b2a6");
+  if (ugoIndex !== -1) {
+    const [ugo] = eligibleSchemes.splice(ugoIndex, 1);
+    eligibleSchemes.push(ugo);
   }
 
   // Sum up total benefits
