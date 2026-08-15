@@ -166,6 +166,15 @@ export function VoiceOnboarding() {
         is_differently_abled: profile.is_differently_abled,
         bpl_status: profile.bpl_status,
         state: profile.home_state,
+        phone: profile.phone,
+        email: profile.email,
+        district: profile.district,
+        address: profile.address,
+        exchange_reg: profile.exchange_reg,
+        aadhar: profile.aadhar,
+        bank_account: profile.bank_account,
+        ifsc_code: profile.ifsc_code,
+        bank_name: profile.bank_name,
       });
 
       if (result.success) {

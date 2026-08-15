@@ -327,6 +327,13 @@ export async function updateUser(id?: string, updates?: Partial<User>): Promise<
           religion: userUpdates.religion,
           is_differently_abled: userUpdates.is_differently_abled,
           bpl_status: userUpdates.bpl_status,
+          phone: userUpdates.phone,
+          address: userUpdates.address,
+          aadhar: userUpdates.aadhar,
+          bank_account: userUpdates.bank_account,
+          ifsc_code: userUpdates.ifsc_code,
+          bank_name: userUpdates.bank_name,
+          exchange_reg: userUpdates.exchange_reg,
           updated_at: new Date().toISOString(),
         }, { onConflict: "id" })
         .select()
@@ -492,17 +499,15 @@ export async function getFamilyMembers(userId?: string): Promise<FamilyMember[]>
 
 export async function addFamilyMember(member: Omit<FamilyMember, "id" | "user_id">): Promise<FamilyMember> {
   const uid = await getActiveUserId();
-  const newMember: FamilyMember = {
-    id: `family-${Math.random().toString(36).substr(2, 9)}`,
-    user_id: uid,
-    ...member
-  };
 
   if (isSupabaseConfigured()) {
     try {
       const { data, error } = await supabase
         .from("family_members")
-        .insert(newMember)
+        .insert({
+          user_id: uid,
+          ...member
+        })
         .select()
         .single();
       if (error) throw error;
@@ -513,6 +518,11 @@ export async function addFamilyMember(member: Omit<FamilyMember, "id" | "user_id
   }
 
   // Local fallback
+  const newMember: FamilyMember = {
+    id: `family-${Math.random().toString(36).substr(2, 9)}`,
+    user_id: uid,
+    ...member
+  };
   const db = readLocalDb();
   db.family_members.push(newMember);
   writeLocalDb(db);
@@ -541,19 +551,17 @@ export async function getUserDocuments(userId?: string): Promise<UserDocument[]>
 
 export async function addUserDocument(doc: Omit<UserDocument, "id" | "user_id" | "uploaded_at">): Promise<UserDocument> {
   const uid = await getActiveUserId();
-  const newDoc: UserDocument = {
-    id: `doc-${Math.random().toString(36).substr(2, 9)}`,
-    user_id: uid,
-    uploaded_at: new Date().toISOString(),
-    document_category: doc.document_category || "Other",
-    ...doc
-  };
+  const now = new Date().toISOString();
 
   if (isSupabaseConfigured()) {
     try {
       const { data, error } = await supabase
         .from("documents")
-        .insert(newDoc)
+        .insert({
+          user_id: uid,
+          uploaded_at: now,
+          ...doc
+        })
         .select()
         .single();
       if (error) throw error;
@@ -564,6 +572,13 @@ export async function addUserDocument(doc: Omit<UserDocument, "id" | "user_id" |
   }
 
   // Local fallback
+  const newDoc: UserDocument = {
+    id: `doc-${Math.random().toString(36).substr(2, 9)}`,
+    user_id: uid,
+    uploaded_at: now,
+    document_category: doc.document_category || "Other",
+    ...doc
+  };
   const db = readLocalDb();
   db.documents.push(newDoc);
   writeLocalDb(db);

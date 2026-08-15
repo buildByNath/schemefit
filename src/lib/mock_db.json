@@ -1223,6 +1223,15 @@
           "status": "Approved"
         }
       ]
+    },
+    {
+      "id": "family-yhzqhc5u0",
+      "user_id": "b348cdb1-5f31-4f5e-bcc0-be634072ec92",
+      "name": "Anjali",
+      "relation": "Daughter",
+      "age": 12,
+      "occupation": "Student",
+      "annual_income": 1000
     }
   ],
   "documents": [
