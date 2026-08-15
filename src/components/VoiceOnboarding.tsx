@@ -15,6 +15,7 @@ export function VoiceOnboarding() {
   const [isParsing, setIsParsing] = useState(false);
   const [isSaving, startTransition] = useTransition();
   const [apiSource, setApiSource] = useState<"gemini" | "groq" | "local" | null>(null);
+  const fullTranscriptRef = useRef(""); // Holds the committed transcript to prevent stale state bugs
 
   // Form State (Manual by default, pre-filled with standard values)
   const [fullName, setFullName] = useState("Rahul Menon");
@@ -36,7 +37,7 @@ export function VoiceOnboarding() {
       if (SpeechRecognition) {
         const recognition = new SpeechRecognition();
         recognition.continuous = true;
-        recognition.interimResults = false; // Keep false to avoid duplicate appends on interim changes
+        recognition.interimResults = true; // MUST be true to capture single words instantly!
         recognition.lang = typeof navigator !== "undefined" ? navigator.language : "en-US";
         
         let manualStop = false;
@@ -55,14 +56,10 @@ export function VoiceOnboarding() {
             setIsListening(false);
             manualStop = true;
           } else if (event.error === "no-speech") {
-            // Chrome times out quickly on silence. We'll restart in onend.
-            console.log("No-speech timeout - will auto-restart");
-          } else if (event.error === "network") {
-            setRecognitionError("Network error occurred. Please check your connection.");
-            setIsListening(false);
-            manualStop = true;
+            // Ignore no-speech. onend will auto-restart if manualStop is false.
+            console.log("Ignored no-speech");
           } else {
-            console.log(`Speech error: ${event.error}. Will retry.`);
+            console.log(`Speech error: ${event.error}. Auto-restarting.`);
           }
         };
 
@@ -81,24 +78,31 @@ export function VoiceOnboarding() {
         let parseTimeout: NodeJS.Timeout;
 
         recognition.onresult = (event: any) => {
-          let newWords = "";
+          let interimTranscript = "";
+          let finalTranscript = "";
+
           for (let i = event.resultIndex; i < event.results.length; i++) {
-            newWords += event.results[i][0].transcript + " ";
+            if (event.results[i].isFinal) {
+              finalTranscript += event.results[i][0].transcript + " ";
+            } else {
+              interimTranscript += event.results[i][0].transcript;
+            }
           }
           
-          if (newWords.trim()) {
-            setTranscript((prev) => {
-              const updatedText = prev ? prev + " " + newWords.trim() : newWords.trim();
-              
-              // Debounce parsing so it waits for the user to finish speaking
-              clearTimeout(parseTimeout);
-              parseTimeout = setTimeout(async () => {
-                await parseProfileText(updatedText);
-              }, 1500);
-
-              return updatedText;
-            });
+          if (finalTranscript) {
+            // Append final results to our ref
+            fullTranscriptRef.current = fullTranscriptRef.current + (fullTranscriptRef.current && !fullTranscriptRef.current.endsWith(" ") ? " " : "") + finalTranscript;
           }
+          
+          const displayText = fullTranscriptRef.current + interimTranscript;
+          setTranscript(displayText);
+          
+          clearTimeout(parseTimeout);
+          parseTimeout = setTimeout(async () => {
+            if (displayText.trim().length > 0) {
+              await parseProfileText(displayText.trim());
+            }
+          }, 1500);
         };
 
         recognitionRef.current = recognition;
@@ -118,10 +122,9 @@ export function VoiceOnboarding() {
       try {
         recognitionRef.current.stop();
       } catch (err) {}
-      // We set a flag or just rely on the component state if we used a ref for manualStop, but since manualStop is inside the effect, let's just abort it
       recognitionRef.current.abort(); 
     } else {
-      setTranscript("");
+      fullTranscriptRef.current = transcript; // Sync current text box state
       setRecognitionError("");
       try {
         recognitionRef.current.start();
@@ -282,7 +285,10 @@ export function VoiceOnboarding() {
             <div className="relative">
               <textarea
                 value={transcript}
-                onChange={(e) => setTranscript(e.target.value)}
+                onChange={(e) => {
+                  setTranscript(e.target.value);
+                  fullTranscriptRef.current = e.target.value;
+                }}
                 placeholder="Spoken transcription will appear here... (You can also type a description here and click Parse)"
                 className="w-full min-h-[80px] p-3 text-slate-800 border border-slate-200 rounded-lg text-xs bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 resize-y"
               />
