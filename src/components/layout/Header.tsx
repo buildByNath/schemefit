@@ -43,6 +43,20 @@ export async function Header() {
               occupation: activeUser.occupation,
               education: activeUser.education,
               state: activeUser.state,
+              date_of_birth: activeUser.date_of_birth,
+              gender: activeUser.gender,
+              marital_status: activeUser.marital_status,
+              religion: activeUser.religion,
+              is_differently_abled: activeUser.is_differently_abled,
+              bpl_status: activeUser.bpl_status,
+              phone: activeUser.phone,
+              district: activeUser.district,
+              address: activeUser.address,
+              exchange_reg: activeUser.exchange_reg,
+              aadhar: activeUser.aadhar,
+              bank_account: activeUser.bank_account,
+              ifsc_code: activeUser.ifsc_code,
+              bank_name: activeUser.bank_name,
             } : null}
           />
         </div>
