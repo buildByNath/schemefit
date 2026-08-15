@@ -53,15 +53,15 @@ export async function saveUserProfile(data: {
       is_differently_abled: data.is_differently_abled,
       bpl_status: data.bpl_status,
       state: data.state || "Kerala",
-      phone: data.phone,
-      email: data.email,
-      district: data.district,
-      address: data.address,
-      exchange_reg: data.exchange_reg,
-      aadhar: data.aadhar,
-      bank_account: data.bank_account,
-      ifsc_code: data.ifsc_code,
-      bank_name: data.bank_name
+      phone: data.phone ?? undefined,
+      email: data.email ?? undefined,
+      district: data.district ?? undefined,
+      address: data.address ?? undefined,
+      exchange_reg: data.exchange_reg ?? undefined,
+      aadhar: data.aadhar ?? undefined,
+      bank_account: data.bank_account ?? undefined,
+      ifsc_code: data.ifsc_code ?? undefined,
+      bank_name: data.bank_name ?? undefined
     });
     
     revalidatePath("/dashboard");
