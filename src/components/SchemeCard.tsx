@@ -127,6 +127,9 @@ export function SchemeCard({ scheme, hasApplied, user, dict }: SchemeCardProps) 
       if (!proceed) return;
     }
 
+    // Open a blank tab synchronously to prevent modern browsers from blocking the popup
+    const portalWindow = window.open("about:blank", "_blank");
+
     startTransition(async () => {
       try {
         const res = await fetch("/api/apply-real", {
@@ -136,20 +139,23 @@ export function SchemeCard({ scheme, hasApplied, user, dict }: SchemeCardProps) 
         });
         const data = await res.json();
         
-        if (data.success) {
-          // Record the application in DB
-          const result = await applyToScheme(scheme.id);
-          if (!result.success) {
-            alert("Failed to submit application: " + result.error);
-          } else {
-            alert("Playwright has securely launched the portal! Please complete your application there.");
+        if (data.success && data.redirectUrl) {
+          // Redirect the open tab to the real portal
+          if (portalWindow) {
+            portalWindow.location.href = data.redirectUrl;
           }
         } else {
-          alert("Automation failed: " + data.error);
+          if (portalWindow) {
+            portalWindow.close();
+          }
+          alert("Failed to start application: " + (data.error || "Unknown error"));
         }
-      } catch (e) {
-        console.error(e);
-        alert("Network error during automation.");
+      } catch (err) {
+        console.error(err);
+        if (portalWindow) {
+          portalWindow.close();
+        }
+        alert("Network error occurred while launching application portal.");
       }
     });
   };

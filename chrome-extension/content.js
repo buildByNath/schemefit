@@ -37,10 +37,79 @@ function autofillForms(profile) {
         const name = (input.name || "").toLowerCase();
         const id = (input.id || "").toLowerCase();
         const placeholder = (input.placeholder || "").toLowerCase();
-        
         const combinedString = `${name} ${id} ${placeholder}`;
 
-        if (isMatch(combinedString, ["name", "first", "last", "full"])) {
+        // 1. Explicit matches for HP Unemployment Allowance Scheme form
+        if (name === "fullname") {
+            fillInput(input, profile.full_name);
+        } else if (name === "dob") {
+            let dob = profile.date_of_birth || "1998-05-12";
+            if (dob && dob.includes('T')) dob = dob.split('T')[0];
+            fillInput(input, dob);
+        } else if (name === "gender") {
+            let gender = "Male";
+            if (profile.gender) {
+                const g = profile.gender.toLowerCase();
+                if (g === "female") gender = "Female";
+                else if (g !== "male") gender = "Other";
+            }
+            fillInput(input, gender);
+        } else if (name === "category") {
+            let cat = "General";
+            if (profile.caste_category) {
+                const c = profile.caste_category.toUpperCase();
+                if (["SC", "ST", "OBC", "GENERAL"].includes(c)) {
+                    cat = c === "GENERAL" ? "General" : c;
+                }
+            }
+            fillInput(input, cat);
+        } else if (name === "mobile") {
+            fillInput(input, profile.phone || "9876543210");
+        } else if (name === "email") {
+            fillInput(input, profile.email);
+        } else if (name === "district") {
+            let district = "Shimla";
+            if (profile.district) {
+                const dist = profile.district.toLowerCase();
+                const hpDistricts = ["bilaspur", "chamba", "hamirpur", "kangra", "kinnaur", "kullu", "lahaul and spiti", "mandi", "shimla", "sirmaur", "solan", "una"];
+                const matched = hpDistricts.find(d => dist.includes(d));
+                if (matched) {
+                    district = matched.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+                }
+            }
+            fillInput(input, district);
+        } else if (name === "address") {
+            fillInput(input, profile.address || "123 Main Street, Shimla");
+        } else if (name === "exchangereg") {
+            fillInput(input, "EX-HP-84920");
+        } else if (name === "education") {
+            let edu = "10+2 / senior secondary";
+            if (profile.education) {
+                const e = profile.education.toLowerCase();
+                if (e.includes("post")) edu = "Post graduate";
+                else if (e.includes("grad") || e.includes("undergrad")) edu = "Graduate";
+                else if (e.includes("diploma") || e.includes("iti")) edu = "Diploma / ITI";
+                else if (e.includes("professional") || e.includes("degree")) edu = "Professional degree";
+            }
+            fillInput(input, edu);
+        } else if (name === "disability") {
+            fillInput(input, profile.is_differently_abled ? "yes" : "no");
+        } else if (name === "familyincome") {
+            fillInput(input, profile.annual_income || 150000);
+        } else if (name === "aadhar") {
+            fillInput(input, "123456789012");
+        } else if (name === "bankaccount") {
+            fillInput(input, "998877665544");
+        } else if (name === "ifsccode") {
+            fillInput(input, "SBIN0001234");
+        } else if (name === "bankname") {
+            fillInput(input, "State Bank of India");
+        } else if (name === "declaration") {
+            fillInput(input, true);
+        }
+        
+        // 2. Generic fallbacks for other forms
+        else if (isMatch(combinedString, ["name", "first", "last", "full"])) {
             fillInput(input, profile.full_name);
         } else if (isMatch(combinedString, ["email", "mail"])) {
             fillInput(input, profile.email);
@@ -65,16 +134,39 @@ function isMatch(string, keywords) {
 }
 
 function fillInput(input, value) {
-    if (!value) return;
+    if (value === undefined || value === null) return;
 
     if (input.tagName === "SELECT") {
         // Try to match dropdown options
+        let matched = false;
         Array.from(input.options).forEach(option => {
-            if (option.text.toLowerCase().includes(value.toString().toLowerCase()) || 
-                option.value.toLowerCase().includes(value.toString().toLowerCase())) {
+            const optVal = (option.value || "").toLowerCase();
+            const optText = (option.text || "").toLowerCase();
+            const searchVal = value.toString().toLowerCase();
+            
+            // Special handling for family income range selection
+            if (input.name === "familyIncome" && typeof value === "number") {
+                if (value < 50000 && optText.includes("below")) {
+                    input.value = option.value;
+                    matched = true;
+                } else if (value >= 50000 && value <= 100000 && optText.includes("50,001")) {
+                    input.value = option.value;
+                    matched = true;
+                } else if (value > 100000 && value <= 200000 && optText.includes("1,00,001")) {
+                    input.value = option.value;
+                    matched = true;
+                }
+            } else if (optText.includes(searchVal) || optVal.includes(searchVal)) {
                 input.value = option.value;
+                matched = true;
             }
         });
+    } else if (input.type === "checkbox") {
+        input.checked = !!value;
+    } else if (input.type === "radio") {
+        if (input.value.toLowerCase() === value.toString().toLowerCase()) {
+            input.checked = true;
+        }
     } else {
         input.value = value;
     }
@@ -113,3 +205,4 @@ function init() {
 
 // Initialize slightly after load to ensure dynamic forms render
 setTimeout(init, 1000);
+
