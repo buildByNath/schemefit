@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import { Atkinson_Hyperlegible } from "next/font/google";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { getDictionary } from "@/lib/i18n";
 
-const atkinson = Atkinson_Hyperlegible({ subsets: ["latin"], weight: ["400", "700"] });
+const outfit = Outfit({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "SchemeFit - The Smart Scheme Intelligence Engine",
-  description: "Discover and prepare for government benefits you may be eligible for.",
+  title: "SchemeFit - Find government benefits easily",
+  description: "Find and apply for government benefits you qualify for.",
 };
 
 export default async function RootLayout({
@@ -20,7 +20,7 @@ export default async function RootLayout({
   const dict = await getDictionary();
   return (
     <html lang="en">
-      <body className={atkinson.className}>
+      <body className={outfit.className}>
         {/* Skip to main content — required for keyboard/screen-reader navigation */}
         <a
           href="#main-content"

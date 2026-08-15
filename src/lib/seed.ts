@@ -541,6 +541,22 @@ export const mockSchemes = [
     ministry: "None",
     provider_type: "NGO",
     provider_name: "U-GO"
+  },
+  {
+    title: "Unemployment Allowance Scheme",
+    description: "The Department of Labour and Employment, Government of Himachal Pradesh introduced the Unemployment Allowance Scheme to provide allowance to eligible educated unemployed youth of Himachal Pradesh, so they can sustain themselves for a certain period.",
+    min_benefit_amount: 12000,
+    max_benefit_amount: 18000,
+    eligibility_json: { max_income: 200000, states: ["Himachal Pradesh"], age: [20, 35], education: ["Undergraduate", "High School"] },
+    required_documents: ["Employment Registration Card", "Income Certificate", "Bonafide Himachali Certificate", "Declaration Form C", "Bank Passbook", "Marksheet", "Aadhaar Card"],
+    prerequisites: ["Employment Registration Card", "Income Certificate", "Bonafide Himachali Certificate", "Aadhaar Card"],
+    application_url: "https://eemis.hp.nic.in/",
+    deadline: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString(),
+    category: "Unemployment Allowance",
+    state: "Himachal Pradesh",
+    ministry: "Labour and Employment",
+    provider_type: "Government",
+    provider_name: "Government of Himachal Pradesh"
   }
 ];
 
@@ -551,7 +567,11 @@ export async function seedDatabase() {
   try {
     // Clean old schemes and insert fresh ones
     await supabase.from("schemes").delete().neq("id", "00000000-0000-0000-0000-000000000000");
-    const { error } = await supabase.from("schemes").insert(mockSchemes);
+    const schemesWithIds = mockSchemes.map((s, idx) => ({
+      ...s,
+      id: s.id || `00000000-0000-0000-0000-${String(idx + 1).padStart(12, '0')}`
+    }));
+    const { error } = await supabase.from("schemes").insert(schemesWithIds);
     schemeError = error;
   } catch (err) {
     console.error("Error deleting/inserting schemes:", err);
@@ -577,16 +597,21 @@ export async function seedDatabase() {
   if (customUserError) console.error("Error seeding custom user:", customUserError);
 
   // 3. Insert Family
+  let familyError = null;
   if (user) {
     // Map family members to exclude claimed_benefits which doesn't exist in Supabase database public.family_members table
-    const supabaseFamily = demoFamily.map(({ claimed_benefits, ...rest }) => rest);
-    const { error: familyError } = await supabase
+    const supabaseFamily = demoFamily.map(({ claimed_benefits, ...rest }, idx) => ({
+      ...rest,
+      id: `00000000-0000-0000-0000-${String(idx + 1).padStart(12, '1')}`
+    }));
+    const { error: fErr } = await supabase
       .from("family_members")
       .upsert(supabaseFamily, { onConflict: "id" });
+    familyError = fErr;
 
     if (familyError) console.error("Error seeding family:", familyError);
     else console.log("Family seeded successfully");
   }
 
-  return { success: !schemeError && !userError && !customUserError };
+  return { success: !schemeError && !userError && !customUserError && !familyError };
 }

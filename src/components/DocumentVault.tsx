@@ -313,7 +313,7 @@ export function DocumentVault({ initialDocuments }: DocumentVaultProps) {
                           <span>{(doc.file_size / 1024).toFixed(1)} KB</span>
                           <span>•</span>
                           <span className="text-indigo-600 flex items-center gap-0.5">
-                            🔒 AES-256
+                            <ShieldCheck className="h-3 w-3" /> AES-256
                           </span>
                           <span>•</span>
                           <span>Uploaded: {new Date(doc.uploaded_at).toLocaleDateString()}</span>

@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState, useTransition } from "react";
-import { Calendar, CheckCircle2, ChevronRight, Loader2, IndianRupee, X, ExternalLink, Building2, Landmark, HeartHandshake, Mail } from "lucide-react";
+import { createPortal } from "react-dom";
+import { useRouter } from "next/navigation";
+import { Calendar, CheckCircle2, ChevronRight, Loader2, IndianRupee, X, ExternalLink, Building2, Landmark, HeartHandshake, Mail, Sparkles } from "lucide-react";
 import { Scheme, User } from "@/lib/db";
 import { applyToScheme } from "@/app/actions";
 import { Badge } from "@/components/ui/badge";
@@ -18,10 +20,19 @@ interface SchemeCardProps {
 const DEMO_SCHEME_ID = "db859c25-f712-4022-9214-e25f6e80b2a6";
 
 export function SchemeCard({ scheme, hasApplied, user, dict }: SchemeCardProps) {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [showModal, setShowModal] = useState(false);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
   const [emailResult, setEmailResult] = useState<{ success: boolean; message: string } | null>(null);
+  const [isAutoFilling, setIsAutoFilling] = useState(false);
+
+  const handleAutoFill = () => {
+    setIsAutoFilling(true);
+    setTimeout(() => {
+      router.push(`/dashboard/apply/${scheme.id}`);
+    }, 2000); // 2 second mock processing state
+  };
 
   const t = dict || {
     financial_benefit: "Financial Benefit",
@@ -116,16 +127,29 @@ export function SchemeCard({ scheme, hasApplied, user, dict }: SchemeCardProps) 
       if (!proceed) return;
     }
 
-    if (!scheme.provider_type || scheme.provider_type === "Government") {
-      if (scheme.application_url) {
-        window.open(scheme.application_url, "_blank");
-      }
-    }
-
     startTransition(async () => {
-      const result = await applyToScheme(scheme.id);
-      if (!result.success) {
-        alert("Failed to submit application: " + result.error);
+      try {
+        const res = await fetch("/api/apply-real", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ schemeId: scheme.id })
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+          // Record the application in DB
+          const result = await applyToScheme(scheme.id);
+          if (!result.success) {
+            alert("Failed to submit application: " + result.error);
+          } else {
+            alert("Playwright has securely launched the portal! Please complete your application there.");
+          }
+        } else {
+          alert("Automation failed: " + data.error);
+        }
+      } catch (e) {
+        console.error(e);
+        alert("Network error during automation.");
       }
     });
   };
@@ -160,7 +184,7 @@ export function SchemeCard({ scheme, hasApplied, user, dict }: SchemeCardProps) 
         onClick={() => setShowModal(true)}
         className="flex flex-col h-full bg-white border border-slate-200 rounded-xl card-hover cursor-pointer group"
       >
-        <CardHeader className="p-5 pb-3">
+        <CardHeader className="p-6 pb-4">
           <div className="flex justify-between items-start gap-2 mb-2 flex-wrap">
             <div className="flex items-center gap-1.5 flex-wrap">
               <Badge variant="secondary" className="bg-slate-100 text-slate-600 font-medium text-[11px]">
@@ -197,7 +221,7 @@ export function SchemeCard({ scheme, hasApplied, user, dict }: SchemeCardProps) 
           </CardDescription>
         </CardHeader>
         
-        <CardContent className="p-5 pt-0 pb-4 flex-1">
+        <CardContent className="p-6 pt-0 pb-6 flex-1">
           <p className="text-slate-600 text-sm leading-relaxed line-clamp-3">
             {scheme.description}
           </p>
@@ -210,7 +234,7 @@ export function SchemeCard({ scheme, hasApplied, user, dict }: SchemeCardProps) 
           )}
         </CardContent>
         
-        <CardFooter className="p-4 pt-0 border-t border-slate-100 flex flex-wrap gap-2 mt-auto">
+        <CardFooter className="p-6 pt-4 border-t border-slate-100 flex flex-wrap gap-3 mt-auto">
           {isEmailDemo ? (
             /* Demo scheme: single Send Reminder button */
             <Button
@@ -282,7 +306,7 @@ export function SchemeCard({ scheme, hasApplied, user, dict }: SchemeCardProps) 
       </Card>
 
       {/* Brief View Modal */}
-      {showModal && (
+      {showModal && typeof document !== "undefined" && createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-xl overflow-hidden max-h-[90vh] flex flex-col animate-in zoom-in-95 duration-200 border border-slate-150">
             {/* Modal Header */}
@@ -364,9 +388,9 @@ export function SchemeCard({ scheme, hasApplied, user, dict }: SchemeCardProps) 
                     <ul className="space-y-2.5">
                       <li className="flex items-start gap-2 text-xs">
                         {isIncomeEligible ? (
-                          <span className="text-emerald-600 font-bold">✅</span>
+                          <span className="text-emerald-600 font-bold"><CheckCircle2 className="h-4 w-4" /></span>
                         ) : (
-                          <span className="text-red-500 font-bold">❌</span>
+                          <span className="text-red-500 font-bold"><X className="h-4 w-4" /></span>
                         )}
                         <div className="flex-1">
                           <p className="font-semibold text-slate-750">Annual Household Income</p>
@@ -379,9 +403,9 @@ export function SchemeCard({ scheme, hasApplied, user, dict }: SchemeCardProps) 
                       </li>
                       <li className="flex items-start gap-2 text-xs">
                         {isCasteEligible ? (
-                          <span className="text-emerald-600 font-bold">✅</span>
+                          <span className="text-emerald-600 font-bold"><CheckCircle2 className="h-4 w-4" /></span>
                         ) : (
-                          <span className="text-red-500 font-bold">❌</span>
+                          <span className="text-red-500 font-bold"><X className="h-4 w-4" /></span>
                         )}
                         <div className="flex-1">
                           <p className="font-semibold text-slate-750">Caste Category Match</p>
@@ -394,9 +418,9 @@ export function SchemeCard({ scheme, hasApplied, user, dict }: SchemeCardProps) 
                       </li>
                       <li className="flex items-start gap-2 text-xs">
                         {isEducationEligible ? (
-                          <span className="text-emerald-600 font-bold">✅</span>
+                          <span className="text-emerald-600 font-bold"><CheckCircle2 className="h-4 w-4" /></span>
                         ) : (
-                          <span className="text-red-500 font-bold">❌</span>
+                          <span className="text-red-500 font-bold"><X className="h-4 w-4" /></span>
                         )}
                         <div className="flex-1">
                           <p className="font-semibold text-slate-750">Education Criteria</p>
@@ -422,11 +446,11 @@ export function SchemeCard({ scheme, hasApplied, user, dict }: SchemeCardProps) 
                               <span className="font-medium text-slate-700 truncate max-w-[180px]">{doc}</span>
                               {docAvailable ? (
                                 <span className="inline-flex items-center gap-1 text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                                  ✅ Vault Checked
+                                  <CheckCircle2 className="h-3 w-3" /> Vault Checked
                                 </span>
                               ) : (
                                 <span className="inline-flex items-center gap-1 text-[10px] text-red-600 font-bold bg-red-50 px-2 py-0.5 rounded border border-red-200 line-through">
-                                  ❌ Upload Needed
+                                  <X className="h-3 w-3" /> Upload Needed
                                 </span>
                               )}
                             </li>
@@ -485,25 +509,37 @@ export function SchemeCard({ scheme, hasApplied, user, dict }: SchemeCardProps) 
                     <CheckCircle2 className="h-4 w-4" /> Applied
                   </button>
                 ) : (
-                  <button
-                    onClick={handleApply}
-                    disabled={isPending}
-                    aria-label={`Apply to ${scheme.title}`}
-                    className="bg-[#0F172A] hover:bg-[#1e293b] text-white font-semibold px-6 py-2.5 rounded-lg text-[13px] flex items-center gap-1.5 cursor-pointer btn-primary tap-target focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600"
-                  >
-                    {isPending ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <>
-                        {!scheme.provider_type || scheme.provider_type === "Government" ? "Apply to portal" : "Apply now"} <ChevronRight className="h-4 w-4" />
-                      </>
-                    )}
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={handleAutoFill}
+                      disabled={isAutoFilling || isPending}
+                      className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold px-6 py-2.5 rounded-lg text-[13px] flex items-center gap-2 cursor-pointer shadow-sm shadow-purple-500/20 tap-target transition-all"
+                    >
+                      {isAutoFilling ? (
+                        <><Loader2 className="h-4 w-4 animate-spin" /> Extracting Data...</>
+                      ) : (
+                        <><Sparkles className="h-4 w-4" /> AI Auto-Fill Application</>
+                      )}
+                    </button>
+                    <button
+                      onClick={handleApply}
+                      disabled={isPending || isAutoFilling}
+                      aria-label={`Apply to ${scheme.title}`}
+                      className="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold px-4 py-2.5 rounded-lg text-[13px] flex items-center gap-1.5 cursor-pointer tap-target"
+                    >
+                      {isPending ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        "Manual Apply"
+                      )}
+                    </button>
+                  </div>
                 )}
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

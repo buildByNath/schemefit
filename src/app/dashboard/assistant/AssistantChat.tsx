@@ -32,7 +32,7 @@ export function AssistantChat({
   const [messages, setMessages] = useState<Message[]>([{
     id: "welcome",
     role: "assistant",
-    content: `Hi ${user.full_name?.split(" ")[0] ?? "there"}! 👋 I'm your SchemeFit assistant. I can help you understand your benefits, check missing documents, and track deadlines. What would you like to know?`,
+    content: `Hi ${user.full_name?.split(" ")[0] ?? "there"}! I'm your SchemeFit assistant. I can help you understand your benefits, check missing documents, and track deadlines. What would you like to know?`,
   }]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);

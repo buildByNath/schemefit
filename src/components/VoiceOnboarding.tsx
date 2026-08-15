@@ -173,14 +173,13 @@ export function VoiceOnboarding() {
       {/* Header Introduction */}
       <div className="text-center space-y-2.5 max-w-xl mx-auto mb-4 animate-in fade-in duration-300">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-600 font-semibold text-[10px] uppercase tracking-wider">
-          <Sparkles className="h-3.5 w-3.5 animate-pulse" />
-          Conversational Smart Intake
+          Quick Setup
         </div>
         <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 md:text-4xl">
-          Setup Your Welfare Profile
+          Tell us about yourself
         </h1>
         <p className="text-slate-500 text-sm md:text-base leading-normal">
-          Fill in the details manually on the right, or press the mic and speak to let our AI parsing engine pre-fill the form instantly.
+          You can either type your details on the right, or just tap the microphone and tell us out loud. We'll fill out the form for you.
         </p>
       </div>
 
@@ -191,7 +190,7 @@ export function VoiceOnboarding() {
           <div className="text-center w-full space-y-1.5 border-b border-slate-100 pb-4 mb-4">
             <h3 className="font-bold text-slate-800 text-sm flex items-center justify-center gap-1.5">
               <Mic className="h-4 w-4 text-blue-600" />
-              Voice Assistant
+              Speak to us
             </h3>
             <div className="flex flex-col items-center gap-1">
               <span className="text-slate-400 text-xs font-medium">Try clicking or saying:</span>
@@ -242,12 +241,12 @@ export function VoiceOnboarding() {
               />
               {isParsing && (
                 <div className="absolute right-3 bottom-3 flex items-center gap-1.5 text-[10px] text-blue-600 font-bold bg-blue-50 px-2 py-0.5 rounded border border-blue-150 animate-pulse">
-                  <RefreshCw className="h-3 w-3 animate-spin" /> AI Parsing...
+                  <RefreshCw className="h-3 w-3 animate-spin" /> Processing...
                 </div>
               )}
               {apiSource && (
                 <div className="absolute right-3 bottom-3 flex items-center gap-1 text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-150">
-                  <Check className="h-3 w-3" /> Auto-Filled via {apiSource === "gemini" ? "Gemini AI" : apiSource === "groq" ? "Groq AI" : "Local AI"}
+                  <Check className="h-3 w-3" /> Filled by AI
                 </div>
               )}
             </div>
@@ -258,7 +257,7 @@ export function VoiceOnboarding() {
                 className="w-full bg-slate-100 hover:bg-slate-250 border border-slate-200 text-slate-700 font-bold text-xs py-2 rounded-lg transition-colors cursor-pointer"
                 style={{ minHeight: "36px" }}
               >
-                Re-Parse Text Description
+                Try understanding this again
               </button>
             )}
 
@@ -272,7 +271,7 @@ export function VoiceOnboarding() {
         <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-5 hover:shadow-md transition-shadow">
           <h3 className="font-bold text-slate-800 text-sm border-b border-slate-100 pb-4 flex items-center gap-1.5">
             <Keyboard className="h-4 w-4 text-indigo-500" />
-            Profile Details (Manual Inputs)
+            Type your details
           </h3>
 
           <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 pb-2">

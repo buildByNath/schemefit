@@ -203,11 +203,11 @@ export default function ProviderDashboardPage() {
                       <h3 className="font-bold text-sm text-slate-900 truncate">{s.title}</h3>
                       {s.provider_type === "NGO" ? (
                         <Badge className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px]">
-                          💚 NGO
+                          <HeartHandshake className="h-3 w-3 inline mr-1" /> NGO
                         </Badge>
                       ) : (
                         <Badge className="bg-purple-50 text-purple-700 border border-purple-200 text-[10px]">
-                          💜 Private Sector
+                          <Building2 className="h-3 w-3 inline mr-1" /> Private Sector
                         </Badge>
                       )}
                       <Badge variant="secondary" className="bg-slate-100 text-slate-600 text-[10px]">
@@ -382,8 +382,8 @@ export default function ProviderDashboardPage() {
                     onChange={(e) => setProviderType(e.target.value as any)}
                     className="w-full h-10 px-3 border border-slate-200 rounded-lg text-xs bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
                   >
-                    <option value="NGO">💚 NGO</option>
-                    <option value="Private Sector">💜 Private Sector</option>
+                    <option value="NGO">NGO</option>
+                    <option value="Private Sector">Private Sector</option>
                   </select>
                 </div>
 

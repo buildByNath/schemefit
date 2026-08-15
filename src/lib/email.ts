@@ -31,7 +31,7 @@ export async function sendSchemeEmailNotification({
     const mailOptions = {
       from: `"Scheme Fit Alerts" <${process.env.GMAIL_USER}>`,
       to: toEmail,
-      subject: `🎯 New Scheme Matched: ${schemeTitle} | Scheme Fit Alert`,
+      subject: `New Scheme Matched: ${schemeTitle} | Scheme Fit Alert`,
       html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f8fafc; padding: 32px 16px; color: #0f172a;">
           <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">

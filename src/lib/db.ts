@@ -375,6 +375,11 @@ export async function getSchemes(): Promise<Scheme[]> {
   return db.schemes;
 }
 
+export async function getSchemeById(id: string): Promise<Scheme | null> {
+  const schemes = await getSchemes();
+  return schemes.find(s => s.id === id) || null;
+}
+
 export async function getApplications(userId?: string): Promise<Application[]> {
   const uid = userId || await getActiveUserId();
   

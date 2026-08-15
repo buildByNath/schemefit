@@ -31,6 +31,12 @@ export default async function DashboardPage() {
     eligibleSchemes.push(ugoScheme);
   }
 
+  // Always append Unemployment Allowance Scheme at the end
+  const uasScheme = allSchemes.find(s => s.title.includes("Unemployment Allowance Scheme"));
+  if (uasScheme && !eligibleSchemes.find(s => s.id === uasScheme.id)) {
+    eligibleSchemes.push(uasScheme);
+  }
+
   // Sum up total benefits
   const totalBenefits = eligibleSchemes.reduce((sum, scheme) => {
     return sum + (scheme.max_benefit_amount || 0);
