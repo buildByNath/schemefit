@@ -35,8 +35,8 @@ export function VoiceOnboarding() {
 
       if (SpeechRecognition) {
         const recognition = new SpeechRecognition();
-        recognition.continuous = false; // Stop after a single sentence
-        recognition.interimResults = false;
+        recognition.continuous = true;
+        recognition.interimResults = false; // Keep false to avoid duplicate appends on interim changes
         recognition.lang = typeof navigator !== "undefined" ? navigator.language : "en-US";
 
         recognition.onstart = () => {
@@ -49,23 +49,41 @@ export function VoiceOnboarding() {
           console.warn("Speech recognition warning/error:", event.error);
           if (event.error === "not-allowed") {
             setRecognitionError("Microphone access blocked. Please enable it in browser settings.");
+            setIsListening(false);
           } else if (event.error === "no-speech") {
-            setRecognitionError("No speech detected. Please tap the mic and try again, or fill the form manually.");
+            // Do nothing on no-speech so it doesn't interrupt the user who might just be pausing
+            console.log("Ignored no-speech timeout");
           } else {
             setRecognitionError(`Speech error: ${event.error}. Please try typing or manual edit.`);
+            setIsListening(false);
           }
-          setIsListening(false);
         };
 
         recognition.onend = () => {
+          // If we want it to truly be continuous until the user clicks stop, we could restart it here
           setIsListening(false);
         };
 
-        recognition.onresult = async (event: any) => {
-          const spokenText = event.results[0][0].transcript;
-          if (spokenText) {
-            setTranscript(spokenText);
-            await parseProfileText(spokenText);
+        let parseTimeout: NodeJS.Timeout;
+
+        recognition.onresult = (event: any) => {
+          let newWords = "";
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            newWords += event.results[i][0].transcript + " ";
+          }
+          
+          if (newWords.trim()) {
+            setTranscript((prev) => {
+              const updatedText = prev ? prev + " " + newWords.trim() : newWords.trim();
+              
+              // Debounce parsing so it waits for the user to finish speaking
+              clearTimeout(parseTimeout);
+              parseTimeout = setTimeout(async () => {
+                await parseProfileText(updatedText);
+              }, 1500);
+
+              return updatedText;
+            });
           }
         };
 
