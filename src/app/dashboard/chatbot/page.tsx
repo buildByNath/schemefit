@@ -8,7 +8,7 @@ import { Scheme } from "@/lib/db";
 interface Message {
   role: "user" | "assistant";
   content: string;
-  source?: "gemini" | "local";
+  source?: "gemini" | "local" | "groq";
   timestamp: Date;
 }
 
@@ -28,7 +28,7 @@ export default function ChatbotPage() {
     {
       role: "assistant",
       content: "Hello! I am SchemeFit AI, your welfare scheme assistant. Please select a scheme from the dropdown above to get started, and I will answer all your questions about eligibility, benefits, required documents, and the application process!",
-      source: "gemini",
+      source: "groq",
       timestamp: new Date(),
     }
   ]);
@@ -61,7 +61,7 @@ export default function ChatbotPage() {
       const welcomeMessage: Message = {
         role: "assistant",
         content: `Great choice! I am now focused on the **${scheme.title}** scheme by ${scheme.ministry || "Government of India"}.\n\nThis scheme offers up to ₹${(scheme.max_benefit_amount || 0).toLocaleString("en-IN")} in benefits. What would you like to know about it?`,
-        source: "gemini",
+        source: "groq",
         timestamp: new Date(),
       };
       setMessages([welcomeMessage]);
@@ -235,10 +235,10 @@ export default function ChatbotPage() {
               </div>
               <div className={`flex items-center gap-1.5 text-[9px] text-slate-400 font-medium ${msg.role === "user" ? "flex-row-reverse" : ""}`}>
                 <span>{formatTime(msg.timestamp)}</span>
-                {msg.role === "assistant" && msg.source === "gemini" && (
+                {msg.role === "assistant" && (msg.source === "groq" || msg.source === "gemini") && (
                   <span className="flex items-center gap-0.5 text-indigo-400">
                     <Sparkles className="h-2.5 w-2.5" />
-                    Gemini AI
+                    Groq AI
                   </span>
                 )}
               </div>
@@ -288,11 +288,10 @@ export default function ChatbotPage() {
         <div className="px-4 pb-2 flex items-center gap-2">
           <MessageSquare className="h-3 w-3 text-slate-400" />
           <span className="text-[9px] text-slate-400">
-            Press Enter to send · Shift+Enter for new line · Powered by Gemini AI
+            Press Enter to send · Shift+Enter for new line · Powered by Groq AI
           </span>
         </div>
       </div>
     </div>
   );
 }
-
