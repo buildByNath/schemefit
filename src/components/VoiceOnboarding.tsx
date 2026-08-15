@@ -27,6 +27,8 @@ export function VoiceOnboarding() {
   });
 
   const recognitionRef = useRef<any>(null);
+  const manualStopRef = useRef(false);
+  const parseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Initialize Speech Recognition
   useEffect(() => {
@@ -37,77 +39,90 @@ export function VoiceOnboarding() {
       if (SpeechRecognition) {
         const recognition = new SpeechRecognition();
         recognition.continuous = true;
-        recognition.interimResults = true; // MUST be true to capture single words instantly!
+        recognition.interimResults = true;
         recognition.lang = typeof navigator !== "undefined" ? navigator.language : "en-US";
-        
-        let manualStop = false;
+        recognition.maxAlternatives = 1;
 
         recognition.onstart = () => {
           setIsListening(true);
           setRecognitionError("");
           setApiSource(null);
-          manualStop = false;
         };
 
         recognition.onerror = (event: any) => {
-          console.warn("Speech recognition warning/error:", event.error);
-          if (event.error === "not-allowed") {
+          console.warn("Speech recognition event:", event.error);
+          if (event.error === "not-allowed" || event.error === "service-not-allowed") {
             setRecognitionError("Microphone access blocked. Please enable it in browser settings.");
             setIsListening(false);
-            manualStop = true;
-          } else if (event.error === "no-speech") {
-            // Ignore no-speech. onend will auto-restart if manualStop is false.
-            console.log("Ignored no-speech");
-          } else {
-            console.log(`Speech error: ${event.error}. Auto-restarting.`);
+            manualStopRef.current = true;
           }
+          // All other errors (no-speech, network, aborted) — just let onend handle restart
         };
 
         recognition.onend = () => {
-          if (!manualStop && recognitionRef.current) {
+          if (!manualStopRef.current && recognitionRef.current) {
+            // Auto-restart: mic ended due to silence or browser timeout, keep listening
             try {
               recognitionRef.current.start();
+              return; // don't set isListening false
             } catch (e) {
-              setIsListening(false);
+              // start() can throw if already started; ignore
             }
-          } else {
-            setIsListening(false);
+          }
+          setIsListening(false);
+          
+          // When the user manually stopped, flush-parse whatever we have
+          if (manualStopRef.current && fullTranscriptRef.current.trim().length > 0) {
+            if (parseTimeoutRef.current) clearTimeout(parseTimeoutRef.current);
+            parseProfileText(fullTranscriptRef.current.trim());
           }
         };
 
-        let parseTimeout: NodeJS.Timeout;
-
         recognition.onresult = (event: any) => {
-          let interimTranscript = "";
-          let finalTranscript = "";
+          let finalChunk = "";
+          let interimChunk = "";
 
           for (let i = event.resultIndex; i < event.results.length; i++) {
+            const text = event.results[i][0].transcript;
             if (event.results[i].isFinal) {
-              finalTranscript += event.results[i][0].transcript + " ";
+              finalChunk += text + " ";
             } else {
-              interimTranscript += event.results[i][0].transcript;
+              interimChunk += text;
             }
           }
-          
-          if (finalTranscript) {
-            // Append final results to our ref
-            fullTranscriptRef.current = fullTranscriptRef.current + (fullTranscriptRef.current && !fullTranscriptRef.current.endsWith(" ") ? " " : "") + finalTranscript;
+
+          // Commit final words to the persistent ref
+          if (finalChunk) {
+            const prev = fullTranscriptRef.current;
+            fullTranscriptRef.current = (prev ? prev.trimEnd() + " " : "") + finalChunk.trim();
           }
-          
-          const displayText = fullTranscriptRef.current + interimTranscript;
+
+          // Display committed text + live interim text
+          const displayText = (fullTranscriptRef.current + " " + interimChunk).trim();
           setTranscript(displayText);
-          
-          clearTimeout(parseTimeout);
-          parseTimeout = setTimeout(async () => {
-            if (displayText.trim().length > 0) {
-              await parseProfileText(displayText.trim());
+
+          // Debounced AI parse — fires 800ms after the user stops speaking
+          if (parseTimeoutRef.current) clearTimeout(parseTimeoutRef.current);
+          parseTimeoutRef.current = setTimeout(async () => {
+            const textToParse = fullTranscriptRef.current.trim();
+            if (textToParse.length > 0) {
+              await parseProfileText(textToParse);
             }
-          }, 1500);
+          }, 800);
         };
 
         recognitionRef.current = recognition;
       }
     }
+
+    return () => {
+      // Cleanup on unmount
+      if (parseTimeoutRef.current) clearTimeout(parseTimeoutRef.current);
+      if (recognitionRef.current) {
+        manualStopRef.current = true;
+        try { recognitionRef.current.abort(); } catch (e) {}
+      }
+    };
   }, []);
 
   const toggleListening = () => {
@@ -117,19 +132,22 @@ export function VoiceOnboarding() {
     }
 
     if (isListening) {
-      // Intentional stop
+      // User intentionally stopping — set flag BEFORE calling stop()
+      manualStopRef.current = true;
       setIsListening(false);
       try {
         recognitionRef.current.stop();
       } catch (err) {}
-      recognitionRef.current.abort(); 
     } else {
-      fullTranscriptRef.current = transcript; // Sync current text box state
+      // Starting fresh
+      manualStopRef.current = false;
+      fullTranscriptRef.current = transcript; // Sync with any manually edited text
       setRecognitionError("");
       try {
         recognitionRef.current.start();
       } catch (err) {
         console.error("Failed to start speech recognition:", err);
+        setRecognitionError("Could not start microphone. Please try again.");
       }
     }
   };
