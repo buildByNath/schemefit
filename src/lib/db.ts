@@ -502,7 +502,7 @@ export async function addFamilyMember(member: Omit<FamilyMember, "id" | "user_id
     try {
       const { data, error } = await supabase
         .from("family_members")
-        .insert(newMember)
+        .insert({ user_id: uid, ...member })
         .select()
         .single();
       if (error) throw error;
@@ -551,9 +551,10 @@ export async function addUserDocument(doc: Omit<UserDocument, "id" | "user_id" |
 
   if (isSupabaseConfigured()) {
     try {
+      const { id, ...docToInsert } = newDoc;
       const { data, error } = await supabase
         .from("documents")
-        .insert(newDoc)
+        .insert(docToInsert)
         .select()
         .single();
       if (error) throw error;
@@ -627,9 +628,10 @@ export async function createScheme(schemeData: Omit<Scheme, "id" | "created_at">
 
   if (isSupabaseConfigured()) {
     try {
+      const { id, ...schemeToInsert } = newScheme;
       const { data, error } = await supabase
         .from("schemes")
-        .insert(newScheme)
+        .insert(schemeToInsert)
         .select()
         .single();
       if (error) throw error;
