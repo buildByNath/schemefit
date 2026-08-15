@@ -12,6 +12,8 @@ export const metadata: Metadata = {
   description: "Find and apply for government benefits you qualify for.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function RootLayout({
   children,
 }: Readonly<{
