@@ -68,7 +68,7 @@ function autofillForms(profile) {
         } else if (name === "email") {
             fillInput(input, profile.email || "nathshaj20006@gmail.com");
         } else if (name === "district") {
-            let district = "Shimla";
+            let district = profile.district || "palakkad";
             if (profile.district) {
                 const dist = profile.district.toLowerCase();
                 const hpDistricts = ["bilaspur", "chamba", "hamirpur", "kangra", "kinnaur", "kullu", "lahaul and spiti", "mandi", "shimla", "sirmaur", "solan", "una"];
@@ -79,9 +79,9 @@ function autofillForms(profile) {
             }
             fillInput(input, district);
         } else if (name === "address") {
-            fillInput(input, profile.address || "Main Street, Tehsil Shimla");
+            fillInput(input, profile.address || "palakkad");
         } else if (name === "exchangereg") {
-            fillInput(input, "EX-HP-84920");
+            fillInput(input, profile.exchange_reg || "EX-HP-40291");
         } else if (name === "education") {
             let edu = "Graduate";
             if (profile.education) {
@@ -89,7 +89,7 @@ function autofillForms(profile) {
                 if (e.includes("post")) edu = "Post graduate";
                 else if (e.includes("grad") || e.includes("undergrad")) edu = "Graduate";
                 else if (e.includes("diploma") || e.includes("iti")) edu = "Diploma / ITI";
-                else if (e.includes("professional") || e.includes("degree")) edu = "Professional degree";
+                else if (e.includes("professional") || e.includes("degree") || e.includes("btech") || e.includes("b.tech")) edu = "Professional degree";
             }
             fillInput(input, edu);
         } else if (name === "disability") {

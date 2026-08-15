@@ -2,14 +2,14 @@
   "users": [
     {
       "id": "00000000-0000-0000-0000-000000000001",
-      "full_name": "Nath",
+      "full_name": "Nath.s",
       "email": "nathshaj20006@gmail.com",
-      "annual_income": 150000,
+      "annual_income": 250000,
       "caste_category": "OBC",
-      "state": "Himachal Pradesh",
-      "district": "Shimla",
+      "state": "Kerala",
+      "district": "palakkad",
       "occupation": "Unemployed",
-      "education": "Graduate",
+      "education": "Btech",
       "uploaded_documents": [
         "Aadhaar Card",
         "Bank Passbook",
@@ -20,15 +20,16 @@
         "Declaration Form C"
       ],
       "voice_raw_text": "I am an OBC student with 2.5 lakh income, studying undergraduate course in Kerala.",
-      "address": "Main Street, Tehsil Shimla",
-      "date_of_birth": "2001-05-15",
+      "address": "palakkad",
+      "date_of_birth": "2001-01-17",
       "gender": "Male",
-      "phone": "9876543210",
+      "phone": "5698745621",
       "is_differently_abled": false,
-      "aadhar": "123456789012",
-      "bank_account": "998877665544",
+      "aadhar": "587965458561",
+      "bank_account": "45620000125",
       "ifsc_code": "SBIN0001234",
-      "bank_name": "State Bank of India"
+      "bank_name": "SBI",
+      "exchange_reg": "EX-HP-40291"
     },
     {
       "id": "00000000-0000-0000-0000-000000000002",
