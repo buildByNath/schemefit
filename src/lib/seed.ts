@@ -41,27 +41,45 @@ export const demoFamily = [
   {
     id: "family-member-0000-0000-0000-000000000001",
     user_id: demoUser.id,
-    name: "Suresh Menon",
-    relation: "Father",
-    age: 50,
-    occupation: "Farmer",
-    annual_income: 150000,
-    education: "High School",
+    name: "Anjali",
+    relation: "Mother",
+    age: 45,
+    occupation: "Tailor",
+    annual_income: 15000,
+    education: null,
     claimed_benefits: [
-      { scheme_title: "PM Kisan Samman Nidhi (PM-KISAN)", amount: 6000, status: "Approved" }
+      {
+        scheme_title: "Kerala Women Self-Employment Assistance",
+        amount: 25000,
+        status: "Approved"
+      },
+      {
+        scheme_title: "National Family Benefit Scheme (NFBS)",
+        amount: 10000,
+        status: "Approved"
+      }
     ]
   },
   {
     id: "family-member-0000-0000-0000-000000000002",
     user_id: demoUser.id,
-    name: "Geetha Menon",
-    relation: "Mother",
-    age: 45,
-    occupation: "Homemaker",
-    annual_income: 0,
-    education: "High School",
+    name: "Ajay",
+    relation: "Father",
+    age: 46,
+    occupation: "Professor",
+    annual_income: 120000,
+    education: null,
     claimed_benefits: [
-      { scheme_title: "Women Entrepreneurship Assistance", amount: 50000, status: "Approved" }
+      {
+        scheme_title: "PM Kisan Samman Nidhi (PM-KISAN)",
+        amount: 6000,
+        status: "Approved"
+      },
+      {
+        scheme_title: "National Pension Scheme (NPS)",
+        amount: 15000,
+        status: "Approved"
+      }
     ]
   }
 ];

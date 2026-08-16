@@ -484,6 +484,10 @@ export async function getFamilyMembers(userId?: string): Promise<FamilyMember[]>
     "Anjali": [
       { scheme_title: "Kerala Women Self-Employment Assistance", amount: 25000, status: "Approved" },
       { scheme_title: "National Family Benefit Scheme (NFBS)", amount: 10000, status: "Approved" }
+    ],
+    "Ajay": [
+      { scheme_title: "PM Kisan Samman Nidhi (PM-KISAN)", amount: 6000, status: "Approved" },
+      { scheme_title: "National Pension Scheme (NPS)", amount: 15000, status: "Approved" }
     ]
   };
 
